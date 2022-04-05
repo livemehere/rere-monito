@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import MainCam from "./pages/mainCam";
@@ -10,12 +9,14 @@ import Edit from "./pages/mypage/edit";
 import Dday from "./pages/mypage/dDay";
 import Analyze from "./pages/mypage/analyze";
 import Pose from "./pages/mypage/pose";
+import Login from "./pages/login";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="mainCam" element={<MainCam />} />
         <Route path="mypage">
           <Route path="" element={<MyPage />} />
