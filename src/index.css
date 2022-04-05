@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  text-align: center;
+}
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  margin: auto;
+}
+
+.navbar {
+  padding: 1em;
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  margin: auto;
+  gap: 1em;
+}

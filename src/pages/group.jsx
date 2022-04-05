@@ -1,5 +1,6 @@
 import React from "react";
+import Layout from "../components/layout";
 
 export default function Group() {
-  return <div>Group</div>;
+  return <Layout>Group</Layout>;
 }
