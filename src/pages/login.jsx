@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/user";
+import Layout from "../components/layout";
 import axiosManager from "../util/axiosManager";
 
 export default function Login() {
@@ -33,14 +34,13 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <Layout>
       <h1>Login</h1>
-      <Link to="/">HOME</Link>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="email" name="email" />
         <input type="text" placeholder="password" name="password" />
         <button>로그인</button>
       </form>
-    </div>
+    </Layout>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
+import Layout from "../../components/layout";
 
 export default function Pose() {
-  return <div>Pose</div>;
+  return <Layout>Pose</Layout>;
 }

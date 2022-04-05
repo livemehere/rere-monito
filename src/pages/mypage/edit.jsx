@@ -1,5 +1,6 @@
 import React from "react";
+import Layout from "../../components/layout";
 
 export default function Edit() {
-  return <div>Edit</div>;
+  return <Layout>Edit</Layout>;
 }

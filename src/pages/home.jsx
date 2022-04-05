@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/user";
+import Layout from "../components/layout";
 
 export default function Home() {
   const [user, setUser] = useRecoilState(userState);
@@ -11,9 +11,8 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div>
-      <h1>Home</h1>
-      <Link to="/login">Login</Link>
-    </div>
+    <Layout>
+      <h1>Monito</h1>
+    </Layout>
   );
 }
