@@ -1,6 +1,12 @@
 import React from "react";
 import Layout from "../components/layout";
+import MainCamera from "../components/Container/MainCam/MainCamera"
 
 export default function MainCam() {
-  return <Layout>MainCam</Layout>;
+  return (
+    <Layout>
+      <MainCamera></MainCamera>
+    </Layout>
+
+  );
 }

@@ -1,0 +1,108 @@
+main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+  }
+
+  main::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+  
+  section {
+    width: 110vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .categories {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 1vh;
+    margin-left: 3vh;
+  }
+  
+  
+  .card_list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .button-design{
+    width:120px;
+	  height: 40px;
+	  color: white;
+    text-align: center;
+    padding-top: 10px;
+    
+	  background: #FFBE47;
+	  font-size: 16px;
+	  border:none;
+	  border-radius: 20px;
+	  box-shadow: 0 4px 16px rgba(0,79,255,0.3);
+	  transition:0.3s;
+	  position: relative;
+	  left:90%;
+
+    
+	  transform: translate(-50%,-50%);
+    text-decoration-line: none;
+  
+  }
+
+  .button-design:visited{
+    color:white;
+  }
+  .button-design:hover{
+    background: #DB9A33;
+	  cursor: pointer;
+	  box-shadow: 0 2px 4px rgba(0,79,255,0.6);
+  }
+  .button-design:focus {
+    outline: 0;
+  }
+
+  .button-design-update{
+    width: 120px;
+    height: 80px;
+    color: white;
+    background: #FFBE47;
+    font-size: 16px;
+    border:none;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,79,255,0.3);
+    transition:0.3s;
+    position: relative;
+    top: -10%;
+
+    margin-left: 2%;
+    transform: translate(-50%,-50%);
+    text-decoration-line: none;
+    padding: 1%;
+  
+  }
+  .button-design-update:visited{
+    color:white;
+  }
+  .button-design-update:focus {
+    outline: 0;
+  }
+  .button-design-update:hover{
+    background: #DB9A33;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,79,255,0.6);
+  }
+
+  .StudyRoom{
+    color: black;
+    text-decoration-line: none;
+
+  }
+
+
+  
