@@ -14,9 +14,67 @@ import { UserBtn } from '../../Presenter/UserPageMain/UserPageMainPresenter';
 const User ={
     name:"임의연",
 }
-class CalendarBody extends React.Component {
 
-  render() {
+const CalendarBody = (props) => {
+  
+    // 유저 핸들러
+  // ------------------------------------------------------------------------------------------
+
+const  handleDateSelect = (selectInfo) => {
+  let calendarApi = selectInfo.view.calendar
+  let title = prompt('일정을 입력하세요.')
+
+  calendarApi.unselect() //일자 선택 초기화
+
+  if (title) {
+    calendarApi.addEvent({ 
+      title,
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      allDay: selectInfo.allDay
+    }, true) //임시로  true 값 둠. 리듀서가 새 이벤트를 제공할때 덮어씀
+  }
+}
+
+const  handleEventClick = (clickInfo) => {
+  if (window.confirm(`'${clickInfo.event.title}' 일정을 삭제하시겠습니까?`)) {
+      clickInfo.event.remove();
+  }
+}
+
+
+const  handleDates = (rangeInfo) => {
+  console.log(rangeInfo);
+  this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr)
+    .catch(reportNetworkError)
+}
+
+const  handleEventAdd = (addInfo) => {
+  this.props.createEvent(addInfo.event.toPlainObject())
+    .catch(() => {
+      reportNetworkError()
+      addInfo.revert()
+    })
+}
+
+const  handleEventChange = (changeInfo) => {
+  this.props.updateEvent(changeInfo.event.toPlainObject())
+    .catch(() => {
+      reportNetworkError()
+      changeInfo.revert()
+    })
+}
+
+const  handleEventRemove = (removeInfo) => {
+  this.props.deleteEvent(removeInfo.event.id)
+    .catch(() => {
+      reportNetworkError()
+      removeInfo.revert()
+    })
+}
+
+
+
     return (
       <div className='demo-app'>
             
@@ -35,28 +93,29 @@ class CalendarBody extends React.Component {
             selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
-            weekends={this.props.weekendsVisible}
-            datesSet={this.handleDates}
-            select={this.handleDateSelect}
-            events={this.props.events}
+            weekends={props.weekendsVisible}
+            datesSet={handleDates}
+            select={handleDateSelect}
+            events={props.events}
             eventContent={renderEventContent} // 커스텀 렌더 기능
-            eventClick={this.handleEventClick}
-            eventAdd={this.handleEventAdd}
-            eventChange={this.handleEventChange} //드래그 앤 드롭/크기 조정 
-            eventRemove={this.handleEventRemove}
+            eventClick={handleEventClick}
+            eventAdd={handleEventAdd}
+            eventChange={handleEventChange} //드래그 앤 드롭/크기 조정 
+            eventRemove={handleEventRemove}
           />
                     </div>
                     </OnlyCalendar>
              {/* 여기에 CRUD폼 들어감 */}
                 <DetailCalendar>
-                {this.renderSidebar()}
+                {renderSidebar()}
                 </DetailCalendar> 
             </CalendarBackDiv> 
       </div>
     )
-  }
+}
 
-  renderSidebar() {
+
+const renderSidebar= (props)=> {
     return (
       <div className='demo-app-sidebar'>
         <div className='demo-app-sidebar-section'>
@@ -71,14 +130,14 @@ class CalendarBody extends React.Component {
           <label>
             <input
               type='checkbox'
-              checked={this.props.weekendsVisible}
-              onChange={this.props.toggleWeekends}
+              checked={props.weekendsVisible}
+              onChange={props.toggleWeekends}
             ></input>
             주말제외
           </label>
         </div>
         <div className='demo-app-sidebar-section'>
-                <h2>{ User.name}님의 일정갯수 : {this.props.events.length}</h2>
+                <h2>{ User.name}님의 일정갯수 : {props.events.length}</h2>
           <ul>
             {this.props.events.map(renderSidebarEvent)}
           </ul>
@@ -87,63 +146,6 @@ class CalendarBody extends React.Component {
     )
   }
 
-  // 유저 핸들러
-  // ------------------------------------------------------------------------------------------
-
-  handleDateSelect = (selectInfo) => {
-    let calendarApi = selectInfo.view.calendar
-    let title = prompt('일정을 입력하세요.')
-
-    calendarApi.unselect() //일자 선택 초기화
-
-    if (title) {
-      calendarApi.addEvent({ 
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      }, true) //임시로  true 값 둠. 리듀서가 새 이벤트를 제공할때 덮어씀
-    }
-  }
-
-  handleEventClick = (clickInfo) => {
-    if (window.confirm(`'${clickInfo.event.title}' 일정을 삭제하시겠습니까?`)) {
-        clickInfo.event.remove();
-    }
-  }
-
-  
-  handleDates = (rangeInfo) => {
-    console.log(rangeInfo);
-    this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr)
-      .catch(reportNetworkError)
-  }
-
-  handleEventAdd = (addInfo) => {
-    this.props.createEvent(addInfo.event.toPlainObject())
-      .catch(() => {
-        reportNetworkError()
-        addInfo.revert()
-      })
-  }
-
-  handleEventChange = (changeInfo) => {
-    this.props.updateEvent(changeInfo.event.toPlainObject())
-      .catch(() => {
-        reportNetworkError()
-        changeInfo.revert()
-      })
-  }
-
-  handleEventRemove = (removeInfo) => {
-    this.props.deleteEvent(removeInfo.event.id)
-      .catch(() => {
-        reportNetworkError()
-        removeInfo.revert()
-      })
-  }
-
-}
 
 function renderEventContent(eventInfo) {
   return (
@@ -181,4 +183,4 @@ function mapStateToProps() {
   }
 }
 
-export default connect(mapStateToProps, actionCreators)(CalendarBody)
+export default CalendarBody

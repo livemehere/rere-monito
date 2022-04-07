@@ -2,7 +2,7 @@ import React from "react";
 import { AlignTitle } from "../../Presenter/Calendar/CalendarTitlePresenter";
 import PlannerBody from "./PlannerBody";
 
-const Planner = () => {
+const PlannerComponent = () => {
     return (
         <>
             <AlignTitle>
@@ -13,4 +13,4 @@ const Planner = () => {
     )
 }
 
-export default Planner;
+export default PlannerComponent;

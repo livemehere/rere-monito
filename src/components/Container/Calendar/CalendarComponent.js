@@ -8,7 +8,7 @@ const Calendar = () => {
       <AlignTitle>
         <h1>캘린더</h1>
       </AlignTitle>
-      <CalendarBody />
+      {/* <CalendarBody /> */}
     </>
   )
 }
