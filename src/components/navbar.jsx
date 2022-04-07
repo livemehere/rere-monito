@@ -6,7 +6,7 @@ export default function NavBar() {
           <>
             <NavBody>
             <NavAllContainer>
-                <h1><Link to="./" className="top-nav-title">MONITO</Link></h1>
+                <h1><Link to="/" className="top-nav-title">MONITO</Link></h1>
                 <NavListContainer>
                     <Link to ="/group" className="top-nav-list"><li >스터디그룹</li></Link>
                     <Link to ="/calendar" className="top-nav-list"><li>캘린더</li></Link>

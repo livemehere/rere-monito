@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/user";
+import Main from "../components/Container/Main/MainComponent";
 import Layout from "../components/layout";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1>Monito</h1>
+      <Main/>
     </Layout>
   );
 }

@@ -1,8 +1,17 @@
 import styled from "styled-components";
 
+const AllBody = styled.div`
+  margin-top:7%;
+`
+
 const NavBody = styled.div`
   font-size: large;
   font-family: "Noto Sans KR", sans-serif;
+  padding: 1em;
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  margin: auto;
 `;
 
 const NavAllContainer = styled.div`
@@ -101,4 +110,5 @@ export {
   NavListContainer,
   BottomBody,
   NavLoginLogOut,
+  AllBody
 };
