@@ -1,5 +1,5 @@
 import React from 'react'
-import CalendarBody from './CalendarBody';
+import { CalendarBody } from './CalendarBody';
 import { AlignTitle } from '../../Presenter/Calendar/CalendarTitlePresenter';
 
 const Calendar = () => {
@@ -8,7 +8,7 @@ const Calendar = () => {
       <AlignTitle>
         <h1>캘린더</h1>
       </AlignTitle>
-      {/* <CalendarBody /> */}
+      <CalendarBody />
     </>
   )
 }

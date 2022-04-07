@@ -1,25 +1,17 @@
 import React from 'react';
-import axios from 'axios';
-import { createSelector } from 'reselect';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import actionCreators from './actions';
-import { getHashValues } from './utils';
 import { CalendarBackDiv, DetailCalendar, OnlyCalendar } from '../../Presenter/Calendar/CalendarBodyPresenter';
-import { UserBtn } from '../../Presenter/UserPageMain/UserPageMainPresenter';
 
-const User ={
+import CountingEvent from './CountEventstate';
+
+export const User = {
     name:"임의연",
 }
 
-const CalendarBody = () => {
-  
-    // 유저 핸들러
-  // ------------------------------------------------------------------------------------------
-
-
+export function CalendarBody() {
     return (
       <div className='demo-app'>
             
@@ -38,10 +30,10 @@ const CalendarBody = () => {
             selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
-            weekends={this.props.weekendsVisible}
-            datesSet={handleDates}
+            //weekends={calendarEvent.weekendsVisible}
+            //datesSet={handleDates} 조정
             select={handleDateSelect}
-            events={this.props.events}
+            //events={calendarEvent.events}
             eventContent={renderEventContent} // 커스텀 렌더 기능
             eventClick={handleEventClick}
             eventAdd={handleEventAdd}
@@ -52,14 +44,14 @@ const CalendarBody = () => {
                     </OnlyCalendar>
              {/* 여기에 CRUD폼 들어감 */}
                 <DetailCalendar>
-                {renderSidebar("")}
+                <CountingEvent/>
                 </DetailCalendar> 
             </CalendarBackDiv> 
       </div>
     )
 }
 
-const  handleDateSelect = (selectInfo) => {
+const handleDateSelect = (selectInfo) => {
   let calendarApi = selectInfo.view.calendar
   let title = prompt('일정을 입력하세요.')
 
@@ -96,6 +88,7 @@ const  handleEventAdd = (addInfo) => {
     })
 }
 
+
 const  handleEventChange = (changeInfo) => {
   this.props.updateEvent(changeInfo.event.toPlainObject())
     .catch(() => {
@@ -110,37 +103,6 @@ const  handleEventRemove = (removeInfo) => {
       reportNetworkError()
       removeInfo.revert()
     })
-}
-
-const renderSidebar= (props)=> {
-  return (
-    <div className='demo-app-sidebar'>
-      <div className='demo-app-sidebar-section'>
-              <h2>{User.name}님의 일정입니다.</h2>
-        <ul>
-          <li>날짜를 선택하면 새 일정을 생성하라는 메시지가 표시됩니다.</li>
-          <li>일정 드래그, 드롭 및 크기 조정이 가능합니다</li>
-          <li>일정을 클릭하면 삭제가 가능합니다.</li>
-        </ul>
-      </div>
-      <div className='demo-app-sidebar-section'>
-        <label>
-          <input
-            type='checkbox'
-            checked={props.weekendsVisible}
-            onChange={props.toggleWeekends}
-          ></input>
-          주말제외
-        </label>
-      </div>
-      <div className='demo-app-sidebar-section'>
-              <h2>{ User.name}님의 일정갯수 : {props.events.length}</h2>
-        <ul>
-          {props.events.map(renderSidebarEvent)}
-        </ul>
-      </div>
-    </div>
-  )
 }
 
 function renderEventContent(eventInfo) {
@@ -165,18 +127,16 @@ function reportNetworkError() {
   alert('이 작업을 완료할 수 없습니다')
 }
 
-function mapStateToProps() {
-  const getEventArray = createSelector(
-    (state) => state.eventsById,
-    getHashValues
-  )
+// function mapStateToProps() {
+//   const getEventArray = createSelector(
+//     (state) => state.eventsById,
+//     getHashValues
+//   )
 
-  return (state) => {
-    return {
-      events: getEventArray(state),
-      weekendsVisible: state.weekendsVisible
-    }
-  }
-}
-
-export default CalendarBody
+//   return (state) => {
+//     return {
+//       events: getEventArray(state),
+//       weekendsVisible: state.weekendsVisible
+//     }
+//   }
+// }
