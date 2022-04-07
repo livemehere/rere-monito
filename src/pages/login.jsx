@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../atoms/user";
 import Layout from "../components/layout";
 import { LoginBox, LoginBoxTitle } from "../components/Presenter/Login/LoginPresenter";
+import { BackDiv } from "../components/Presenter/UserPageMain/UserPageMainPresenter";
 import axiosManager from "../util/axiosManager";
 
 
@@ -37,6 +38,7 @@ export default function Login() {
 
   return (
     <Layout>
+      <BackDiv>
       <LoginBox>
       <LoginBoxTitle className="main-logo">로그인</LoginBoxTitle>
         <form onSubmit={handleSubmit}>
@@ -44,7 +46,8 @@ export default function Login() {
           <input type="text" placeholder="password" name="password" className="login-input"/>
           <button className="login-btn">로그인</button>
         </form>
-      </LoginBox>
+        </LoginBox>
+        </BackDiv>
 
     </Layout>
   );

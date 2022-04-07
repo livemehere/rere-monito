@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import axios from 'axios';
 import { createSelector } from 'reselect';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
@@ -15,10 +14,50 @@ const User ={
     name:"임의연",
 }
 
-const CalendarBody = (props) => {
+const CalendarBody = () => {
   
     // 유저 핸들러
   // ------------------------------------------------------------------------------------------
+
+
+    return (
+      <div className='demo-app'>
+            
+            <CalendarBackDiv>
+            <OnlyCalendar>
+        <div className='demo-app-main'>
+          <FullCalendar className="FullCalendarCSS" 
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }}
+            initialView='dayGridMonth'
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={true}
+            weekends={this.props.weekendsVisible}
+            datesSet={handleDates}
+            select={handleDateSelect}
+            events={this.props.events}
+            eventContent={renderEventContent} // 커스텀 렌더 기능
+            eventClick={handleEventClick}
+            eventAdd={handleEventAdd}
+            eventChange={handleEventChange} //드래그 앤 드롭/크기 조정 
+            eventRemove={handleEventRemove}
+          />
+                    </div>
+                    </OnlyCalendar>
+             {/* 여기에 CRUD폼 들어감 */}
+                <DetailCalendar>
+                {renderSidebar("")}
+                </DetailCalendar> 
+            </CalendarBackDiv> 
+      </div>
+    )
+}
 
 const  handleDateSelect = (selectInfo) => {
   let calendarApi = selectInfo.view.calendar
@@ -32,7 +71,7 @@ const  handleDateSelect = (selectInfo) => {
       start: selectInfo.startStr,
       end: selectInfo.endStr,
       allDay: selectInfo.allDay
-    }, true) //임시로  true 값 둠. 리듀서가 새 이벤트를 제공할때 덮어씀
+    }, true)
   }
 }
 
@@ -73,79 +112,36 @@ const  handleEventRemove = (removeInfo) => {
     })
 }
 
-
-
-    return (
-      <div className='demo-app'>
-            
-            <CalendarBackDiv>
-            <OnlyCalendar>
-        <div className='demo-app-main'>
-          <FullCalendar className="FullCalendarCSS" 
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }}
-            initialView='dayGridMonth'
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            weekends={props.weekendsVisible}
-            datesSet={handleDates}
-            select={handleDateSelect}
-            events={props.events}
-            eventContent={renderEventContent} // 커스텀 렌더 기능
-            eventClick={handleEventClick}
-            eventAdd={handleEventAdd}
-            eventChange={handleEventChange} //드래그 앤 드롭/크기 조정 
-            eventRemove={handleEventRemove}
-          />
-                    </div>
-                    </OnlyCalendar>
-             {/* 여기에 CRUD폼 들어감 */}
-                <DetailCalendar>
-                {renderSidebar()}
-                </DetailCalendar> 
-            </CalendarBackDiv> 
-      </div>
-    )
-}
-
-
 const renderSidebar= (props)=> {
-    return (
-      <div className='demo-app-sidebar'>
-        <div className='demo-app-sidebar-section'>
-                <h2>{User.name}님의 일정입니다.</h2>
-          <ul>
-            <li>날짜를 선택하면 새 일정을 생성하라는 메시지가 표시됩니다.</li>
-            <li>일정 드래그, 드롭 및 크기 조정이 가능합니다</li>
-            <li>일정을 클릭하면 삭제가 가능합니다.</li>
-          </ul>
-        </div>
-        <div className='demo-app-sidebar-section'>
-          <label>
-            <input
-              type='checkbox'
-              checked={props.weekendsVisible}
-              onChange={props.toggleWeekends}
-            ></input>
-            주말제외
-          </label>
-        </div>
-        <div className='demo-app-sidebar-section'>
-                <h2>{ User.name}님의 일정갯수 : {props.events.length}</h2>
-          <ul>
-            {this.props.events.map(renderSidebarEvent)}
-          </ul>
-        </div>
+  return (
+    <div className='demo-app-sidebar'>
+      <div className='demo-app-sidebar-section'>
+              <h2>{User.name}님의 일정입니다.</h2>
+        <ul>
+          <li>날짜를 선택하면 새 일정을 생성하라는 메시지가 표시됩니다.</li>
+          <li>일정 드래그, 드롭 및 크기 조정이 가능합니다</li>
+          <li>일정을 클릭하면 삭제가 가능합니다.</li>
+        </ul>
       </div>
-    )
-  }
-
+      <div className='demo-app-sidebar-section'>
+        <label>
+          <input
+            type='checkbox'
+            checked={props.weekendsVisible}
+            onChange={props.toggleWeekends}
+          ></input>
+          주말제외
+        </label>
+      </div>
+      <div className='demo-app-sidebar-section'>
+              <h2>{ User.name}님의 일정갯수 : {props.events.length}</h2>
+        <ul>
+          {props.events.map(renderSidebarEvent)}
+        </ul>
+      </div>
+    </div>
+  )
+}
 
 function renderEventContent(eventInfo) {
   return (
