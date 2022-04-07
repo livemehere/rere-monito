@@ -1,52 +1,52 @@
 {
   "rooms": [
     {
-      "id": 2,
-      "roomname": "모니토와 함께 공부해 봐여",
-      "recruit": "모집완료",
-      "member": 40,
-      "roomId": "12355312",
-      "score": 74
-    },
-    {
-      "id": 3,
-      "roomname": "MONITO와 함께 집중해봅시다.",
-      "recruit": "모집완료",
-      "member": 40,
-      "score": 90,
-      "roomId": "123123233"
-    },
-    {
-      "id": 6,
-      "roomname": "조용히 하세요!",
+      "id": 11,
+      "roomname": "가나다2772",
       "recruit": "모집중",
+      "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
       "member": 0,
-      "roomId": "1231442",
       "score": 0
     },
     {
-      "roomname": "스터디룸1",
+      "id": 11882,
+      "roomname": "가나다2442",
       "recruit": "모집중",
+      "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
       "member": 0,
-      "score": 0,
-      "roomId": "12312",
-      "id": 9
+      "score": 0
     },
     {
-      "roomname": "스터디룸5",
+      "id": 11121,
+      "roomname": "가나다2322",
       "recruit": "모집중",
+      "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
       "member": 0,
-      "score": 0,
-      "roomId": "44323232",
-      "id": 10
+      "score": 0
     },
     {
-      "roomname": "스터디룸10",
+      "id": 1271,
+      "roomname": "가나다25532",
       "recruit": "모집중",
+      "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
       "member": 0,
-      "score": 0,
-      "roomId": "2f9a1a20-b404-11ec-8af3-dd4c87fd4841",
-      "id": 11
+      "score": 0
+    },
+    {
+      "id": 1221,
+      "roomname": "가나다23232",
+      "recruit": "모집중",
+      "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
+      "member": 0,
+      "score": 0
+    },
+    {
+      "id": 12441,
+      "roomname": "가나다29932",
+      "recruit": "모집중",
+      "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
+      "member": 0,
+      "score": 0
     }
   ],
   "subjects": [
@@ -84,6 +84,13 @@
       "text": "dfsdfsdf",
       "textarea": "dfdsfsdf",
       "time": 142700
+    },
+    {
+      "id": 0.46744764770717917,
+      "done": true,
+      "text": "dsdasdsad",
+      "textarea": "asdsads",
+      "time": 0
     }
   ]
 }

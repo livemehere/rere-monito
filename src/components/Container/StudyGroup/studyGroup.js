@@ -103,7 +103,7 @@ export default function Display() {
               handleSetCat={setActiveCat}
             />
           </article>
-          <Link to="/RoomCreate" className="button-design">스터디룸 생성</Link>
+          <Link to="/group/RoomCreate" className="button-design">스터디룸 생성</Link>
           
             {/* <button onClick={updateData}>refresh</button> */}
            <article className="card_list">            

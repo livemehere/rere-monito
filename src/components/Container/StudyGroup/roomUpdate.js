@@ -143,7 +143,7 @@ function RoomUpdate({ rooms }) {
         .then(res =>{
             if (res.ok) {
                 alert("수정이 완료 되었습니다.");
-                navigate("/StudyGroup");
+                navigate("/group");
             }
         });
         

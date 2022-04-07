@@ -103,7 +103,7 @@ export default function CreateWord() {
         .then(res =>{
             if (res.ok) {
                 alert("생성이 완료 되었습니다.");
-                navigate(`/StudyGroup`);
+                navigate(`/group`);
             }
         });
     }

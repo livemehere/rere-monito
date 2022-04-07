@@ -24,14 +24,17 @@ const DelBtn = styled.button`
 
 export function Card({ card, handleDeleteRoome }) {
 
+  
+  const { id, roomname, recruit, member, score, roomId } = card;
+  console.log(id);
   function useDel() {
     if(window.confirm('스터디룸을 삭제 하시겠습니까?')) {
         axios.delete(`http://localhost:3001/rooms/${card.id}`)
         handleDeleteRoome();
+        
     }
   }
-
-  const { id, roomname, recruit, member, score, roomId } = card;
+  
 
   // const [, setCardData] = useState("");
 
@@ -46,11 +49,12 @@ export function Card({ card, handleDeleteRoome }) {
 
   return (
     <>
-      <div className="card_header"><Link className="StudyRoom" to={`/StudyRoom/${roomId}`}>&nbsp;{roomname}</Link>
-      <Link to='/StudyGroup/RoomUpdate' className="button-design-update" state={{
+      <div className="card_header"><Link className="StudyRoom" to={`/group/${roomId}`}>&nbsp;{roomname}</Link>
+      <Link to='/group/RoomUpdate' className="button-design-update" state={{
           id: id,
           roomname: roomname,
           recruit: recruit,
+          roomId: roomId,
           member: member,
           score: score,
         }}>수정</Link>
