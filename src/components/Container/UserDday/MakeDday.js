@@ -75,7 +75,7 @@ const MakeDday = () => {
                         </MakeDdayContent>
                     </Form>
 
-                    <MakeDdayBtn type="submit">
+                    <MakeDdayBtn type="submit" onClick={add}>
                         <Link to="" className="MakeDdayBtn">추가</Link>
                     </MakeDdayBtn>
 

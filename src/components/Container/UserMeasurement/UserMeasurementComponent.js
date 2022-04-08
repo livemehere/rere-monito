@@ -5,7 +5,7 @@ import {
   } from "../../Presenter/UserMeasurement/UserMeasurementPresenter";
 import UserMeasurementContext from "./UserMeasurementContext";
 
-const UserMeasurement = () => {
+export default function UserMeasurement() {
     return (
         <>
         <BackDiv>
@@ -17,5 +17,3 @@ const UserMeasurement = () => {
         </>
     );
 };
-
-export default UserMeasurement;

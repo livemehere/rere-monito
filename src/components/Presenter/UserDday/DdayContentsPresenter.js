@@ -4,13 +4,13 @@ const DdayContentsBox = styled.div`
 background:linear-gradient(80deg, #FDEEE2, #FDF2E2);
 align-items:center;
 width:35em;
-height:20em;
+height:22em;
 text-align:center;
 border-radius: 1.5em;
 margin-left: auto;
 margin-right: auto;
 margin-top:2em;
-padding:1em;
+padding:1.5em;
 `;
 
 const DdayTitle = styled.div`
@@ -51,7 +51,7 @@ padding-right:0.6em;
 
 const Contenttd = styled.td`
 height:6em;
-width:13.7em;
+width:15.8em;
 padding:1em;
 
 `;

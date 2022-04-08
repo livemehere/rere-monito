@@ -15,8 +15,7 @@ const UserPageEdit = () => {
                 <UserPageEditBtnGroup>
                     <UserPageEditBtnSave onClick={save}><Link to ="/UserPageMain" className="UserEditBtn">저장</Link></UserPageEditBtnSave>
                     <UserPageEditBtn><Link to ="/UserPageMain"  className="UserEditBtn">취소</Link></UserPageEditBtn>
-                </UserPageEditBtnGroup>
-                
+                </UserPageEditBtnGroup>                
             </BackDiv>
         </>
     );

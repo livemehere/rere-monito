@@ -4,7 +4,7 @@ const MakeDdayBox = styled.div`
 background:linear-gradient(80deg, #FDEEE2, #FDF2E2);
 align-items:center;
 width:25em;
-height:25em;
+height:26.5em;
 text-align:center;
 border-radius: 1.5em;
 margin-left: auto;
@@ -53,7 +53,7 @@ const MakeDdayBtn = styled.div`
 `;
 
 const Form = styled.form`
-height:19em;
+height:18em;
 `;
 
 export {Title, MakeDdayBox, MakeDdayContent, MainTitle, MakeDdayBtn, Form};
