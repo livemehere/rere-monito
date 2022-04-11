@@ -6,10 +6,30 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarBackDiv, DetailCalendar, OnlyCalendar } from '../../Presenter/Calendar/CalendarBodyPresenter';
 
 import CountingEvent from './CountEventstate';
+import CountingEventState from './CountEventstate';
 
 export const User = {
     name:"임의연",
 }
+
+const EventList =[
+  {
+    id: 'a',
+    title: "캡스톤 회의",
+    start: '2022-04-05',
+
+  },
+  {
+    id: 'b',
+    title: "캡스톤 면담",
+    start: '2022-04-09',
+  },
+  {
+    id: 'b',
+    title: "중간고사 시험",
+    start: '2022-04-11',
+  }
+]
 
 export function CalendarBody() {
     return (
@@ -33,7 +53,7 @@ export function CalendarBody() {
             //weekends={calendarEvent.weekendsVisible}
             //datesSet={handleDates} 조정
             select={handleDateSelect}
-            //events={calendarEvent.events}
+            events={EventList}
             eventContent={renderEventContent} // 커스텀 렌더 기능
             eventClick={handleEventClick}
             eventAdd={handleEventAdd}
@@ -44,7 +64,7 @@ export function CalendarBody() {
                     </OnlyCalendar>
              {/* 여기에 CRUD폼 들어감 */}
                 <DetailCalendar>
-                <CountingEvent/>
+                <CountingEventState/>
                 </DetailCalendar> 
             </CalendarBackDiv> 
       </div>
