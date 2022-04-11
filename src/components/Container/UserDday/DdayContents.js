@@ -22,9 +22,6 @@ const DdayContents = (dday) => {
         window.confirm(`디데이을 삭제하시겠습니까?`)
     }
 
-
-    const {title, date, goal} = dday;
-
     return (
         <>
         <DdayContentsBox>
