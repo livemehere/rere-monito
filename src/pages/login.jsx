@@ -3,7 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/user";
 import Layout from "../components/layout";
+import { AlignTitle } from "../components/Presenter/Calendar/CalendarTitlePresenter";
+import { LoginBox, LoginBoxTitle } from "../components/Presenter/Login/LoginPresenter";
+import { BackDiv } from "../components/Presenter/UserPageMain/UserPageMainPresenter";
 import axiosManager from "../util/axiosManager";
+
 
 export default function Login() {
   const [user, setUser] = useRecoilState(userState);
@@ -35,12 +39,19 @@ export default function Login() {
 
   return (
     <Layout>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="email" name="email" />
-        <input type="text" placeholder="password" name="password" />
-        <button>로그인</button>
-      </form>
-    </Layout>
+
+      <AlignTitle>
+        <h1>로그인</h1>
+      </AlignTitle>
+      <BackDiv>
+      <LoginBox>
+        <form onSubmit={handleSubmit} className= "login-container">
+          <input type="text" placeholder="email" name="email" className="login-input"/>
+          <input type="text" placeholder="password" name="password" className="login-input"/>
+          <button className="login-btn">로그인</button>
+        </form>
+        </LoginBox>
+        </BackDiv>
+      </Layout>
   );
 }

@@ -1,0 +1,11 @@
+.top-nav-title {
+    @font-face {
+      `font-family: 'Jua', sans-serif;
+        font-style: normal;
+        font-weight: 100;
+        src: url("../../../style/fonts/BMJUA.otf") format('woff2'),
+        url("../../../style/fonts/BMJUA.otf") format('woff'),
+        url("../../../style/fonts/BMJUA.otf") format('truetype')
+      }
+      
+}

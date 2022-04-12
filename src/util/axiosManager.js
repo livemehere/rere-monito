@@ -5,10 +5,12 @@ class AxiosManager {
     const data = await axios({
       method,
       url: `http://www.monito.ml:3000${url}`,
-      data: body,
+      data: body && body,
     });
     return data.data;
   }
 }
 
-export default new AxiosManager();
+const axiosManager = new AxiosManager();
+
+export default axiosManager;
