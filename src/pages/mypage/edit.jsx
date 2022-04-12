@@ -5,7 +5,7 @@ import Layout from "../../components/layout";
 export default function Edit() {
   return (
     <Layout>
-      <UserPageEdit></UserPageEdit>
+      <UserPageEdit />
     </Layout>
   );
 }
