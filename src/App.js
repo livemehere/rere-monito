@@ -20,7 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="mainCam" element={<MainCam />} />
+        {/* <Route path="mainCam" element={<MainCam />} /> */}
         <Route path="mypage">
           <Route path="" element={<MyPage />} />
           <Route path="edit" element={<Edit />} />
@@ -29,13 +29,12 @@ function App() {
           <Route path="pose" element={<Pose />} />
         </Route>
         <Route path="planner" element={<Planner />} />
-        <Route path="group">
+        {/* <Route path="group">
           <Route path="" element={<Group />} />
           <Route path="RoomUpdate" element={<RoomUpdate />} />
           <Route path="RoomCreate" element={<RoomCreate />} />
           <Route path=":roomId" element={<StudyRoom />} />
-        </Route>
-        
+        </Route> */}
         <Route path="calendar" element={<Canlendar />} />
       </Routes>
     </BrowserRouter>
