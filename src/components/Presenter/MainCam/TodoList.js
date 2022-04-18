@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TodoItem } from './TodoItem'
-import { useTodoState } from './TodoContext';
+import axios from 'axios';
 
 
 const TodoHeadBlock = styled.div`
@@ -29,26 +29,26 @@ const TodoHeadBlock = styled.div`
 `;
 
 
-export function TodoHead() {
-    const todos = useTodoState();
-    const undoneTasks = todos.filter(todo => !todo.done);
+// export function TodoHead() {
+//     const todos = useTodoState();
+//     const undoneTasks = todos.filter(todo => !todo.done);
   
-    const today = new Date();
-    const dateString = today.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    const dayName = today.toLocaleDateString('ko-KR', { weekday: 'long' });
+//     const today = new Date();
+//     const dateString = today.toLocaleDateString('ko-KR', {
+//       year: 'numeric',
+//       month: 'long',
+//       day: 'numeric'
+//     });
+//     const dayName = today.toLocaleDateString('ko-KR', { weekday: 'long' });
   
-    return (
-      <TodoHeadBlock>
-        <h1>{dateString}</h1>
-        <div className="day">{dayName}</div>
-        <div className="tasks-left">할 일 {undoneTasks.length}개 남음</div>
-      </TodoHeadBlock>
-    );
-  }
+//     return (
+//       <TodoHeadBlock>
+//         <h1>{dateString}</h1>
+//         <div className="day">{dayName}</div>
+//         <div className="tasks-left">할 일 {undoneTasks.length}개 남음</div>
+//       </TodoHeadBlock>
+//     );
+//   }
 
 
 
@@ -67,7 +67,23 @@ const TodoListBlock = styled.div`
 `;
 
 export function TodoList() {
-  const todos = useTodoState();
+
+  const [todos , setTodos] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/subjects')
+    .then((response) => {
+        setTodos(response.data)
+    })
+  }, []);
+
+  const OnRemove = (id) => 
+    { if(window.confirm('할 일을 삭제 하시겠습니까?'))
+    axios.delete(`http://localhost:3001/subjects/${id}`);
+    setTodos(prev=>prev.filter(todo=>todo.id !== id));
+    }
+ 
+
   return (
     <>
     <TodoListBlock>
@@ -79,6 +95,7 @@ export function TodoList() {
           textarea={todo.textarea}
           done={todo.done}
           time={todo.time}
+          OnRemove={()=> OnRemove(todo.id)}
         />
       ))}
     </TodoListBlock>

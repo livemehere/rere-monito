@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { FaPause } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
 import { TodoCreate } from './TodoCreate';
-import { TodoProvider } from './TodoContext';
 import ListTimer from './Timer'
 import { TodoList } from './TodoList';
 import MainCamAi from './MainCamAi';
@@ -200,16 +199,9 @@ function CamSide() {
       </div>
 
       </TimeBlock>
-        
-        <TodoProvider>
-          <TodoList>
-          
-          </TodoList>
-          <TodoCreate></TodoCreate>
-        </TodoProvider>
-        
+        <TodoList />          
+        <TodoCreate />
       </RightBlock>
-      
     </>
   )
 }

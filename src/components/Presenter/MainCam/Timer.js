@@ -5,9 +5,8 @@ import { FaPause } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
 import { FaStop } from 'react-icons/fa';
 import axios from "axios";
-import useAxios from "../StudyGroup/axiosHook";
 import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch } from './TodoContext';
+
 
 const Timers = styled.div`
     margin: 10px;
@@ -132,7 +131,7 @@ export function ListTimer({ id, done, text, textarea }) {
       })
   }
 
-  const dispatch = useTodoDispatch();
+
     const OnToggle = () => {
       fetch(`http://localhost:3001/subjects/${id}`,{
         method: "GET",
@@ -141,7 +140,6 @@ export function ListTimer({ id, done, text, textarea }) {
         }
       })
       console.log(time)
-      dispatch({ type: 'TOGGLE', id },
       fetch(`http://localhost:3001/subjects/${id}`,{
         method: "PUT",
         headers: {
@@ -155,8 +153,6 @@ export function ListTimer({ id, done, text, textarea }) {
           time: time
         })
       })
-      
-      );
     }
 
   return (
@@ -188,5 +184,3 @@ export function ListTimer({ id, done, text, textarea }) {
     
   )
 };
-
-// export default React.memo(ListTimer);

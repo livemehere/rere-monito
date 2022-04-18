@@ -1,7 +1,7 @@
 import { React, useEffect }from 'react';
 import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch } from './TodoContext';
+// import { useTodoDispatch } from './TodoContext';
 import { ListTimer } from './Timer'
 import axios from 'axios';
 
@@ -88,41 +88,8 @@ const TextArea = styled.div`
 // `;
 
 
-export function TodoItem({ id, done, text, textarea, time }) {
-    const dispatch = useTodoDispatch();
-    // const OnToggle = () => {
-    //   fetch(`http://localhost:3001/subjects/${id}`,{
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     }
-    //   })
-    //   console.log(time)
-    //   dispatch({ type: 'TOGGLE', id },
-    //   fetch(`http://localhost:3001/subjects/${id}`,{
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       id: id,
-    //       done: !done,
-    //       text: text,
-    //       textarea: textarea,
-    //       time: time
-    //     })
-    //   })
-      
-    //   );
-    // }
-    
+export function TodoItem({ id, done, text, textarea, time, OnRemove }) {
 
-    const onRemove = () => 
-    { if(window.confirm('할 일을 삭제 하시겠습니까?'))
-    dispatch({ type: 'REMOVE', id },
-    axios.delete(`http://localhost:3001/subjects/${id}`));
-    }
-    
     return (
       
       <TodoItemBlock>
@@ -133,17 +100,12 @@ export function TodoItem({ id, done, text, textarea, time }) {
         textarea={textarea}
         time={time}
         ></ListTimer>
-        {/* <CheckCircle done={done} onClick={OnToggle}>
-          {done && <MdDone />}
-        </CheckCircle> */}
         <Text done={done}>
-        
           {text}
-          
         </Text>
         
         <TextArea>{textarea}</TextArea>
-        <Remove onClick={onRemove}>
+        <Remove onClick={OnRemove}>
           <MdDelete />
         </Remove>
         
@@ -151,5 +113,3 @@ export function TodoItem({ id, done, text, textarea, time }) {
       
     );
 }
-
-// export default React.memo(TodoItem);
