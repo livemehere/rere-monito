@@ -23,6 +23,7 @@ export function CalendarBody() {
     //TODO: axios from server
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
+      console.log("캘린더",datas);
       datas.forEach((data) => {
         initialData.push({
           id: data.id,
