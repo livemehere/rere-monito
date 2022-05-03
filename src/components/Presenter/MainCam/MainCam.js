@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { FaPause } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
-import { TodoCreate } from './TodoCreate';
+// import { TodoCreate } from './TodoCreate';
 import ListTimer from './Timer'
 import { TodoList } from './TodoList';
 import MainCamAi from './MainCamAi';
@@ -200,7 +200,7 @@ function CamSide() {
 
       </TimeBlock>
         <TodoList />          
-        <TodoCreate />
+        {/* <TodoCreate /> */}
       </RightBlock>
     </>
   )

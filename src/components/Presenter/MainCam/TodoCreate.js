@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
-// import { useTodoDispatch, useTodoNextId } from './TodoContext';
+import axiosManager from '../../../util/axiosManager';
+import { userState } from '../../../atoms/user';
+import { useRecoilState } from 'recoil';
 
 
 const CircleButton = styled.button`
@@ -94,7 +96,7 @@ const TextAreaInput = styled.textarea`
 
 //TODO: TodoCreate를 TodoItem 으로 컴포넌트 이동
 
-export function TodoCreate() {
+export function TodoCreate( ) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(''); 
   const [content, setContent] = useState('');
@@ -109,7 +111,7 @@ export function TodoCreate() {
   const onChangeContent = e => setContent(e.target.value);
   console.log(onChangeContent);
 
-  
+  const [user, setUser] = useRecoilState(userState);
 
   const contentsReplaceNewline = () => {
     return content.replaceAll("\n", "\r\n"); 
@@ -118,26 +120,19 @@ export function TodoCreate() {
   const onSubmit = e => {
     e.preventDefault(); // 새로고침 방지
 
-    fetch(`http://localhost:3001/subjects/`, {
-            method : "POST",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: nextId.current,
-              text: value,
-              textarea: contentsReplaceNewline(),
-              done: false,
-              time: 0
-            })
+    axiosManager.axios(`/record/`, "POST", {
+      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+      id: user.id,
+      name: value
     })
+    
  
     setValue('');
     setContent('');
     setOpen(false);
     nextId.current += 1;
     console.log(nextId.current);
-  };
+   };
 
   return (
     <>
@@ -168,5 +163,3 @@ export function TodoCreate() {
     </>
   );
 }
-
-// export default React.memo(TodoCreate);
