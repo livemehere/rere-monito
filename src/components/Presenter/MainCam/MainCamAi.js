@@ -16,9 +16,9 @@ const StyledVideo = styled.video`
 `;
 
 const StatesBar = styled.div`
-  postion: relative;
   height: 10vh;
   width: 100%;
+  padding-top: 100px;
 `;
 
 const Emotions = styled.div`
@@ -28,7 +28,7 @@ const Emotions = styled.div`
 
 const State1 = styled.div`
   background-color: #E9A681;
-  width: 12vh;
+  width: 14vh;
   height: 6vh;
   position absolute;
   bottom: -10%;
@@ -38,6 +38,7 @@ const State1 = styled.div`
   text-align: center;
   border-radius: 1vh;
   color: white;
+  top: 103%; 
 `;
 
 const State2 = styled.div`
@@ -52,6 +53,7 @@ const State2 = styled.div`
   text-align: center;
   border-radius: 1vh;
   color: white;
+  top: 103%; 
 `;
 
 const DetectTimer = styled.div`

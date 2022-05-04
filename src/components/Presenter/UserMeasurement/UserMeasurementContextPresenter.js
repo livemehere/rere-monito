@@ -5,8 +5,8 @@ const BackDiv = styled.div`
     padding: 10px;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 1em;
-    margin-bottom: 3em;
+    margin-top: 2em;
+    margin-bottom: 2em;
     background-color: rgb(247, 247, 247);
     width: 50em;
     height:43em;

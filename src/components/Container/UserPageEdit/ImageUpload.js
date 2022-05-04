@@ -7,7 +7,8 @@ const Uploader = () => {
   return (
       <>
         <Uploadimg>
-            
+            <input
+            type="file"/>
         </Uploadimg>
       </>
   );

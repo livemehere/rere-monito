@@ -4,10 +4,12 @@ import styled, { css } from 'styled-components';
 import { FaPause } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
 import { FaStop } from 'react-icons/fa';
-import axios from "axios";
-import useAxios from "../StudyGroup/axiosHook";
 import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch } from './TodoContext';
+import axiosManager from "../../../util/axiosManager";
+import { userState } from "../../../atoms/user";
+import { useRecoilState } from "recoil";
+import moment from "moment";
+
 
 const Timers = styled.div`
     margin: 10px;
@@ -81,16 +83,24 @@ const CheckCircle = styled.div`
       color: #38d9a9;
     `}
 `;
-
+//TODO: 타이머 뜬다 put 기능 수정
 
 export function ListTimer({ id, done, text, textarea }) {
+  const nowTime = moment().format('YYYY-MM-DDTHH:mm:ss.000Z');
+  const [user, setUser] = useRecoilState(userState);
 
+  const [proMise, setProMise] = useState([])
   const [initTime, setInitTime] = useState([])
+
   useEffect(() => {
-    axios.get(`http://localhost:3001/subjects/${id}`)
-    .then(Response => {
-    setInitTime(Response.data.time)
-    })
+    axiosManager.axios(`/record/${user.id}`, "GET")
+    .then(response => {
+      setProMise(response.filter(times => times.id === id))
+      if(proMise){
+        setInitTime(proMise[0].cumulative_time);
+      }
+    }
+    )
   })
   
 
@@ -117,22 +127,15 @@ export function ListTimer({ id, done, text, textarea }) {
 
 
   const onUpdate = () => {
-    fetch(`http://localhost:3001/subjects/${id}`,{
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          done: done,
-          text: text,
-          textarea: textarea,
-          time: time
-        })
-      })
+    axiosManager.axios(`/record/`, "PUT", {
+      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+      id: id,
+      cumulative_time: time,
+      endDate: nowTime
+    })
   }
 
-  const dispatch = useTodoDispatch();
+
     const OnToggle = () => {
       fetch(`http://localhost:3001/subjects/${id}`,{
         method: "GET",
@@ -141,7 +144,6 @@ export function ListTimer({ id, done, text, textarea }) {
         }
       })
       console.log(time)
-      dispatch({ type: 'TOGGLE', id },
       fetch(`http://localhost:3001/subjects/${id}`,{
         method: "PUT",
         headers: {
@@ -155,8 +157,6 @@ export function ListTimer({ id, done, text, textarea }) {
           time: time
         })
       })
-      
-      );
     }
 
   return (
@@ -188,5 +188,3 @@ export function ListTimer({ id, done, text, textarea }) {
     
   )
 };
-
-// export default React.memo(ListTimer);

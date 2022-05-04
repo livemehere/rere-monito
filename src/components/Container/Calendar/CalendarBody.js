@@ -5,24 +5,28 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { CalendarBackDiv, DetailCalendar, OnlyCalendar } from "../../Presenter/Calendar/CalendarBodyPresenter";
 
-import CountingEvent from "./CountEventstate";
 import CountingEventState from "./CountEventstate";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../atoms/user";
 import axiosManager from "../../../util/axiosManager";
+import { calendarState } from "../../../atoms/calendar";
 
-export const User = {
-  name: "임의연",
-};
+
+export const event1= [{
+  title: "캡스톤회의",
+  start: "2022-05-27",
+},]
+
 
 export function CalendarBody() {
-  const [calendarData, setCalendarData] = useState([]);
+  const [calendarData, setCalendarData] = useRecoilState(calendarState);
   const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
     //TODO: axios from server
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
+      console.log("캘린더",datas);
       datas.forEach((data) => {
         initialData.push({
           id: data.id,
@@ -31,10 +35,20 @@ export function CalendarBody() {
           end: data.endDate,
         });
       });
+        
       setCalendarData(initialData);
     });
-  }, []);
-
+    console.log("이벤트정보", calendarData);
+    console.log("변경");
+  }, [calendarData]);
+  
+  const handleEventAdd = (addInfo) => {
+    console.log(addInfo.event.toPlainObject());
+    // TODO: addCalendarToDB();
+    setCalendarData([
+      ...calendarData,{ ...addInfo.event.toPlainObject(), id:Date.now() }
+    ])
+  };
   return (
     <div className="demo-app">
       <CalendarBackDiv>
@@ -53,8 +67,8 @@ export function CalendarBody() {
               selectable={true}
               selectMirror={true}
               dayMaxEvents={true}
-              //weekends={calendarEvent.weekendsVisible}
-              //datesSet={handleDates} 조정
+              weekends={true}
+              datesSet={handleDates} 
               select={handleDateSelect}
               events={calendarData}
               eventContent={renderEventContent} // 커스텀 렌더 기능
@@ -92,7 +106,6 @@ const handleDateSelect = (selectInfo) => {
     );
   }
 };
-
 const handleEventClick = (clickInfo) => {
   if (window.confirm(`'${clickInfo.event.title}' 일정을 삭제하시겠습니까?`)) {
     clickInfo.event.remove();
@@ -102,13 +115,8 @@ const handleEventClick = (clickInfo) => {
 
 const handleDates = (rangeInfo) => {
   console.log(rangeInfo);
-  this.props.requestEvents(rangeInfo.startStr, rangeInfo.endStr).catch(reportNetworkError);
 };
 
-const handleEventAdd = (addInfo) => {
-  console.log(addInfo.event.toPlainObject());
-  // TODO: addCalendarToDB();
-};
 
 const handleEventChange = (oldEvent) => {
   console.log(oldEvent.event.toPlainObject());
@@ -116,7 +124,7 @@ const handleEventChange = (oldEvent) => {
 };
 
 const handleEventRemove = (removeInfo) => {
-  this.props.deleteEvent(removeInfo.event.id).catch(() => {
+  (removeInfo.event.id).catch(() => {
     reportNetworkError();
     removeInfo.revert();
   });
@@ -127,6 +135,7 @@ function renderEventContent(eventInfo) {
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
+
     </>
   );
 }
