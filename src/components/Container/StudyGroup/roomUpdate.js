@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LogoSrc from '../../Presenter/StudyGroup/GroupFilter/book.jpg'
 import { useLocation } from "react-router-dom";
+import axiosManager from "../../../util/axiosManager";
 
 const Logo = styled.img`
   width: 100%;
@@ -54,7 +55,7 @@ const SubmitBtn = styled.button`
   box-shadow: 0 4px 16px rgba(0,79,255,0.3);
   transition:0.3s;
   position: relative;
-  left: 100%;
+  left: 60%;
   
   transform: translate(-50%,-50%);
   .button-design{
@@ -80,36 +81,6 @@ const RoomTitle = styled.div`
   margin-bottom: 20px;
 `;
 
-// const InsertFormPositioner = styled.div`
-//   width: 40%;
-//   bottom: 55%;
-//   left: 30%;
-//   position: fixed;
-  
-// `;
-
-// const InsertForm = styled.form`
-//   background: #f8f9fa;
-//   padding-left: 32px;
-//   padding-top: 32px;
-//   padding-right: 32px;
-//   padding-bottom: 32px;
-
-//   border-radius: 16px;
-  
-//   border: 5px solid black;
-// `;
-
-// const Input = styled.input`
-//   padding: 12px;
-//   border-radius: 4px;
-//   border: 1px solid #dee2e6;
-//   width: 100%;
-//   outline: none;
-//   font-size: 18px;
-//   box-sizing: border-box;
-// `;
-
 function RoomUpdate({ rooms }) {
   const location = useLocation();
   const room = location.state;
@@ -124,24 +95,18 @@ function RoomUpdate({ rooms }) {
 
     const navigate = useNavigate();
 
-    
+    // TODO: roomName 키 추가, 그외 키값들 수정필요
 
     function onSubmit(e){
         e.preventDefault();
         
-        fetch(`http://localhost:3001/rooms/${room.id}`, {
-            method : "PUT",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                ...room,
-                roomname: roomName.current.value,
-            })
+        axiosManager.axios(`/room/`, "POST", {
+          headers: { 'Content-type': 'application/x-www-form-urlencoded', },
+          roomName : roomName.current.value,
+          
         })
-
         .then(res =>{
-            if (res.ok) {
+            if (res) {
                 alert("수정이 완료 되었습니다.");
                 navigate("/group");
             }
@@ -157,21 +122,7 @@ function RoomUpdate({ rooms }) {
     },[room.roomname])
 
     return (
-  //     <div>
-  //     {open && (
-  //   <InsertFormPositioner>
-  //     <InsertForm onSubmit={onSubmit}>
-  //       <Input ref={roomName}
-  //         autoFocus
-  //         placeholder="수정할 내용을 입력후 엔터를 누르세요"
-  //         onChange={onChange}
-  //         value={value}
-  //       />
-  //     </InsertForm>
-  //   </InsertFormPositioner>
-  // )}
-  //   <button onClick={onToggle}>수정하기</button>
-  //     </div>
+
   <main>
         <Logo src={LogoSrc}></Logo>
         

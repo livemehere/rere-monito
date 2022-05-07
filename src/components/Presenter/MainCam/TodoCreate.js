@@ -96,7 +96,10 @@ const TextAreaInput = styled.textarea`
 
 //TODO: TodoCreate를 TodoItem 으로 컴포넌트 이동
 
-export function TodoCreate( ) {
+export function TodoCreate(SubjectCreate) {
+  
+  const [user, setUser] = useRecoilState(userState);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(''); 
   const [content, setContent] = useState('');
@@ -111,7 +114,6 @@ export function TodoCreate( ) {
   const onChangeContent = e => setContent(e.target.value);
   console.log(onChangeContent);
 
-  const [user, setUser] = useRecoilState(userState);
 
   const contentsReplaceNewline = () => {
     return content.replaceAll("\n", "\r\n"); 

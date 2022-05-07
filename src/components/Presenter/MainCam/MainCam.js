@@ -45,8 +45,8 @@ const Btn1 = styled.button`
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  left: 40%;
+  position: relative;
+  
   font-size: 40px;
   background-color: white;
   background-size: contain;
@@ -54,7 +54,7 @@ const Btn1 = styled.button`
 
   color: #d1963e;
   
-  top: 95%;
+  top: -200px;
 
   &:hover {
     color: #D1A66F;
@@ -69,8 +69,8 @@ const BtnReset = styled.button`
   position: absolute;
   top: 110%;
   border: 0;
-  left: 39%;
-  background-color: white;
+  left: 40%;
+  background: none;
   &:hover {
     color: #80EB71;
   }
@@ -84,7 +84,7 @@ const VideoBox = styled.div`
   width: 540px;
   height: 580px;
   position: relative;
-  left : 10%;
+  left : 15%;
   top : 4%;
   background-color: black;
   
@@ -97,7 +97,7 @@ const RightBlock = styled.div`
   margin: 10px;
   width: 80vh;
   position: relative;
-  left: 15%;
+  left: 20%;
   
 `;
 

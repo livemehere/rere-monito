@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
-
+// import { TodoCreate } from './TodoCreate';
 
 const TodoHeadBlock = styled.div`
   padding-top: 48px;
@@ -150,7 +150,7 @@ const TextAreaInput = styled.textarea`
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #dee2e6;
-  width: 96%;
+  width: 100%;
   outline: none;
   resize: none;
   height: 100px;
@@ -167,7 +167,6 @@ export function TodoList() {
   //record(과목) 가져오기
   useEffect(() => {
     axiosManager.axios(`/record/${user.id}`, "GET").then((response) => {
-      console.log(response);
       setTodos(response)
     });
   }, []);
@@ -182,16 +181,13 @@ export function TodoList() {
       setTodos(prev=>prev.filter(todo=>todo.id !== id));
     }
     
-    
     }
+
 
     //record(과목) 생성 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(''); 
     const [content, setContent] = useState('');
-  
-    const ni = Math.random();
-    const nextId = useRef(ni);
   
     const onToggle = () => setOpen(!open);
     const onChange = e => setValue(e.target.value);
@@ -204,25 +200,31 @@ export function TodoList() {
     const contentsReplaceNewline = () => {
       return content.replaceAll("\n", "\r\n"); 
     }
-  //useEffect로 밑에거 감싸봐 
-    const onSubmit = (userId, nameValue) => {
+
+
+    const onSubmit = () => {
       // e.preventDefault(); // 새로고침 방지
-      
+
       axiosManager.axios(`/record/`, "POST", {
         headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-        id: userId,
-        name: nameValue
-      })
+        id: user.id,
+        name: value
+      });
+
+      axiosManager.axios(`/record/${user.id}`, "GET").then((response) => {
+        setTodos(response)
+      });
 
       setValue('');
       setContent('');
       setOpen(false);
-      nextId.current += 1;
+      console.log(todos.length)
 
-      
-      console.log(nextId.current);
+      // setTodos(prev=>prev.filter(todo=>todo.length !== todos.length));
     };
- 
+
+    
+
 
   return (
     <>
@@ -244,7 +246,7 @@ export function TodoList() {
      {/* 생성 컴포넌트 */}
     {open && (
         <InsertFormPositioner>
-        <InsertForm onSubmit={() => onSubmit(user.id, value)}>
+        <InsertForm onSubmit={onSubmit}>
           <Input
             autoFocus
             placeholder="할 일을 입력 후, Enter 를 누르세요"
