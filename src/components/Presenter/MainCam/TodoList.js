@@ -158,19 +158,50 @@ const TextAreaInput = styled.textarea`
   white-space: pre-wrap;
 `;
 
+const SubmitBtn = styled.button`
+  width:120px;
+  height: 40px;
+  color: white;
+  text-align: center;
+  top: 20px;
+  font-weight: bold;
+  
+  background: #E9A681;
+  font-size: 16px;
+  border:none;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,79,255,0.3);
+  transition:0.3s;
+  position: relative;
+
+  left: 8%;
+  transform: translate(-50%,-50%);
+  text-decoration-line: none;
+`;
+
 
 export function TodoList() {
 
   const [todos , setTodos] = useState([]);
+  const [getts, setGets] = useState([]);
   const [user, setUser] = useRecoilState(userState);
 
   //record(과목) 가져오기
   useEffect(() => {
-    axiosManager.axios(`/record/${user.id}`, "GET").then((response) => {
-      setTodos(response)
-    });
+    axiosManager.axios(`/record/${user.id}`, "GET")
+    .then((res) => {
+      const initData = [];
+        res.forEach((r) => {
+        initData.push({
+          id: r.id,
+          name: r.name,
+          cumulative_time: r.cumulative_time,
+        });
+      });
+      setTodos(initData);
+    })
   }, []);
-
+  
   //record(과목) 삭제
   const OnRemove = (id) => 
     { if(window.confirm('할 일을 삭제 하시겠습니까?')){
@@ -183,7 +214,6 @@ export function TodoList() {
     
     }
 
-
     //record(과목) 생성 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(''); 
@@ -191,16 +221,15 @@ export function TodoList() {
   
     const onToggle = () => setOpen(!open);
     const onChange = e => setValue(e.target.value);
-    console.log(onChange);
+    // console.log(onChange);
   
     const onChangeContent = e => setContent(e.target.value);
-    console.log(onChangeContent);
+    // console.log(onChangeContent);
   
     //엔터 반환
     const contentsReplaceNewline = () => {
       return content.replaceAll("\n", "\r\n"); 
     }
-
 
     const onSubmit = () => {
       // e.preventDefault(); // 새로고침 방지
@@ -209,21 +238,30 @@ export function TodoList() {
         headers : {'Content-Type': 'application/x-www-form-urlencoded', },
         id: user.id,
         name: value
-      });
+      }).then( console.log("posted"));
 
-      axiosManager.axios(`/record/${user.id}`, "GET").then((response) => {
-        setTodos(response)
-      });
-
+      axiosManager.axios(`/record/${user.id}`, "GET")
+      .then((res) => {
+        const initData = [];
+          res.forEach((r) => {
+          initData.push({
+            id: r.id,
+            name: r.name,
+            cumulative_time: r.cumulative_time,
+          });
+        });
+        setTodos(initData);
+      })
+      
       setValue('');
       setContent('');
       setOpen(false);
-      console.log(todos.length)
-
-      // setTodos(prev=>prev.filter(todo=>todo.length !== todos.length));
     };
 
-    
+    useEffect(() => {
+      setTodos(todos);
+    }, [todos])
+
 
 
   return (
@@ -247,6 +285,7 @@ export function TodoList() {
     {open && (
         <InsertFormPositioner>
         <InsertForm onSubmit={onSubmit}>
+          
           <Input
             autoFocus
             placeholder="할 일을 입력 후, Enter 를 누르세요"
@@ -259,7 +298,7 @@ export function TodoList() {
             onChange={onChangeContent}
             value={content}
           />
-          
+          <SubmitBtn type='submit'>과목 생성</SubmitBtn>
         </InsertForm>
         
       </InsertFormPositioner>

@@ -84,29 +84,16 @@ const CheckCircle = styled.div`
     `}
 `;
 
-export function ListTimer({ id, done, text, textarea }) {
+export function ListTimer({ id, done, text, textarea, SubTime }) {
   const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
   const [user, setUser] = useRecoilState(userState);
 
-  const [proMise, setProMise] = useState([])
-  const [initTime, setInitTime] = useState([])
-
-  axiosManager.axios(`/record/${user.id}`, "GET")
-    .then(response => {
-      setProMise(response.filter(times => times.id === id))
-      if(proMise){
-        setInitTime(proMise[0].cumulative_time);
-      }
-    }
-    )
-  
-
-  const [time, setTime] = React.useState(initTime);
+  const [time, setTime] = React.useState(SubTime);
   const [timerOn, setTimerOn] = React.useState(false);
 
   useEffect(()=>{
-    setTime(initTime);
-  },[initTime])
+    setTime(SubTime);
+  },[])
   
 
   React.useEffect(() => {
@@ -114,8 +101,8 @@ export function ListTimer({ id, done, text, textarea }) {
 
     if (timerOn) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 100);
-      }, 100);
+        setTime((prevTime) => prevTime + 1000);
+      }, 1000);
     } else if (!timerOn) {
       clearInterval(interval);
     }

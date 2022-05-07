@@ -98,7 +98,7 @@ export function TodoItem({ id, done, text, textarea, time, OnRemove }) {
         done={done}
         text={text}
         textarea={textarea}
-        time={time}
+        SubTime={time}
         ></ListTimer>
         <Text done={done}>
           {text}
