@@ -7,7 +7,7 @@ export const userState = atom({
     email: "test@gmail.com",
     password: "1234",
     name: "공태만",
-    birth: "1998-11-30T00:00:00.000Z",
+    birth: "1998-11-30",
     job: "프리렌서",
     profile_img: null,
     iat: 1649769720,
