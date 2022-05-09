@@ -5,33 +5,81 @@ import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
 import { useParams } from "react-router-dom";
 
+
+//생성되는 캠 div 만들기
 const Container = styled.div`
-  padding: 20px;
+
   display: flex;
   height: 100vh;
-  width: 90%;
-  margin: 50px;
+  margin-left: 50px;
   flex-wrap: wrap;
-  flex-direction: center;
+  flex-direction: row;
+  align-content: stretch;
+`;
+
+const MyCam = styled.div`
+  width: 600px;
+  height: 450px;
+  position: relative;
+  top: -40px;
+  left: 150px;
+
+`;
+
+const Emotions = styled.div`
+  position: absolute;
+  left: 2%;
+  top: 12%;
+  z-index: 90;
+`;
+
+const CamTimers = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  top: 110%;
+  left: 1%;
+  width: 100px;
+  height: 40px;
+  z-index: 99;
+`;
+
+const UserName = styled.div`
+  text-align: right;
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;
+  width: 100px;
+  top: 110%;
+  left: 80%;
+  z-index: 99;
 `;
 
 const StyledVideo = styled.video`
-  position: relative
-  margin: 50px;
-  left 20%;
+  opacity: 1;
+  width: 600px;
+  height: 450px;
+  position: relative;
+  border-radius: 20px;
+  margin-top: 50px;
+`;
+
+const StyledVideo2 = styled.video`
+  top: 50px;
+  opacity: 1;
+  height: 200px;
+  position: relative;
+  border-radius: 20px;
 `;
 
 const RoomTitle = styled.div`
   font-size: 32px;
   font-weight: bold;
   text-align: center;
+  line-height: 200px;
+  color: #206966;
 `;
 
-const VideoOuter = styled.div`
-  width: 400px;
-  height: 300px;
-  overflow: hidden;
-`;
 
 //face-emotion
 const expressionMap = {
@@ -53,7 +101,7 @@ const Video = (props) => {
     });
   }, []);
 
-  return <StyledVideo playsInline autoPlay ref={ref} />;
+  return <StyledVideo2 playsInline autoPlay ref={ref} />;
 };
 
 const videoConstraints = {
@@ -80,7 +128,7 @@ const StudyRoom = () => {
   useEffect(() => {
     socketRef.current = io.connect("/");
     navigator.mediaDevices
-      .getUserMedia({ video: videoConstraints, audio: true })
+      .getUserMedia({ video: StyledVideo2, audio: true })
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit("join room", roomID);
@@ -216,15 +264,20 @@ const StudyRoom = () => {
 
   return (
     <div>
-      <RoomTitle>방 이름: 모니토와 함께 공부해 봐여</RoomTitle>
+      <RoomTitle>방 이름 : 모니토와 함께 공부해 봐여</RoomTitle>
       <Container>
-      {faceEmotion}
-      {/* <h2>
+      
+      <MyCam>
+        <Emotions>{faceEmotion}</Emotions>
+        <CamTimers>
         {hours < 10 ? `0${hours}` : hours}:
         {minutes < 10 ? `0${minutes}` : minutes}:
         {seconds < 10 ? `0${seconds}` : seconds}
-      </h2> */}
-      <StyledVideo muted ref={userVideo} autoPlay playsInline />
+        </CamTimers>
+        <UserName>최동연님</UserName>
+        <StyledVideo muted ref={userVideo} autoPlay playsInline />
+      </MyCam>
+      
       {peers.map((peer, index) => {
         return <Video key={index} peer={peer} />;
       })}

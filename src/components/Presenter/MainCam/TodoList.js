@@ -1,12 +1,10 @@
 import { TodoItem } from './TodoItem'
-import axios from 'axios';
 import axiosManager from '../../../util/axiosManager';
 import { userState } from '../../../atoms/user';
 import { useRecoilState } from "recoil";
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { MdAdd } from 'react-icons/md';
-
+import { TodoCreate } from './TodoCreate';
 
 const TodoHeadBlock = styled.div`
   padding-top: 48px;
@@ -70,108 +68,29 @@ const TodoListBlock = styled.div`
 
 `;
 
-const CircleButton = styled.button`
-  background: #FFB68B;
-  &:hover {
-    background: #ffcf90;
-  }
-  &:active {
-    background: #ff7f96;
-  }
-
-  z-index: 5;
-  cursor: pointer;
-  width: 80px;
-  height: 80px;
-  display: block;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  position: absolute;
-  left: 45%;
-  bottom: 0px;
-  transform: translate(-50%, 50%);
-  color: white;
-  border-radius: 50%;
-  border: none;
-  outline: none;
-  display: flex;
-  
-
-  transition: 0.125s all ease-in;
-  ${props =>
-    props.open &&
-    css`
-      background: #ff6b6b;
-      &:hover {
-        background: #ff8787;
-      }
-      &:active {
-        background: #fa5252;
-      }
-      transform: translate(-50%, 50%) rotate(45deg);
-    `}
-`;
-
-
-const InsertFormPositioner = styled.div`
-  width: 90%;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-`;
-
-const InsertForm = styled.form`
-  background: #f8f9fa;
-  padding-left: 32px;
-  padding-top: 32px;
-  padding-right: 32px;
-  padding-bottom: 72px;
-
-  border-radius: 16px;
-  
-  border-top: 1px solid #e9ecef;
-`;
-
-
-
-const Input = styled.input`
-  padding: 12px;
-  border-radius: 4px;
-  border: 1px solid #dee2e6;
-  width: 100%;
-  outline: none;
-  font-size: 18px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-`;
-
-const TextAreaInput = styled.textarea`
-  padding: 12px;
-  border-radius: 4px;
-  border: 1px solid #dee2e6;
-  width: 96%;
-  outline: none;
-  resize: none;
-  height: 100px;
-  font-size: 18px;
-  white-space: pre-wrap;
-`;
-
 
 export function TodoList() {
 
   const [todos , setTodos] = useState([]);
+  const [getts, setGets] = useState([]);
   const [user, setUser] = useRecoilState(userState);
 
   //record(과목) 가져오기
   useEffect(() => {
-    axiosManager.axios(`/record/${user.id}`, "GET").then((response) => {
-      console.log(response);
-      setTodos(response)
-    });
+    axiosManager.axios(`/record/${user.id}`, "GET")
+    .then((res) => {
+      const initData = [];
+        res.forEach((r) => {
+        initData.push({
+          id: r.id,
+          name: r.name,
+          cumulative_time: r.cumulative_time,
+        });
+      });
+      setGets(initData);
+    })
   }, []);
-
+  
   //record(과목) 삭제
   const OnRemove = (id) => 
     { if(window.confirm('할 일을 삭제 하시겠습니까?')){
@@ -182,47 +101,37 @@ export function TodoList() {
       setTodos(prev=>prev.filter(todo=>todo.id !== id));
     }
     
-    
     }
 
-    //record(과목) 생성 
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(''); 
-    const [content, setContent] = useState('');
-  
-    const ni = Math.random();
-    const nextId = useRef(ni);
-  
-    const onToggle = () => setOpen(!open);
-    const onChange = e => setValue(e.target.value);
-    console.log(onChange);
-  
-    const onChangeContent = e => setContent(e.target.value);
-    console.log(onChangeContent);
-  
-    //엔터 반환
-    const contentsReplaceNewline = () => {
-      return content.replaceAll("\n", "\r\n"); 
-    }
-  //useEffect로 밑에거 감싸봐 
-    const onSubmit = (userId, nameValue) => {
-      // e.preventDefault(); // 새로고침 방지
-      
+
+    const subjectAdd = (userId, values) => {
+
       axiosManager.axios(`/record/`, "POST", {
         headers : {'Content-Type': 'application/x-www-form-urlencoded', },
         id: userId,
-        name: nameValue
+        name: values
       })
 
-      setValue('');
-      setContent('');
-      setOpen(false);
-      nextId.current += 1;
-
+      axiosManager.axios(`/record/${user.id}`, "GET")
+      .then((res) => {
+        const initData = [];
+          res.forEach((r) => {
+          initData.push({
+            id: r.id,
+            name: r.name,
+            cumulative_time: r.cumulative_time,
+          });
+        });
+        setGets(initData);
+      })
       
-      console.log(nextId.current);
     };
- 
+
+    useEffect(() => {
+      setTodos(getts);
+    }, [getts])
+
+
 
   return (
     <>
@@ -240,32 +149,10 @@ export function TodoList() {
         />
       ))}
     </TodoListBlock>
-     
-     {/* 생성 컴포넌트 */}
-    {open && (
-        <InsertFormPositioner>
-        <InsertForm onSubmit={() => onSubmit(user.id, value)}>
-          <Input
-            autoFocus
-            placeholder="할 일을 입력 후, Enter 를 누르세요"
-            onChange={onChange}
-            value={value}
-          />
-          <TextAreaInput
-            autoFocus
-            placeholder="내용을 입력하세요"
-            onChange={onChangeContent}
-            value={content}
-          />
-          
-        </InsertForm>
-        
-      </InsertFormPositioner>
-        
-      )}
-      <CircleButton onClick={onToggle} open={open}>
-        <MdAdd />
-      </CircleButton>
+
+      <TodoCreate
+        subjectAdd={subjectAdd}
+      />
     </>
   );
 }

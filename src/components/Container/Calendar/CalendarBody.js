@@ -3,7 +3,11 @@ import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { CalendarBackDiv, DetailCalendar, OnlyCalendar } from "../../Presenter/Calendar/CalendarBodyPresenter";
+import {
+  CalendarBackDiv,
+  DetailCalendar,
+  OnlyCalendar,
+} from "../../Presenter/Calendar/CalendarBodyPresenter";
 
 import CountingEventState from "./CountEventstate";
 import { useRecoilState } from "recoil";
@@ -11,12 +15,12 @@ import { userState } from "../../../atoms/user";
 import axiosManager from "../../../util/axiosManager";
 import { calendarState } from "../../../atoms/calendar";
 
-
-export const event1= [{
-  title: "캡스톤회의",
-  start: "2022-05-27",
-},]
-
+export const event1 = [
+  {
+    title: "캡스톤회의",
+    start: "2022-05-27",
+  },
+];
 
 export function CalendarBody() {
   const [calendarData, setCalendarData] = useRecoilState(calendarState);
@@ -26,7 +30,7 @@ export function CalendarBody() {
     //TODO: axios from server
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
-      console.log("캘린더",datas);
+      console.log("캘린더", datas);
       datas.forEach((data) => {
         initialData.push({
           id: data.id,
@@ -35,19 +39,30 @@ export function CalendarBody() {
           end: data.endDate,
         });
       });
-        
+
       setCalendarData(initialData);
     });
     console.log("이벤트정보", calendarData);
     console.log("변경");
   }, [calendarData]);
-  
+
   const handleEventAdd = (addInfo) => {
     console.log(addInfo.event.toPlainObject());
     // TODO: addCalendarToDB();
     setCalendarData([
-      ...calendarData,{ ...addInfo.event.toPlainObject(), id:Date.now() }
-    ])
+      ...calendarData,
+      { ...addInfo.event.toPlainObject(), id: Date.now() },
+    ]);
+  };
+  const handleEventRemove = (removeInfo) => {
+    const updatedList = [...calendarData];
+    setCalendarData(calendarData.filter((d) => d.removeInfo !== removeInfo));
+    // removeInfo.event.id.catch(() => {
+    //   reportNetworkError();
+    //   updatedList.removeInfo.revert();
+    // });
+
+    setCalendarData(updatedList);
   };
   return (
     <div className="demo-app">
@@ -68,7 +83,7 @@ export function CalendarBody() {
               selectMirror={true}
               dayMaxEvents={true}
               weekends={true}
-              datesSet={handleDates} 
+              datesSet={handleDates}
               select={handleDateSelect}
               events={calendarData}
               eventContent={renderEventContent} // 커스텀 렌더 기능
@@ -117,25 +132,23 @@ const handleDates = (rangeInfo) => {
   console.log(rangeInfo);
 };
 
-
 const handleEventChange = (oldEvent) => {
   console.log(oldEvent.event.toPlainObject());
   // TODO: updateToDB(); 해도되고 안해도되고
 };
 
-const handleEventRemove = (removeInfo) => {
-  (removeInfo.event.id).catch(() => {
-    reportNetworkError();
-    removeInfo.revert();
-  });
-};
+// const handleEventRemove = (removeInfo) => {
+//   (removeInfo.event.id).catch(() => {
+//     reportNetworkError();
+//     // removeInfo.revert();
+//   });
+// };
 
 function renderEventContent(eventInfo) {
   return (
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
-
     </>
   );
 }
@@ -143,7 +156,13 @@ function renderEventContent(eventInfo) {
 function renderSidebarEvent(plainEventObject) {
   return (
     <li key={plainEventObject.id}>
-      <b>{formatDate(plainEventObject.start, { year: "numeric", month: "short", day: "numeric" })}</b>
+      <b>
+        {formatDate(plainEventObject.start, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
+      </b>
       <i>{plainEventObject.title}</i>
     </li>
   );

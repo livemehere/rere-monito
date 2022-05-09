@@ -13,6 +13,7 @@ import Login from "./pages/login";
 import RoomUpdate from "./pages/studyGroup/roomUpdate";
 import RoomCreate from "./pages/studyGroup/roomCreate";
 import StudyRoom from "./pages/studyGroup/studyRoom";
+import SignUp from "./pages/signUp";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signUp" element={<SignUp/>}/>
         <Route path="mainCam" element={<MainCam />} />
         <Route path="mypage">
           <Route path="" element={<MyPage />} />

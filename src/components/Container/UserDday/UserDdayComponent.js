@@ -4,22 +4,12 @@ import { useRecoilState } from "recoil";
 import { userState } from "../../../atoms/user";
 
 import { BackDiv, DdayTitle } from "../../Presenter/UserDday/UseDdayPresent";
-import DdayList from "./DdayList";
+import DdayContents from "./DdayContents"
+
+import moment from 'moment';
 
 
 const UserDday = () => {
-  const [ddays, setDdays] = useState([
-    {
-      id: 1,
-      title: "중간고사",
-      date: "2022-04-21",
-    },
-    {
-      id: 2,
-      title: "종강",
-      date: "2022-06-22",
-    },
-  ]);
 
   const [dday, setDday] = useState([]);
   const [user, setUser] = useRecoilState(userState);
@@ -40,16 +30,16 @@ const UserDday = () => {
       setDday(initialData);
     });
     
-    const now = new Date()
 
   }, []);
-
 
   return (
     <>
       <BackDiv>
         <DdayTitle>디데이</DdayTitle>
-        <DdayList dday={dday} />
+        {dday.map(dday => (
+            <DdayContents dday={dday} key={dday.id}/>
+        ))}
       </BackDiv>
     </>
   );

@@ -86,7 +86,7 @@ const TextAreaInput = styled.textarea`
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #dee2e6;
-  width: 96%;
+  width: 100%;
   outline: none;
   resize: none;
   height: 100px;
@@ -94,24 +94,47 @@ const TextAreaInput = styled.textarea`
   white-space: pre-wrap;
 `;
 
-//TODO: TodoCreate를 TodoItem 으로 컴포넌트 이동
+const SubmitBtn = styled.button`
+  width:120px;
+  height: 40px;
+  color: white;
+  text-align: center;
+  top: 20px;
+  font-weight: bold;
+  
+  background: #E9A681;
+  font-size: 16px;
+  border:none;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,79,255,0.3);
+  transition:0.3s;
+  position: relative;
 
-export function TodoCreate( ) {
+  left: 8%;
+  transform: translate(-50%,-50%);
+  text-decoration-line: none;
+
+  &:hover {
+  background: #DB9A33;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,79,255,0.6);
+  }
+`;
+
+export function TodoCreate({subjectAdd}) {
+  
+  const [user, setUser] = useRecoilState(userState);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(''); 
   const [content, setContent] = useState('');
 
-  const ni = Math.random();
-  const nextId = useRef(ni);
 
   const onToggle = () => setOpen(!open);
   const onChange = e => setValue(e.target.value);
-  console.log(onChange);
 
   const onChangeContent = e => setContent(e.target.value);
-  console.log(onChangeContent);
 
-  const [user, setUser] = useRecoilState(userState);
 
   const contentsReplaceNewline = () => {
     return content.replaceAll("\n", "\r\n"); 
@@ -119,19 +142,12 @@ export function TodoCreate( ) {
 
   const onSubmit = e => {
     e.preventDefault(); // 새로고침 방지
-
-    axiosManager.axios(`/record/`, "POST", {
-      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-      id: user.id,
-      name: value
-    })
-    
  
     setValue('');
     setContent('');
     setOpen(false);
-    nextId.current += 1;
-    console.log(nextId.current);
+
+    console.log("posted");
    };
 
   return (
@@ -151,7 +167,7 @@ export function TodoCreate( ) {
             onChange={onChangeContent}
             value={content}
           />
-          
+          <SubmitBtn onClick={() => subjectAdd(user.id, value)}>과목 생성</SubmitBtn>
         </InsertForm>
         
       </InsertFormPositioner>
