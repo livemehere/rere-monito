@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const AllBody = styled.div`
-  margin-top:7%;
-`
+  margin-top: 7%;
+`;
 
 const NavBody = styled.div`
   font-size: large;
@@ -25,6 +25,7 @@ const NavAllContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: space-between;
+
   .top-nav-title {
     text-decoration: none;
     justify-content: space-between;
@@ -110,5 +111,5 @@ export {
   NavListContainer,
   BottomBody,
   NavLoginLogOut,
-  AllBody
+  AllBody,
 };
