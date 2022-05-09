@@ -5,7 +5,7 @@ const UserMeasurementContext = ({ labels, data }) => {
   return (
     <>
       <BackDiv>
-        <Mtitle>2022.01.30.</Mtitle>
+        <Mtitle>2022.05.10.</Mtitle>
         <Mtime>학습시간 : 2:30:41</Mtime>
         <Mmchart>
           <MChart labels={labels} data={data} />
