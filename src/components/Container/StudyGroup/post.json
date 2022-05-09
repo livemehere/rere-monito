@@ -47,6 +47,14 @@
       "roomId": "9f125190-b68b-11ec-be0a-81416dd44290",
       "member": 0,
       "score": 0
+    },
+    {
+      "roomname": "asdf",
+      "recruit": "모집중",
+      "member": 0,
+      "score": 0,
+      "roomId": "12a3c1a0-cb65-11ec-b562-f3ec82f01fb2",
+      "id": 12442
     }
   ],
   "subjects": [
