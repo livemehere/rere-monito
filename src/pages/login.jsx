@@ -7,6 +7,7 @@ import { AlignTitle } from "../components/Presenter/Calendar/CalendarTitlePresen
 import { LoginBox, LoginBoxTitle } from "../components/Presenter/Login/LoginPresenter";
 import { BackDiv } from "../components/Presenter/UserPageMain/UserPageMainPresenter";
 import axiosManager from "../util/axiosManager";
+import signUp from "./signUp";
 
 
 export default function Login() {
@@ -36,7 +37,9 @@ export default function Login() {
     const password = e.target.password.value;
     handleLogin(email, password);
   };
-
+  function signUpClick() {
+    window.location.href = "/signUp"
+  }
   return (
     <Layout>
 
@@ -47,9 +50,11 @@ export default function Login() {
       <LoginBox>
         <form onSubmit={handleSubmit} className= "login-container">
           <input type="text" placeholder="email" name="email" className="login-input"/>
-          <input type="text" placeholder="password" name="password" className="login-input"/>
-          <button className="login-btn">로그인</button>
-        </form>
+            <input type="text" placeholder="password" name="password" className="login-input" />
+
+            <button className="login-btn">로그인</button>
+          </form>
+          <button className="signup-btn" onClick={signUpClick}>회원가입</button>
         </LoginBox>
         </BackDiv>
       </Layout>
