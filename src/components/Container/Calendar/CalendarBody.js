@@ -49,6 +49,16 @@ export function CalendarBody() {
       ...calendarData,{ ...addInfo.event.toPlainObject(), id:Date.now() }
     ])
   };
+  const handleEventRemove = (removeInfo) => {
+    const updatedList = [...calendarData]
+
+    (removeInfo.event.id).catch(() => {
+      reportNetworkError();
+      updatedList.removeInfo.revert();
+    });
+
+    setCalendarData(updatedList);
+  };
   return (
     <div className="demo-app">
       <CalendarBackDiv>
@@ -123,12 +133,14 @@ const handleEventChange = (oldEvent) => {
   // TODO: updateToDB(); 해도되고 안해도되고
 };
 
-const handleEventRemove = (removeInfo) => {
-  (removeInfo.event.id).catch(() => {
-    reportNetworkError();
-    removeInfo.revert();
-  });
-};
+
+
+// const handleEventRemove = (removeInfo) => {
+//   (removeInfo.event.id).catch(() => {
+//     reportNetworkError();
+//     // removeInfo.revert();
+//   });
+// };
 
 function renderEventContent(eventInfo) {
   return (

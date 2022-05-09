@@ -22,18 +22,8 @@ const CountingEventState = ({ data }) => {
             </ul>
           </div>
           <div className="demo-app-sidebar-section">
-            <label>
-              <input
-                type="checkbox"
-                //checked={calCheck}
-                // onChange={onChange}
-              ></input>
-              주말제외
-            </label>
-          </div>
-          <div className="demo-app-sidebar-section">
-            <h2>{User()}님의 이번달 일정갯수 : </h2>
-            {data && data.map((d) => <div key={d.id}>{d.title}</div>)}
+            <h2>{User()}님의 모든 일정 {data.length} </h2>
+            {data && data.map((d) => <li key={d.id} className="d-list"><b>{d.start}   </b> {d.title}</li>)}
             <ul>{/* {this.props.events.map(renderSidebarEvent)} */}</ul>
           </div>
         </div>

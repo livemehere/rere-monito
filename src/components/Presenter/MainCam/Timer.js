@@ -83,33 +83,17 @@ const CheckCircle = styled.div`
       color: #38d9a9;
     `}
 `;
-//TODO: 타이머 뜬다 put 기능 수정
 
-export function ListTimer({ id, done, text, textarea }) {
-  const nowTime = moment().format('YYYY-MM-DDTHH:mm:ss.000Z');
+export function ListTimer({ id, done, text, textarea, SubTime }) {
+  const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
   const [user, setUser] = useRecoilState(userState);
 
-  const [proMise, setProMise] = useState([])
-  const [initTime, setInitTime] = useState([])
-
-  useEffect(() => {
-    axiosManager.axios(`/record/${user.id}`, "GET")
-    .then(response => {
-      setProMise(response.filter(times => times.id === id))
-      if(proMise){
-        setInitTime(proMise[0].cumulative_time);
-      }
-    }
-    )
-  })
-  
-
-  const [time, setTime] = React.useState(initTime);
+  const [time, setTime] = React.useState(SubTime);
   const [timerOn, setTimerOn] = React.useState(false);
 
   useEffect(()=>{
-    setTime(initTime);
-  },[initTime])
+    setTime(SubTime);
+  },[])
   
 
   React.useEffect(() => {
@@ -117,8 +101,8 @@ export function ListTimer({ id, done, text, textarea }) {
 
     if (timerOn) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 100);
-      }, 100);
+        setTime((prevTime) => prevTime + 1000);
+      }, 1000);
     } else if (!timerOn) {
       clearInterval(interval);
     }
@@ -126,16 +110,29 @@ export function ListTimer({ id, done, text, textarea }) {
   }, [timerOn]);
 
 
-  const onUpdate = () => {
-    axiosManager.axios(`/record/`, "PUT", {
+  const onUpdate = (currentTime) => {
+    axiosManager.axios(`/record`, "PUT", {
       headers : {'Content-Type': 'application/x-www-form-urlencoded', },
       id: id,
-      cumulative_time: time,
+      cumulative_time: currentTime,
       endDate: nowTime
     })
   }
 
+  const setZero = () => {
+    if(window.confirm('진행시간을 초기화 하시겠습니까?')){
+      axiosManager.axios(`/record`, "PUT", {
+        headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+        id: id,
+        cumulative_time: 0,
+        endDate: nowTime
+      })
+      setTime(0);
+    }
+  }
 
+
+    // 디비 키값 추가 필요 
     const OnToggle = () => {
       fetch(`http://localhost:3001/subjects/${id}`,{
         method: "GET",
@@ -171,13 +168,13 @@ export function ListTimer({ id, done, text, textarea }) {
         {!timerOn && time === 0 && (
           <BtnPlay onClick={() => setTimerOn(true)}><FaPlay></FaPlay></BtnPlay>
         )}
-        {timerOn && <BtnPause onClick={() => {setTimerOn(false); onUpdate();}
+        {timerOn && <BtnPause onClick={() => {onUpdate(time); setTimerOn(false); }
         }><FaPause></FaPause></BtnPause>}
         {!timerOn && time > 0 && (
           <BtnPlay onClick={() => {setTimerOn(true)}}><FaPlay></FaPlay></BtnPlay>
         )}
         {time >= 0 && (
-          <BtnReset onClick={() => setTime(0)}><FaStop /></BtnReset>
+          <BtnReset onClick={() => setZero()}><FaStop /></BtnReset>
         )}
         
       </Timers>

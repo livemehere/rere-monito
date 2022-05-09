@@ -4,7 +4,7 @@ class AxiosManager {
   async axios(url, method, body) {
     const data = await axios({
       method,
-      url: `http://www.monito.ml:3000${url}`,
+      url: `http://15.164.167.169:3000${url}`,
       data: body && body,
     });
     return data.data;

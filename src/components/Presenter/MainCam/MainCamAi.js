@@ -18,7 +18,9 @@ const StyledVideo = styled.video`
 const StatesBar = styled.div`
   height: 10vh;
   width: 100%;
-  padding-top: 100px;
+  top: -100px;
+  padding-top: 150px;
+  position: relative;
 `;
 
 const Emotions = styled.div`
@@ -31,7 +33,7 @@ const State1 = styled.div`
   width: 14vh;
   height: 6vh;
   position absolute;
-  bottom: -10%;
+  bottom: -15%;
   left: 10%;
   font-size: 2.6vh;
   vertical-align: center;
@@ -46,7 +48,7 @@ const State2 = styled.div`
   width: 12vh;
   height: 6vh;
   position absolute;
-  bottom: -10%;
+  bottom: -15%;
   left: 68%;
   font-size: 2.6vh;
   vertical-align: center;
