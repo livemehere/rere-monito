@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { MeasurementTitle, BackDiv } from "../../Presenter/UserMeasurement/UserMeasurementPresenter";
+import { BackDiv } from "../../Presenter/UserMeasurement/UserMeasurementPresenter";
 import UserMeasurementContext from "./UserMeasurementContext";
+import { AlignTitlee } from "../../Presenter/Calendar/CalendarTitlePresenter";
 
 export default function UserMeasurement() {
   const labels = ["자세불량","측정불가","집중"];
@@ -26,8 +27,8 @@ export default function UserMeasurement() {
   }, []);
   return (
     <>
+      <AlignTitlee>측정 결과 분석</AlignTitlee>
       <BackDiv>
-        <MeasurementTitle>측정 결과 분석</MeasurementTitle>
         <UserMeasurementContext labels={labels} data={data} />
       </BackDiv>
     </>

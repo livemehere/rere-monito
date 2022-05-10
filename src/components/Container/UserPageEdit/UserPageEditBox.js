@@ -3,18 +3,18 @@ import {
   EditFrom,
   Editname,
   EditText,
+  EditTextt,
   Line,
   Linee,
   Lineeee,
-  Blank,
-  PWExplain,
+  Editnames,
+  Editimg,
 } from "../../Presenter/UserPageEdit/UserPageEditBoxPresenter";
 import {
   UserPageEditBtn,
   UserPageEditBtnSave,
   UserPageEditBtnGroup,
 } from "../../Presenter/UserPageEdit/UserPageEditPresenter";
-import ImageUpload from "./ImageUpload";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useRecoilState } from "recoil";
@@ -24,138 +24,145 @@ import moment from "moment";
 
 const UserPageEditBox = () => {
   const [userdata, setUserdata] = useState([]);
-  const [userdatachange, setUserdatachange] = useState([]);
   const [user, setUser] = useRecoilState(userState);
 
-  useEffect(() => {
+  useEffect(() => { // 유저정보 불러오기
     axiosManager.axios(`/api/user/${user.id}`, "GET");
     setUserdata(user);
   }, []);
 
-  const birthday = moment(userdata.birth).format("YYYY-MM-DD");
+  const birthday = moment(userdata.birth).format("YYYY-MM-DD"); // 생일 테이터 형식 변경
 
-  const usernameChange = (n) => {
-    setUserdatachange({
-      name: n.target.value,
+  // 데이터 수정
+
+  const onChange = (e) => {
+    setUserdata(preState => {
+      return{ ...preState,[e.target.name]:e.target.value}
     });
   };
 
-  const userbirthChange = (b) => {
-    setUserdatachange({
-      birth: b.target.value,
-    });
-  };
+   // 사진 업로드 & 미리보기
+  const [image, setImage] = useState({
+    profile_img: "",
+    preview_URL: "../../img/default_image.png",
+  });
 
-  const userjobChange = (b) => {
-    setUserdatachange({
-      job: b.target.value,
-    });
-  };
+  const Uploadimg = (e) => {
+    e.preventDefault();
+    const fileReader = new FileReader();
+
+    if(e.target.files[0]){
+      fileReader.readAsDataURL(e.target.files[0])
+    }
+    fileReader.onload = () => {
+      setImage(
+        {
+          profile_img: e.target.files[0],
+          preview_URL: fileReader.result
+        }
+      )
+    }
+  }
 
   const navigate = useNavigate();
 
-  const save = ({ user, pw }) => {
-    // TODO: axios 작업
-    // null인 부분은 update x
-    if (pw === user.password) {
-      alert("사용자정보가 업데이트 되었습니다");
-      navigate(-1);
+  const usersave = () => {
+    
+    console.log();
+
+    if (userdata.pw === userdata.password) {
+      if(userdata.pwnew === null) {
+        //만약 뉴pw 빈칸이면 원래비번
+        axiosManager.axios(`/api/user/`, "PUT", {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        id:userdata.id,
+        name: userdata.name,
+        password: userdata.password,
+        email:userdata.email,
+        birth: userdata.birth,
+        job: userdata.job,
+        profile_img: image.preview_URL,
+        });
+        alert("사용자정보가 업데이트 되었습니다");
+        navigate(-1);
+      }
+      else{
+        if (userdata.pwnew === userdata.pwnewcheck){
+            axiosManager.axios(`/api/user/`, "PUT", {
+            id:userdata.id,
+            name: userdata.name,
+            password: userdata.pwnew,
+            birth: userdata.birth,
+            email:userdata.email,
+            job: userdata.job,
+            profile_img: image.preview_URL,
+            });
+            alert("사용자정보가 업데이트 되었습니다");
+            navigate(-1);
+        }
+        else{
+          alert("변경된 비밀번호를 확인해 주세요");
+        }
+      }
     } else {
-      alert("비밀번호를 다시 확인해 주세요");
+      alert("비밀번호를 확인해 주세요");
     }
-    axiosManager.axios(`/api/user/`, "PUT", {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      name: user.name,
-      password: user.password,
-      birth: user.birth,
-      job: user.job,
-      profile_img: user.profile_img,
-    });
   };
 
   return (
     <>
       <EditFrom>
-        <table>
           <Lineeee>
-            <tr>
-              <td>
-                <Editname>커버사진</Editname>
-              </td>
-              <td>
-                <EditText>
-                  <Blank>
-                    ㅤ
-                    <ImageUpload
-                      value={userdata.profile_img}
-                      name="profile_img"
-                      accept="image/*"
-                    />
-                  </Blank>
-                </EditText>
-              </td>
-            </tr>
+                <Editname>
+                  커버사진
+                  <Editnames>이미지 사진만 업로드해주세요</Editnames>
+                </Editname>
+                <EditTextt>
+                      <Editimg src={image.preview_URL}/>
+                      <input 
+                      type="file" 
+                      name="profile_img" 
+                      accept="image/*" 
+                      value={userdata.profile_img|| ''}
+                      onChange={Uploadimg}/>
+                </EditTextt>
           </Lineeee>
 
           <Line>
-            <tr>
-              <td>
                 <Editname>이름(닉네임)</Editname>
-              </td>
-              <td>
                 <EditText>
                   <input
-                    value={userdata.name}
+                    value={userdata.name|| ''}
                     name="name"
-                    onChange={usernameChange}
-                  />
+                    onChange={onChange}/>
                 </EditText>
-              </td>
-            </tr>
           </Line>
 
           <Line>
-            <tr>
-              <td>
                 <Editname>이메일</Editname>
-              </td>
-              <td>
                 <EditText>
-                  <input value={userdata.email} disabled />
+                  <input name="email"value={userdata.email|| ''} disabled />
+                  {/* 콘솔창 경고 안뜨려면(이름, 이메일에만 뜸) -> || '' */}
                 </EditText>
-              </td>
-            </tr>
           </Line>
 
           <Line>
-            <tr>
-              <td>
                 <Editname>생일</Editname>
-              </td>
-              <td>
                 <EditText>
                   <input
                     type="date"
-                    value={birthday}
-                    onChange={userbirthChange}
+                    name="birth"
+                    value={birthday|| ''}
+                    onChange={onChange}
+                    disabled
                   />
                 </EditText>
-              </td>
-            </tr>
           </Line>
 
           <Line>
-            <tr>
-              <td>
                 <Editname>직업</Editname>
-              </td>
-              <td>
                 <EditText>
-                  <select
-                    name="job"
-                    value={userdata.job}
-                    onChange={userjobChange}
-                  >
+                  <select name="job" value={userdata.job|| ''} onChange={onChange}>
                     <option value="초등학생">초등학생</option>
                     <option value="중학생">중학생</option>
                     <option value="고등학생">고등학생</option>
@@ -165,57 +172,44 @@ const UserPageEditBox = () => {
                     <option value="프리렌서">프리렌서</option>
                   </select>
                 </EditText>
-              </td>
-            </tr>
           </Line>
 
           <Line>
-            <tr>
-              <td>
                 <Editname>비밀번호 변경</Editname>
-              </td>
-              <td>
                 <EditText>
                   <input
                     placeholder="새 비밀번호"
-                    name="newpw"
+                    name="pwnew"
                     type="password"
                     autoComplete="on"
-                  />{" "}
-                  <br />
+                    onChange={onChange}
+                  /><br />
                   <input
                     placeholder="새 비밀번호 재확인"
-                    name="newpwcheck"
+                    name="pwnewcheck"
                     type="password"
                     autoComplete="on"
+                    onChange={onChange}
                   />
                 </EditText>
-              </td>
-            </tr>
           </Line>
 
           <Linee>
-            <tr>
-              <td>
                 <Editname>비밀번호 확인(*필수)</Editname>
-              </td>
-              <td>
                 <EditText>
                   <input
                     placeholder="현재 비밀번호"
                     name="pw"
                     type="password"
                     autoComplete="on"
-                  />{" "}
-                  <br />
+                    onChange={onChange}
+                  /><br />
                 </EditText>
-              </td>
-            </tr>
           </Linee>
-        </table>
       </EditFrom>
+
       <UserPageEditBtnGroup>
-        <UserPageEditBtnSave onClick={save}>
+        <UserPageEditBtnSave onClick={usersave}>
           <div className="UserEditBtn">저장</div>
         </UserPageEditBtnSave>
         <UserPageEditBtn className="UserEditBtn">

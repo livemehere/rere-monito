@@ -3,12 +3,13 @@ import {
   BackDiv,
 } from "../../Presenter/UserPageEdit/UserPageEditPresenter";
 import UserPageEditBox from "./UserPageEditBox";
+import { AlignTitlee } from "../../Presenter/Calendar/CalendarTitlePresenter";
 
 const UserPageEdit = () => {
   return (
     <>
+    <AlignTitlee>개인 정보 수정</AlignTitlee>
       <BackDiv>
-        <EditTitle>개인 정보 수정</EditTitle>
         <UserPageEditBox />
       </BackDiv>
     </>

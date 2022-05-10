@@ -1,6 +1,6 @@
 import { Uploadimg } from "../../Presenter/UserPageEdit/ImageUpload";
 
-const Uploader = () => {
+const Uploader = () => { // 안씀
   return (
     <>
       <Uploadimg>

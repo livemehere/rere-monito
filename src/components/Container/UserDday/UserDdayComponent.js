@@ -3,6 +3,7 @@ import axiosManager from "../../../util/axiosManager";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../atoms/user";
 import DdayContents from "./DdayContents";
+import { AlignTitlee } from "../../Presenter/Calendar/CalendarTitlePresenter";
 
 import moment from "moment";
 import { BackDiv, DdayTitle } from "../../Presenter/UserDday/UseDdayPresent";
@@ -15,24 +16,29 @@ const UserDday = () => {
     // TODO: DB에서 데이터 불러와서 setDdays()
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
-      console.log("캘린더", datas);
-      datas.forEach((data) => {
-        initialData.push({
-          id: data.id,
-          title: data.title,
-          start: data.startDate,
-          end: data.endDate,
+      if (!datas){
+        datas.forEach((data) => {
+          initialData.push({
+            id: data.id,
+            title: data.title,
+            start: data.startDate,
+            end: data.endDate,
+          });
         });
-      });
-      setDday(initialData);
+        setDday(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
+      }    
     });
+
+
   }, []);
 
+  
+  console.log(dday);
   return (
     <>
+      <AlignTitlee>디데이</AlignTitlee>
       <BackDiv>
-        <DdayTitle>디데이</DdayTitle>
-        {dday.map((dday) => (
+        {dday && dday.map((dday) => (
           <DdayContents dday={dday} key={dday.id} />
         ))}
       </BackDiv>
