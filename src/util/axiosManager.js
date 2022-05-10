@@ -11,25 +11,6 @@ class AxiosManager {
   }
 }
 
-class LoginUser {
-  async axios(dispatch, email, pw) {
-    const authRes = await axios.post("http://localhost:3000", {
-      email: email,
-      pw: pw,
-    });
-
-    if (!authRes.data.result.coll) {
-      console.log("회원이 없습니다");
-      return;
-    }
-
-    const user_name = "값을 넣으세요";
-
-    console.log("로그인 성공");
-  }
-}
-
 const axiosManager = new AxiosManager();
-const loginUser = new LoginUser();
 
-export { AxiosManager, LoginUser };
+export default axiosManager;
