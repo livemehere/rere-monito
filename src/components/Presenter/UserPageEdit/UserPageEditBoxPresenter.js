@@ -19,27 +19,47 @@ width:11em;
 text-align:left;
 `;
 
+const Editnames = styled.div`
+font-size: 0.7em;
+margin:1em 0;
+color:orange;
+`;
+
+
 const EditText = styled.div`
 font-size: 1em;
 margin: 1em 1em;
 
 `;
 
+const EditTextt = styled.div`
+font-size: 1em;
+margin: 1em 1em;
+display:flex;
+flex-direction:row;
+`;
+
 const Line = styled.div`
 width:54.7em;
 height:5.5em;
 border-bottom:0.1em solid #EDEBE9;
+display:flex;
+flex-direction:row;
 `;
 
 const Linee = styled.div`
 width:54.7em;
 height:5.5em;
+display:flex;
+flex-direction:row;
 `;
 
 const Lineeee = styled.div`
 width:54.7em;
 height:8.63em;
 border-bottom:0.1em solid #EDEBE9;
+display:flex;
+flex-direction:row;
 `;
 
 const Blank = styled.div`
@@ -54,5 +74,9 @@ margin: 1.2em 0.1em;
 color : #E7910A;
 `;
 
+const Editimg = styled.img`
+margin-right:1em;
+height:7em;
+`;
 
-export {Lineeee, EditFrom, Editname ,EditText, Line, Linee, Blank, PWExplain};
+export {Lineeee, EditFrom, Editname ,EditText ,EditTextt, Line, Linee, Blank, PWExplain, Editnames,Editimg};
