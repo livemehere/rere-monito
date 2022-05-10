@@ -4,18 +4,13 @@ import Peer from "simple-peer";
 import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
 import { useParams } from "react-router-dom";
-<<<<<<< HEAD
-import { useForceUpdate } from "framer-motion";
-=======
 import axiosManager from "../../../util/axiosManager";
 import { useLocation } from "react-router-dom";
-import { userState } from '../../../atoms/user';
+import { userState } from "../../../atoms/user";
 import { useRecoilState } from "recoil";
->>>>>>> 225d280e45d26b720571aa4e2350e4d3709799b0
 
 //생성되는 캠 div 만들기
 const Container = styled.div`
-
   height: 100vh;
   flex-wrap: wrap;
   flex-direction: row;
@@ -109,12 +104,6 @@ const Video = (props) => {
       ref.current.srcObject = stream;
     });
   }, []);
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 225d280e45d26b720571aa4e2350e4d3709799b0
   return <StyledVideo2 playsInline autoPlay ref={ref} />;
 };
 
@@ -145,7 +134,6 @@ const StudyRoom = () => {
   const [hours, setHours] = useState(0);
 
   const [update, setUpdate] = useState(true);
-  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
     console.log(`peers : ${peers}`);
@@ -310,14 +298,16 @@ const StudyRoom = () => {
             {seconds < 10 ? `0${seconds}` : seconds}
           </CamTimers>
           <UserName>{user.name}님</UserName>
-          
-          <OuterCam><StyledVideo muted ref={userVideo} autoPlay playsInline /></OuterCam>
+
+          <OuterCam>
+            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          </OuterCam>
         </MyCam>
 
         {peers.map((peer, index) => {
           if (update === false) {
             setUpdate(true);
-            return <Video key={index} peer={peer} onChange={forceUpdate} />;
+            return <Video key={index} peer={peer} />;
           }
           return <Video key={index} peer={peer} />;
         })}

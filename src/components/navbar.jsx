@@ -14,7 +14,8 @@ export default function NavBar() {
   const logoutHandler = () => {
     localStorage.removeItem("4242-token");
     setIsLoggedIn(false);
-    window.location.href = "/";
+    // window.location.href = "/";
+    console.log(isLoggedIn);
   };
   return (
     <>
