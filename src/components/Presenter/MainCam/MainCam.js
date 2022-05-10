@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaPause } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
@@ -6,7 +6,9 @@ import { FaPlay } from 'react-icons/fa';
 import ListTimer from './Timer'
 import { TodoList } from './TodoList';
 import MainCamAi from './MainCamAi';
-
+import axiosManager from "../../../util/axiosManager";
+import { userState } from '../../../atoms/user';
+import { useRecoilState } from "recoil";
 
 const Div = styled.div`
   margin: 0px;
@@ -84,7 +86,7 @@ const VideoBox = styled.div`
   width: 540px;
   height: 580px;
   position: relative;
-  left : 15%;
+  left : 10%;
   top : 4%;
   background-color: black;
   
@@ -97,7 +99,7 @@ const RightBlock = styled.div`
   margin: 10px;
   width: 80vh;
   position: relative;
-  left: 20%;
+  left: 18%;
   
 `;
 
@@ -157,8 +159,19 @@ const BtnAdd =styled.button`
 
 
 function CamSide() {
-  const [time, setTime] = React.useState(0);
+  const [user, setUser] = useRecoilState(userState);
+  const [allTime, setAllTime] = useState([]);
   const [timerOn, setTimerOn] = React.useState(false);
+
+  useEffect(() => {
+    axiosManager.axios(`/time/${user.id}`, "GET")
+    .then((res) => {
+      setTime(res.total_time);
+      setAllTime(res);
+    })
+  }, []);
+
+  const [time, setTime] = useState(0);
 
   React.useEffect(() => {
     let interval = null;
@@ -173,6 +186,28 @@ function CamSide() {
 
     return () => clearInterval(interval);
   }, [timerOn]);
+
+  const onUpdate = (currentTime) => {
+    axiosManager.axios(`/time`, "PUT", {
+      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+      id: user.id,
+      total_time: currentTime,
+      focus_time: 11111,
+    })
+  }
+
+  const setZero = () => {
+    if(window.confirm('진행시간을 초기화 하시겠습니까?')){
+      axiosManager.axios(`/time`, "PUT", {
+        headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+        id: user.id,
+        total_time: 0,
+        focus_time: 11111,
+      })
+      setTime(0);
+    }
+  }
+
   return(
     <>
       <VideoBox>
@@ -180,12 +215,12 @@ function CamSide() {
         {!timerOn && time === 0 && (
           <Btn1 onClick={() => setTimerOn(true)}><FaPlay></FaPlay></Btn1>
         )}
-        {timerOn && <Btn1 onClick={() => setTimerOn(false)}><FaPause></FaPause></Btn1>}
+        {timerOn && <Btn1 onClick={() => {onUpdate(time); setTimerOn(false);}}><FaPause></FaPause></Btn1>}
         {!timerOn && time > 0 && (
           <Btn1 onClick={() => setTimerOn(true)}><FaPlay></FaPlay></Btn1>
         )}
         {!timerOn && time > 0 && (
-          <BtnReset onClick={() => setTime(0)}>초기화</BtnReset>
+          <BtnReset onClick={() => {setZero(); setTime(0);}}>초기화</BtnReset>
         )}
         
       </VideoBox>

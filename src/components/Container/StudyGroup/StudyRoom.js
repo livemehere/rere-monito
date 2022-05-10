@@ -4,18 +4,23 @@ import Peer from "simple-peer";
 import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
 import { useParams } from "react-router-dom";
+import axiosManager from "../../../util/axiosManager";
+import { useLocation } from "react-router-dom";
+import { userState } from '../../../atoms/user';
+import { useRecoilState } from "recoil";
 
 //생성되는 캠 div 만들기
 const Container = styled.div`
-  display: flex;
+
   height: 100vh;
-  margin-left: 50px;
   flex-wrap: wrap;
   flex-direction: row;
   align-content: stretch;
+  justify-content: space-around;
 `;
 
 const MyCam = styled.div`
+  display: flex;
   width: 600px;
   height: 450px;
   position: relative;
@@ -25,7 +30,7 @@ const MyCam = styled.div`
 
 const Emotions = styled.div`
   position: absolute;
-  left: 2%;
+  left: 15%;
   top: 12%;
   z-index: 90;
 `;
@@ -34,8 +39,8 @@ const CamTimers = styled.div`
   font-size: 20px;
   font-weight: bold;
   position: relative;
-  top: 110%;
-  left: 1%;
+  top: 112%;
+  left: 15%;
   width: 100px;
   height: 40px;
   z-index: 99;
@@ -47,8 +52,8 @@ const UserName = styled.div`
   font-weight: bold;
   position: absolute;
   width: 100px;
-  top: 110%;
-  left: 80%;
+  top: 112%;
+  left: 95%;
   z-index: 99;
 `;
 
@@ -61,12 +66,17 @@ const StyledVideo = styled.video`
   margin-top: 50px;
 `;
 
+const OuterCam = styled.div`
+  width: 100%;
+`;
+
 const StyledVideo2 = styled.video`
   top: 50px;
   opacity: 1;
   height: 200px;
   position: relative;
   border-radius: 20px;
+  margin: 4%;
 `;
 
 const RoomTitle = styled.div`
@@ -97,6 +107,8 @@ const Video = (props) => {
     });
   }, []);
 
+
+
   return <StyledVideo2 playsInline autoPlay ref={ref} />;
 };
 
@@ -106,6 +118,11 @@ const videoConstraints = {
 };
 
 const StudyRoom = () => {
+  const location = useLocation();
+  const rooms = location.state.roomname; //link to 에서 props 받아옴
+
+  const [user, setUser] = useRecoilState(userState);
+
   const [peers, setPeers] = useState([]);
   const socketRef = useRef();
   const userVideo = useRef();
@@ -266,7 +283,7 @@ const StudyRoom = () => {
 
   return (
     <div>
-      <RoomTitle>방 이름 : 모니토와 함께 공부해 봐여</RoomTitle>
+      <RoomTitle>방 이름 : {rooms}</RoomTitle>
       <Container>
         <MyCam>
           <Emotions>{faceEmotion}</Emotions>
@@ -275,8 +292,9 @@ const StudyRoom = () => {
             {minutes < 10 ? `0${minutes}` : minutes}:
             {seconds < 10 ? `0${seconds}` : seconds}
           </CamTimers>
-          <UserName>최동연님</UserName>
-          <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          <UserName>{user.name}님</UserName>
+          
+          <OuterCam><StyledVideo muted ref={userVideo} autoPlay playsInline /></OuterCam>
         </MyCam>
 
         {peers.map((peer, index) => {

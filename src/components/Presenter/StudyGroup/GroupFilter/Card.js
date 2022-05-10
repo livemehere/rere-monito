@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { MdDone, MdDelete } from "react-icons/md";
 import axios from "axios";
 import "./StudyMain.css";
-import { useNavigate } from "react-router-dom";
+
 
 const DelBtn = styled.button`
   position: relative;
@@ -27,7 +27,16 @@ export function Card({ card, handleDeleteRoome }) {
   return (
     <>
       <div className="card_header">
-        <Link className="StudyRoom" to={`/group/${roomCode}`}>
+        <Link className="StudyRoom" 
+        to={`/group/${roomCode}`}
+        state={{
+          id: id,
+          roomname: roomname,
+          recruit: recruit,
+          roomCode: roomCode,
+          member: member,
+          score: score,
+        }}>
           &nbsp;{roomname}
         </Link>
         <Link
