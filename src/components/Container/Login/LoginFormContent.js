@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Input, Button, Checkbox } from "@chakra-ui/react";
 import {
   LoginInput,
   LoginLine,
   SideLine,
 } from "../../Presenter/Login/LoginFormPresenter";
 
-import { signinUser } from "../../../action/loginData";
+import loginUser from "../../../util/loginData";
 
 const LoginFormContent = () => {
   const dispatch = useDispatch();
@@ -18,36 +17,36 @@ const LoginFormContent = () => {
   const LoginButton = () => {
     console.log("로그인 클릭 : " + email + "/" + password);
 
-    signinUser(dispatch, email, password);
+    loginUser(dispatch, email, password);
   };
   return (
     <>
       <LoginInput>
-        <Input
+        <input
           variant="filled"
           placeholder="ID"
           className="login-input"
           onChange={(e) => setEmail(e.target.value)}
         />
         <br />
-        <Input
+        <input
           variant="filled"
           placeholder="Password"
           className="login-input"
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <Button
+        <button
           onClick={LoginButton}
           colorScheme="blue"
           width="300px"
           className="login-btn"
         >
           로그인
-        </Button>
+        </button>
         <br />
         <div>
-          <Checkbox className="stay-login">로그인 상태 유지</Checkbox>
+          <checkbox className="stay-login">로그인 상태 유지</checkbox>
         </div>
         <br />
         <div display="flex">

@@ -5,10 +5,8 @@ import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
 import { useParams } from "react-router-dom";
 
-
 //생성되는 캠 div 만들기
 const Container = styled.div`
-
   display: flex;
   height: 100vh;
   margin-left: 50px;
@@ -23,7 +21,6 @@ const MyCam = styled.div`
   position: relative;
   top: -40px;
   left: 150px;
-
 `;
 
 const Emotions = styled.div`
@@ -80,7 +77,6 @@ const RoomTitle = styled.div`
   color: #206966;
 `;
 
-
 //face-emotion
 const expressionMap = {
   neutral: "😶",
@@ -105,8 +101,8 @@ const Video = (props) => {
 };
 
 const videoConstraints = {
-  height: window.innerHeight / 3,
-  width: window.innerWidth / 4,
+  height: window.innerHeight,
+  width: window.innerWidth,
 };
 
 const StudyRoom = () => {
@@ -120,13 +116,19 @@ const StudyRoom = () => {
   const [faceEmotion, setFaceEmotion] = useState(false);
   const [detected, setDetected] = useState(false);
 
-  //timer
+  //timers
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [hours, setHours] = useState(0);
 
+  const [update, setUpdate] = useState(false);
+
   useEffect(() => {
-    socketRef.current = io.connect("/");
+    console.log(`peers : ${peers}`);
+  }, [peers]);
+
+  useEffect(() => {
+    socketRef.current = io.connect("http://15.164.167.169:8000");
     navigator.mediaDevices
       .getUserMedia({ video: StyledVideo2, audio: true })
       .then((stream) => {
@@ -151,7 +153,7 @@ const StudyRoom = () => {
             peerID: payload.callerID,
             peer,
           });
-
+          setUpdate(!update);
           setPeers((users) => [...users, peer]);
         });
 
@@ -266,24 +268,22 @@ const StudyRoom = () => {
     <div>
       <RoomTitle>방 이름 : 모니토와 함께 공부해 봐여</RoomTitle>
       <Container>
-      
-      <MyCam>
-        <Emotions>{faceEmotion}</Emotions>
-        <CamTimers>
-        {hours < 10 ? `0${hours}` : hours}:
-        {minutes < 10 ? `0${minutes}` : minutes}:
-        {seconds < 10 ? `0${seconds}` : seconds}
-        </CamTimers>
-        <UserName>최동연님</UserName>
-        <StyledVideo muted ref={userVideo} autoPlay playsInline />
-      </MyCam>
-      
-      {peers.map((peer, index) => {
-        return <Video key={index} peer={peer} />;
-      })}
-    </Container>
+        <MyCam>
+          <Emotions>{faceEmotion}</Emotions>
+          <CamTimers>
+            {hours < 10 ? `0${hours}` : hours}:
+            {minutes < 10 ? `0${minutes}` : minutes}:
+            {seconds < 10 ? `0${seconds}` : seconds}
+          </CamTimers>
+          <UserName>최동연님</UserName>
+          <StyledVideo muted ref={userVideo} autoPlay playsInline />
+        </MyCam>
+
+        {peers.map((peer, index) => {
+          return <Video key={index} peer={peer} />;
+        })}
+      </Container>
     </div>
-    
   );
 };
 
