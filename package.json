@@ -28,6 +28,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "recoil": "^0.7.0",
+    "recoil-persist": "^4.1.0",
     "redux": "^4.2.0",
     "reselect": "^4.1.5",
     "simple-peer": "^9.11.1",
@@ -59,5 +60,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-hot-loader": "^4.13.0"
   }
 }

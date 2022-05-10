@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import {
   LoginInput,
   LoginLine,
@@ -9,7 +9,7 @@ import {
 import loginUser from "../../../util/loginData";
 
 const LoginFormContent = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,11 +17,12 @@ const LoginFormContent = () => {
   const LoginButton = () => {
     console.log("로그인 클릭 : " + email + "/" + password);
 
-    loginUser(dispatch, email, password);
+    // loginUser(dispatch, email, password);
   };
   return (
     <>
-      <LoginInput>
+      <p>123</p>
+      {/* <LoginInput>
         <input
           variant="filled"
           placeholder="ID"
@@ -53,7 +54,7 @@ const LoginFormContent = () => {
           <SideLine />
           <LoginLine>또는 다음으로 로그인</LoginLine>
         </div>
-      </LoginInput>
+      </LoginInput> */}
     </>
   );
 };

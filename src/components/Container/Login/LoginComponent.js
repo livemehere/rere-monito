@@ -9,18 +9,13 @@ import {
   BackDiv,
 } from "../../Presenter/Login/LoginPresenter";
 import LoginFormContent from "./LoginFormContent";
-import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
     <>
       <BackDiv>
         <LoginBox>
-          <LoginBoxTitle className="main-logo">
-            <Link to="/LoginFormContent" className="LoginButton">
-              로그인
-            </Link>
-          </LoginBoxTitle>
+          <LoginBoxTitle className="main-logo"></LoginBoxTitle>
           <LoginFormContent />
         </LoginBox>
       </BackDiv>

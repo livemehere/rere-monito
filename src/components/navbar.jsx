@@ -1,26 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { NavAllContainer, NavListContainer, NavBody, NavLoginLogOut } from "./Presenter/Nav/TopNavPresenter";
+import {
+  NavAllContainer,
+  NavListContainer,
+  NavBody,
+  NavLoginLogOut,
+} from "./Presenter/Nav/TopNavPresenter";
+import { useRecoilState } from "recoil";
+import { loginState } from "../atoms/loginState";
+
 export default function NavBar() {
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
+  const logoutHandler = () => {
+    localStorage.removeItem("4242-token");
+    setIsLoggedIn(false);
+    window.location.href = "/";
+  };
   return (
-          <>
-            <NavBody>
-            <NavAllContainer>
-                <h1><Link to="/" className="top-nav-title">MONITO</Link></h1>
-                <NavListContainer>
-                    <Link to ="/group" className="top-nav-list"><li >스터디그룹</li></Link>
-                    <Link to ="/calendar" className="top-nav-list"><li>캘린더</li></Link>
-                    <Link to ="/planner" className="top-nav-list"><li>플래너</li></Link>
-                    <Link to ="/mypage" className="top-nav-list"><li >마이페이지</li></Link>
-                </NavListContainer>
-                    <NavLoginLogOut>
-                    <Link to="/login" className="login-btn">로그인</Link> 
-                </NavLoginLogOut>
-                    
-                    {/* <div className="user-name">{User.Name}님 환영합니다.</div> { /* 이부분 기능구현은 로그인 기능 갖춰지면 넣을예정 */}
-            </NavAllContainer>
+    <>
+      <NavBody>
+        <NavAllContainer>
+          <h1>
+            <Link to="/" className="top-nav-title">
+              MONITO
+            </Link>
+          </h1>
+          <NavListContainer>
+            <Link to="/group" className="top-nav-list">
+              <li>스터디그룹</li>
+            </Link>
+            <Link to="/calendar" className="top-nav-list">
+              <li>캘린더</li>
+            </Link>
+            <Link to="/planner" className="top-nav-list">
+              <li>플래너</li>
+            </Link>
+            <Link to="/mypage" className="top-nav-list">
+              <li>마이페이지</li>
+            </Link>
+          </NavListContainer>
+          <NavLoginLogOut>
+            {isLoggedIn === true ? (
+              <Link to="/LoginFormContent" className="login-btn">
+                로그인
+              </Link>
+            ) : (
+              <p onClick={logoutHandler}>로그아웃</p>
+            )}
+          </NavLoginLogOut>
+
+          {/* <div className="user-name">{User.Name}님 환영합니다.</div> { /* 이부분 기능구현은 로그인 기능 갖춰지면 넣을예정 */}
+        </NavAllContainer>
       </NavBody>
-      </>
+    </>
     // <ul className="navbar">
     //   <li>
     //     <Link to="/">홈으로 가자</Link>

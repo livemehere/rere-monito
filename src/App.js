@@ -9,7 +9,7 @@ import Edit from "./pages/mypage/edit";
 import Dday from "./pages/mypage/dDay";
 import Analyze from "./pages/mypage/analyze";
 import Pose from "./pages/mypage/pose";
-import LoginFormContent from "./components/Container/Login/LoginFormContent";
+import Login from "./pages/login";
 import RoomUpdate from "./pages/studyGroup/roomUpdate";
 import RoomCreate from "./pages/studyGroup/roomCreate";
 import StudyRoom from "./pages/studyGroup/studyRoom";
@@ -20,7 +20,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Login" element={<LoginFormContent />} />
+        <Route path="/LoginFormContent" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="mainCam" element={<MainCam />} />
         <Route path="mypage">

@@ -4,6 +4,7 @@ import Peer from "simple-peer";
 import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
 import { useParams } from "react-router-dom";
+import { useForceUpdate } from "framer-motion";
 
 //생성되는 캠 div 만들기
 const Container = styled.div`
@@ -90,13 +91,11 @@ const expressionMap = {
 
 const Video = (props) => {
   const ref = useRef();
-
   useEffect(() => {
     props.peer.on("stream", (stream) => {
       ref.current.srcObject = stream;
     });
   }, []);
-
   return <StyledVideo2 playsInline autoPlay ref={ref} />;
 };
 
@@ -121,7 +120,8 @@ const StudyRoom = () => {
   const [seconds, setSeconds] = useState(0);
   const [hours, setHours] = useState(0);
 
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState(true);
+  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
     console.log(`peers : ${peers}`);
@@ -130,7 +130,7 @@ const StudyRoom = () => {
   useEffect(() => {
     socketRef.current = io.connect("http://15.164.167.169:8000");
     navigator.mediaDevices
-      .getUserMedia({ video: StyledVideo2, audio: true })
+      .getUserMedia({ video: StyledVideo2, audio: false })
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit("join room", roomID);
@@ -148,13 +148,23 @@ const StudyRoom = () => {
         });
 
         socketRef.current.on("user joined", (payload) => {
+          console.log(payload);
           const peer = addPeer(payload.signal, payload.callerID, stream);
           peersRef.current.push({
             peerID: payload.callerID,
             peer,
           });
-          setUpdate(!update);
+          setUpdate(true);
           setPeers((users) => [...users, peer]);
+        });
+
+        socketRef.current.on("user left", (payload) => {
+          const peerObj = peersRef.current.find((p) => p.peerID === payload.id);
+          peerObj.peer.detroy();
+          const peers = peersRef.current.filter((p) => p.peerID !== payload.id);
+          peersRef.current = peers;
+          setUpdate(false);
+          setPeers(peers);
         });
 
         socketRef.current.on("receiving returned signal", (payload) => {
@@ -280,6 +290,10 @@ const StudyRoom = () => {
         </MyCam>
 
         {peers.map((peer, index) => {
+          if (update === false) {
+            setUpdate(true);
+            return <Video key={index} peer={peer} onChange={forceUpdate} />;
+          }
           return <Video key={index} peer={peer} />;
         })}
       </Container>
