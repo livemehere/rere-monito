@@ -100,24 +100,31 @@ export function CalendarBody() {
     // TODO: updateToDB(); 해도되고 안해도되고
   };
 
-  const handleEventRemove = (removeInfo) => {};
+  // const handleEventRemove = (removeInfo) => {
+  //   let calendarApi = removeInfo.view.calendar;
+  //   setCalendarData((d) => d.filter((data) => data.removeInfo !== removeInfo));
+  //   calendarData.remove();
+  // };
 
   const handleEventClick = (removeInfo) => {
+    let calendarApi = removeInfo.view.calendar;
     let question = window.confirm(
       `'${removeInfo.event.title}' 일정을 삭제하시겠습니까?`
     );
     if (question) {
-      axiosManager.axios(`calendar/${user.id}`, "DELETE", {
+      axiosManager.axios(`/calendar/`, "DELETE", {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
         id: removeInfo.event._def.publicId,
       });
       setCalendarData((d) =>
         d.filter((data) => data.removeInfo !== removeInfo)
       );
-      // removeInfo.event.remove();
+      console.log(removeInfo.event._def.publicId);
     }
+
     // setCalendarData(updatedList);
   };
+
   return (
     <div className="demo-app">
       <CalendarBackDiv>
@@ -144,7 +151,7 @@ export function CalendarBody() {
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}
               eventChange={handleEventChange} //드래그 앤 드롭/크기 조정
-              eventRemove={handleEventRemove}
+              // eventRemove={handleEventRemove}
             />
           </div>
         </OnlyCalendar>

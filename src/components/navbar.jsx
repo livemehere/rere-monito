@@ -49,7 +49,7 @@ export default function NavBar() {
                 <Link to="/signUp" className="sign-up-btn">회원가입</Link>
               </li>
             ) : (
-              <p onClick={logoutHandler}>로그아웃</p>
+              <p onClick={logoutHandler} className="login-btn">로그아웃</p>
             )}
           </NavLoginLogOut>
 
