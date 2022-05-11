@@ -78,12 +78,16 @@ export default function SignUp() {
               name="birth"
               className="signup-input"
             />
-            <input
-              type="text"
-              placeholder="job"
-              name="job"
-              className="signup-input"
-            />
+            <select name="job" className="signup-input">
+                    <option selected disabled>선택해주세요</option>
+                    <option value="초등학생">초등학생</option>
+                    <option value="중학생">중학생</option>
+                    <option value="고등학생">고등학생</option>
+                    <option value="대학생">대학생</option>
+                    <option value="취업준비생">취업준비생</option>
+                    <option value="직장인">직장인</option>
+                    <option value="프리렌서">프리렌서</option>
+                  </select>
             <button className="login-btn">회원가입</button>
           </form>
         </LoginBox>
