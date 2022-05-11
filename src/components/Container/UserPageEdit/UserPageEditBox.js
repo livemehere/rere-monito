@@ -68,7 +68,7 @@ const UserPageEditBox = () => {
 
   const usersave = () => {
     
-    console.log();
+    console.log(userdata);
 
     if (userdata.pw === userdata.password) {
       if(userdata.pwnew === null) {

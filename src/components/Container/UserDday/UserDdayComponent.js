@@ -17,6 +17,9 @@ const UserDday = () => {
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
       if (!datas){
+        
+      }
+      else{
         datas.forEach((data) => {
           initialData.push({
             id: data.id,
@@ -26,7 +29,7 @@ const UserDday = () => {
           });
         });
         setDday(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
-      }    
+      }
     });
 
 
