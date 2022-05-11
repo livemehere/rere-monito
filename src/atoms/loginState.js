@@ -8,3 +8,13 @@ export const loginState = atom({
   default: false,
   ettects_UNSTABLE: [persistAtom],
 });
+
+export const IDState = atom({
+  key: "id",
+  default: "",
+});
+
+export const PWState = atom({
+  key: "password",
+  default: "",
+});

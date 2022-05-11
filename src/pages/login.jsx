@@ -11,13 +11,15 @@ import {
 import { BackDiv } from "../components/Presenter/UserPageMain/UserPageMainPresenter";
 import axiosManager from "../util/axiosManager";
 import signUp from "./signUp";
-import { loginState } from "../atoms/loginState";
+import { loginState, IDState, PWState } from "../atoms/loginState";
 
 export default function Login() {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
+  const [isID, setIsID] = useRecoilState(IDState);
+  const [isPW, setIsPW] = useRecoilState(PWState);
   const token = window.location.href.split(`?token=`)[1];
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export default function Login() {
       });
       setUser(userData);
       navigate("/");
+      setIsLoggedIn(true);
     } catch (e) {
       alert("로그인에 실패하였습니다");
     }
@@ -44,9 +47,9 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    handleLogin(email, password);
+    setIsID(e.target.email.value);
+    setIsPW(e.target.password.value);
+    handleLogin(isID, isPW);
   };
   function signUpClick() {
     window.location.href = "/signUp";

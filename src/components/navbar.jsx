@@ -14,7 +14,7 @@ export default function NavBar() {
   const logoutHandler = () => {
     localStorage.removeItem("4242-token");
     setIsLoggedIn(false);
-    // window.location.href = "/";
+    window.location.href = "/";
     console.log(isLoggedIn);
   };
   return (
@@ -41,10 +41,13 @@ export default function NavBar() {
             </Link>
           </NavListContainer>
           <NavLoginLogOut>
-            {isLoggedIn === true ? (
-              <Link to="/LoginFormContent" className="login-btn">
-                로그인
-              </Link>
+            {isLoggedIn === false ? (
+              <li>
+                <Link to="/LoginFormContent" className="login-btn">
+                  로그인
+                </Link>
+                <Link to="/signUp" className="sign-up-btn">회원가입</Link>
+              </li>
             ) : (
               <p onClick={logoutHandler}>로그아웃</p>
             )}
