@@ -3,6 +3,7 @@ import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+
 import {
   CalendarBackDiv,
   DetailCalendar,
@@ -100,14 +101,9 @@ export function CalendarBody() {
     // TODO: updateToDB(); 해도되고 안해도되고
   };
 
-  // const handleEventRemove = (removeInfo) => {
-  //   let calendarApi = removeInfo.view.calendar;
-  //   setCalendarData((d) => d.filter((data) => data.removeInfo !== removeInfo));
-  //   calendarData.remove();
-  // };
-
+  //  일정삭제 컨트롤
   const handleEventClick = (removeInfo) => {
-    let calendarApi = removeInfo.view.calendar;
+    let CalendarApi = removeInfo.view.calendar;
     let question = window.confirm(
       `'${removeInfo.event.title}' 일정을 삭제하시겠습니까?`
     );
@@ -116,9 +112,10 @@ export function CalendarBody() {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
         id: removeInfo.event._def.publicId,
       });
-      setCalendarData((d) =>
-        d.filter((data) => data.removeInfo !== removeInfo)
-      );
+      window.location.reload();
+      console.log(removeInfo.event.toPlainObject());
+      setCalendarData(d => d.filter(calendar => calendar.removeInfo !== removeInfo));
+
       console.log(removeInfo.event._def.publicId);
     }
 
