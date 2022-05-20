@@ -13,6 +13,19 @@ const BackDiv = styled.div`
     border-radius: 1.5em;
 `;
 
+const BackDivv = styled.div`
+    text-align: center;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    background-color: rgb(247, 247, 247);
+    width: 50em;
+    height:27em;
+    border-radius: 1.5em;
+`;
+
 const Mtitle = styled.div`
     height:1.5em;
     font-size: 1.5em;
@@ -33,6 +46,7 @@ const Mmchart = styled.div`
 
 
 export {BackDiv,
+    BackDivv,
     Mtitle,
     Mtime,
     Mmchart,};
