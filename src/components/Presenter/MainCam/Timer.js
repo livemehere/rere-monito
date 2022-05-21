@@ -91,6 +91,25 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
   const [time, setTime] = React.useState(SubTime);
   const [timerOn, setTimerOn] = React.useState(false);
 
+  axiosManager.axios(`/record/${user.id}`, "GET")
+      .then((res) => {
+        TimesDatas(res);
+      });
+
+  var dataNum = [];
+  var dataSum = 0;
+
+  function TimesDatas(responseData) {
+      for(let i=0; i<responseData.length; i++){
+          let time = (responseData[i].cumulative_time)
+          dataNum.push(time)
+          }
+      for (let i = 0; i < dataNum.length; i++){
+        dataSum += Number(dataNum[i]);
+        console.log(dataSum);
+      }
+  }
+
   useEffect(()=>{
     setTime(SubTime);
   },[])
@@ -116,6 +135,12 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
       id: id,
       cumulative_time: currentTime,
       endDate: nowTime
+    })
+    axiosManager.axios(`/time`, "PUT", {
+      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+      id: user.id,
+      total_time: dataSum,
+      focus_time: 11111,
     })
   }
 
