@@ -79,7 +79,7 @@ export default function SignUp() {
               className="signup-input"
             />
             <select name="job" className="signup-input">
-                    <option selected disabled>선택해주세요</option>
+                    <option selected disabled>직업을 선택해주세요</option>
                     <option value="초등학생">초등학생</option>
                     <option value="중학생">중학생</option>
                     <option value="고등학생">고등학생</option>

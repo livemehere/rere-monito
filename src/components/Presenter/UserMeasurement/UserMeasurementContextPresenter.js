@@ -3,23 +3,17 @@ import styled from "styled-components";
 const BackDiv = styled.div`
     text-align: center;
     padding: 10px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin:2em auto 3em auto;
     background-color: rgb(247, 247, 247);
     width: 50em;
-    height:43em;
+    height:45em;
     border-radius: 1.5em;
 `;
 
 const BackDivv = styled.div`
     text-align: center;
     padding: 10px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin:2em auto 2em auto;
     background-color: rgb(247, 247, 247);
     width: 50em;
     height:27em;
@@ -39,6 +33,13 @@ const Mtime = styled.div`
     margin-right:2em;
 `;
 
+const Mday = styled.div`
+    text-align:right;
+    font-size: 1.3em;
+    margin-right:2em;
+    margin-bottom:0.2em;
+`;
+
 const Mmchart = styled.div`
     margin: 1em 4em;
     padding: 0em 3em;
@@ -48,5 +49,6 @@ const Mmchart = styled.div`
 export {BackDiv,
     BackDivv,
     Mtitle,
+    Mday,
     Mtime,
     Mmchart,};

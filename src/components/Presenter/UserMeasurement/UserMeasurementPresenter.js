@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const BackDiv = styled.div`
-height: 100vh;
 `;
 
 const MeasurementTitle = styled.div`

@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import { BackDiv } from "../../Presenter/UserMeasurement/UserMeasurementPresenter";
 import UserMeasurementContext from "./UserMeasurementContext";
 import { AlignTitlee } from "../../Presenter/Calendar/CalendarTitlePresenter";
 import WeekContext from "./WeekContext";
 
-export default function UserMeasurement() { // 하루 집중
+import moment from "moment";
+
+export default function UserMeasurement() { 
+  
+  // 하루 집중
   const labels = ["자세불량","측정불가","집중"];
 
   const datas = {
@@ -22,13 +25,21 @@ export default function UserMeasurement() { // 하루 집중
     ],
   };
 
+  // 일주일 공부시간
+  const week1 =  moment().subtract(1,'days').format("MM-DD");
+  const week2 =  moment().subtract(2,'days').format("MM-DD");
+  const week3 =  moment().subtract(3,'days').format("MM-DD");
+  const week4 =  moment().subtract(4,'days').format("MM-DD");
+  const week5 =  moment().subtract(5,'days').format("MM-DD");
+  const week6 =  moment().subtract(6,'days').format("MM-DD");
+  const week7 =  moment().subtract(7,'days').format("MM-DD");
 
-  const weeklabels = ["월","화","수","목","금","토","일","평균",]; // 일주일 통계
+  const weeklabels = [week7, week6, week5, week4, week3, week2, week1, "평균",]; // 일주일 통계
   const weekdata={
     labels: weeklabels,
     datasets: [
       {
-        label: "공부시간",
+        label: "공부시간(min)",
         data: [50, 45, 82, 20,35,70,90,65],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -62,10 +73,8 @@ export default function UserMeasurement() { // 하루 집중
   return (
     <>
       <AlignTitlee>측정 결과 분석</AlignTitlee>
-      <BackDiv>
         <UserMeasurementContext labels={labels} data={datas} />
         <WeekContext labels={weeklabels} data={weekdata}/>
-      </BackDiv>
     </>
   );
 }
