@@ -4,6 +4,8 @@ import { userState } from "../atoms/user";
 import Main from "../components/Container/Main/MainComponent";
 import Layout from "../components/layout";
 import { loginState } from "../atoms/loginState";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [user, setUser] = useRecoilState(userState);
