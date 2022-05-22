@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FaPause } from 'react-icons/fa';
-import { FaPlay } from 'react-icons/fa';
+// import {GrPowerReset} from "react-icons/gr"
 // import { TodoCreate } from './TodoCreate';
 import ListTimer from './Timer'
 import { TodoList } from './TodoList';
@@ -40,41 +39,41 @@ const Block = styled.div`
   flex-direction: row;
 `;
 
-const Btn1 = styled.button`
-  width: 10vh;
-  height: 10vh;
-  border: 5px solid #d1963e;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+// const Btn1 = styled.button`
+//   width: 10vh;
+//   height: 10vh;
+//   border: 5px solid #d1963e;
+//   border-radius: 50%;
+//   align-items: center;
+//   justify-content: center;
+//   position: relative;
   
-  font-size: 40px;
-  background-color: white;
-  background-size: contain;
-  padding-top: 2%;
+//   font-size: 40px;
+//   background-color: white;
+//   background-size: contain;
+//   padding-top: 2%;
 
-  color: #d1963e;
+//   color: #d1963e;
   
-  top: -200px;
+//   top: -200px;
 
-  &:hover {
-    color: #D1A66F;
-    border: 5px solid #D1A66F;
-  }
-`;
+//   &:hover {
+//     color: #D1A66F;
+//     border: 5px solid #D1A66F;
+//   }
+// `;
 
 const BtnReset = styled.button`
-  color: #60EB4A;
-  font-size: 3vh;
+  color: white;
+  font-size: 24px;
+  border-radius: 6px;
   font-weight: bold;
   position: absolute;
-  top: 110%;
+  background-color: #e9a681;
+  left: 0%;
   border: 0;
-  left: 40%;
-  background: none;
   &:hover {
-    color: #80EB71;
+    background-color: #FBCFB7; 
   }
 `;
 
@@ -187,14 +186,14 @@ function CamSide() {
     return () => clearInterval(interval);
   }, [timerOn]);
 
-  const onUpdate = (currentTime) => {
-    axiosManager.axios(`/time`, "PUT", {
-      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-      id: user.id,
-      total_time: currentTime,
-      focus_time: 11111,
-    })
-  }
+  // const onUpdate = (currentTime) => {
+  //   axiosManager.axios(`/time`, "PUT", {
+  //     headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+  //     id: user.id,
+  //     total_time: currentTime,
+  //     focus_time: 11111,
+  //   })
+  // }
 
   const setZero = () => {
     if(window.confirm('진행시간을 초기화 하시겠습니까?')){
@@ -212,21 +211,15 @@ function CamSide() {
     <>
       <VideoBox>
         <MainCamAi />
-        {!timerOn && time === 0 && (
-          <Btn1 onClick={() => setTimerOn(true)}><FaPlay></FaPlay></Btn1>
-        )}
-        {timerOn && <Btn1 onClick={() => {onUpdate(time); setTimerOn(false);}}><FaPause></FaPause></Btn1>}
-        {!timerOn && time > 0 && (
-          <Btn1 onClick={() => setTimerOn(true)}><FaPlay></FaPlay></Btn1>
-        )}
-        {!timerOn && time > 0 && (
+        {/* {!timerOn && time > 0 && (
           <BtnReset onClick={() => {setZero(); setTime(0);}}>초기화</BtnReset>
-        )}
+        )} */}
         
       </VideoBox>
       
       <RightBlock>
       <TimeBlock>
+      <BtnReset onClick={() => {setZero();}}>reset</BtnReset>
       <div id="display">공부시간 :&nbsp; 
         <span>{("0" + Math.floor((time / 3600000) % 60)).slice(-2)}:</span> 
         <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>

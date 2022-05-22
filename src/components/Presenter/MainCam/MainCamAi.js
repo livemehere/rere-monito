@@ -3,6 +3,8 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
+import { FaPause } from 'react-icons/fa';
+import { FaPlay } from 'react-icons/fa';
 
 const Container = styled.div`
   margin: 0px;
@@ -68,6 +70,30 @@ const DetectTimer = styled.div`
   font-weight: 500;
 `;
 
+const Btn1 = styled.button`
+  width: 10vh;
+  height: 10vh;
+  border: 5px solid #d1963e;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  font-size: 40px;
+  background-color: white;
+  background-size: contain;
+  padding-top: 2%;
+
+  color: #d1963e;
+  
+  top: -200px;
+
+  &:hover {
+    color: #D1A66F;
+    border: 5px solid #D1A66F;
+  }
+`;
+
 
 //face-emotion
 const expressionMap = {
@@ -121,69 +147,89 @@ const Room = (props) => {
       .then((stream) => {
         userVideo.current.srcObject = stream;
         // socketRef.current.emit("join room", roomID);
-        socketRef.current.on("all users", (users) => {
-          const peers = [];
-          users.forEach((userID) => {
-            const peer = createPeer(userID, socketRef.current.id, stream);
-            peersRef.current.push({
-              peerID: userID,
-              peer,
-            });
-            peers.push(peer);
-          });
-          setPeers(peers);
-        });
+        // socketRef.current.on("all users", (users) => {
+        //   const peers = [];
+        //   users.forEach((userID) => {
+        //     const peer = createPeer(userID, socketRef.current.id, stream);
+        //     peersRef.current.push({
+        //       peerID: userID,
+        //       peer,
+        //     });
+        //     peers.push(peer);
+        //   });
+        //   setPeers(peers);
+        // });
 
-        socketRef.current.on("user joined", (payload) => {
-          const peer = addPeer(payload.signal, payload.callerID, stream);
-          peersRef.current.push({
-            peerID: payload.callerID,
-            peer,
-          });
+        // socketRef.current.on("user joined", (payload) => {
+        //   const peer = addPeer(payload.signal, payload.callerID, stream);
+        //   peersRef.current.push({
+        //     peerID: payload.callerID,
+        //     peer,
+        //   });
 
-          setPeers((users) => [...users, peer]);
-        });
+        //   setPeers((users) => [...users, peer]);
+        // });
 
-        socketRef.current.on("receiving returned signal", (payload) => {
-          const item = peersRef.current.find((p) => p.peerID === payload.id);
-          item.peer.signal(payload.signal);
-        });
+        // socketRef.current.on("receiving returned signal", (payload) => {
+        //   const item = peersRef.current.find((p) => p.peerID === payload.id);
+        //   item.peer.signal(payload.signal);
+        // });
       });
   }, []);
 
-  function createPeer(userToSignal, callerID, stream) {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream,
-    });
+  const [playing, setPlaying] = useState(undefined);
 
-    peer.on("signal", (signal) => {
-      socketRef.current.emit("sending signal", {
-        userToSignal,
-        callerID,
-        signal,
+  const startOrStop = () => {
+    if (playing) {
+      const s = userVideo.current.srcObject;
+      s.getTracks().forEach((track) => {
+        track.stop();
       });
-    });
+    } else {
+      setPlaying(true);
+      navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        userVideo.current.srcObject = stream;
+      });
+      };
+      setPlaying(!playing);
+    }
+    
 
-    return peer;
-  }
+  // function createPeer(userToSignal, callerID, stream) {
+  //   const peer = new Peer({
+  //     initiator: true,
+  //     trickle: false,
+  //     stream,
+  //   });
 
-  function addPeer(incomingSignal, callerID, stream) {
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream,
-    });
+  //   peer.on("signal", (signal) => {
+  //     socketRef.current.emit("sending signal", {
+  //       userToSignal,
+  //       callerID,
+  //       signal,
+  //     });
+  //   });
 
-    peer.on("signal", (signal) => {
-      socketRef.current.emit("returning signal", { signal, callerID });
-    });
+  //   return peer;
+  // }
 
-    peer.signal(incomingSignal);
+  // function addPeer(incomingSignal, callerID, stream) {
+  //   const peer = new Peer({
+  //     initiator: false,
+  //     trickle: false,
+  //     stream,
+  //   });
 
-    return peer;
-  }
+  //   peer.on("signal", (signal) => {
+  //     socketRef.current.emit("returning signal", { signal, callerID });
+  //   });
+
+  //   peer.signal(incomingSignal);
+
+  //   return peer;
+  // }
 
   //face-api
   useEffect(() => {
@@ -251,12 +297,14 @@ const Room = (props) => {
 
   //face-api
 
+  //캠 ON/OFF
+  const [timerOn, setTimerOn] = React.useState(false);
+
   return (
     <>
     <Container>
       <Emotions>
         {faceEmotion}
-        
       </Emotions>
      
       <StyledVideo muted ref={userVideo} autoPlay playsInline />
@@ -274,7 +322,10 @@ const Room = (props) => {
         <State1>자세불량</State1>
         <State2>집중</State2>
       </StatesBar>
-
+      {!timerOn && (
+          <Btn1 onClick={() => {setTimerOn(true); startOrStop(playing);}}><FaPlay></FaPlay></Btn1>
+      )}
+      {timerOn && <Btn1 onClick={() => {setTimerOn(false); startOrStop(!playing);}}><FaPause></FaPause></Btn1>}
     </>
     
   );

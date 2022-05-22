@@ -106,7 +106,6 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
           }
       for (let i = 0; i < dataNum.length; i++){
         dataSum += Number(dataNum[i]);
-        console.log(dataSum);
       }
   }
 

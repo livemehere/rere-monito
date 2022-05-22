@@ -8,6 +8,7 @@ import axiosManager from "../../../util/axiosManager";
 import { useLocation } from "react-router-dom";
 import { userState } from "../../../atoms/user";
 import { useRecoilState } from "recoil";
+import { AlignTitle } from "../../Presenter/Calendar/CalendarTitlePresenter";
 
 //생성되는 캠 div 만들기
 const Container = styled.div`
@@ -79,10 +80,11 @@ const StyledVideo2 = styled.video`
 `;
 
 const RoomTitle = styled.div`
+  margin-top: -80px;
   font-size: 32px;
   font-weight: bold;
   text-align: center;
-  line-height: 200px;
+  line-height: 150px;
   color: #206966;
 `;
 
@@ -288,6 +290,9 @@ const StudyRoom = () => {
 
   return (
     <div>
+      <AlignTitle>
+        <h1>스터디룸</h1>
+      </AlignTitle>
       <RoomTitle>방 이름 : {rooms}</RoomTitle>
       <Container>
         <MyCam>
