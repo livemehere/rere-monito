@@ -26,12 +26,14 @@ export default function SignUp() {
         name,
         birth,
         job,
-      });
+      }
+      );console.log(result);
     } catch (e) {
       alert("회원가입 실패");
     }
   };
   const handleSubmit = (e) => {
+    e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     const password_check = e.target.password_check.value;
