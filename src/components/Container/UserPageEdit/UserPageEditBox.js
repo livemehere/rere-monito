@@ -68,7 +68,7 @@ const UserPageEditBox = () => {
 
   const usersave = () => {
     
-    console.log();
+    console.log(userdata);
 
     if (userdata.pw === userdata.password) {
       if(userdata.pwnew === null) {
@@ -81,7 +81,7 @@ const UserPageEditBox = () => {
         email:userdata.email,
         birth: userdata.birth,
         job: userdata.job,
-        profile_img: image.preview_URL,
+        profile_img: "",
         });
         alert("사용자정보가 업데이트 되었습니다");
         navigate(-1);
@@ -89,13 +89,14 @@ const UserPageEditBox = () => {
       else{
         if (userdata.pwnew === userdata.pwnewcheck){
             axiosManager.axios(`/api/user/`, "PUT", {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
             id:userdata.id,
             name: userdata.name,
             password: userdata.pwnew,
             birth: userdata.birth,
             email:userdata.email,
             job: userdata.job,
-            profile_img: image.preview_URL,
+            profile_img: "",
             });
             alert("사용자정보가 업데이트 되었습니다");
             navigate(-1);
@@ -119,10 +120,10 @@ const UserPageEditBox = () => {
                 </Editname>
                 <EditTextt>
                       <Editimg src={image.preview_URL}/>
-                      <input 
-                      type="file" 
-                      name="profile_img" 
-                      accept="image/*" 
+                      <input
+                      type="file"
+                      name="profile_img"
+                      accept="image/*"
                       value={userdata.profile_img|| ''}
                       onChange={Uploadimg}/>
                 </EditTextt>

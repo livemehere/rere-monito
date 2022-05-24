@@ -3,6 +3,7 @@ import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+
 import {
   CalendarBackDiv,
   DetailCalendar,
@@ -44,26 +45,83 @@ export function CalendarBody() {
     });
     console.log("이벤트정보", calendarData);
     console.log("변경");
-  }, [calendarData]);
-
+  }, []);
+  // 이벤트 추가
   const handleEventAdd = (addInfo) => {
     console.log(addInfo.event.toPlainObject());
     // TODO: addCalendarToDB();
-    setCalendarData([
-      ...calendarData,
-      { ...addInfo.event.toPlainObject(), id: Date.now() },
-    ]);
-  };
-  const handleEventRemove = (removeInfo) => {
-    const updatedList = [...calendarData];
-    setCalendarData(calendarData.filter((d) => d.removeInfo !== removeInfo));
-    // removeInfo.event.id.catch(() => {
-    //   reportNetworkError();
-    //   updatedList.removeInfo.revert();
-    // });
 
-    setCalendarData(updatedList);
+    axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
+      const initialData = [];
+      datas.forEach((data) => {
+        initialData.push({
+          id: data.id,
+          title: data.title,
+          start: data.startDate,
+          end: data.endDate,
+        });
+      });
+      setCalendarData([
+        ...calendarData,
+        { ...addInfo.event.toPlainObject(), id: Date.now() },
+      ]);
+    }, []);
   };
+  //일자선택
+  const handleDateSelect = (selectInfo) => {
+    let calendarApi = selectInfo.view.calendar;
+    let title = prompt("일정을 입력하세요.");
+    let detail = "0";
+    calendarApi.unselect(); //일자 선택 초기화
+
+    if (title) {
+      console.log(user.id, title, selectInfo.startStr, selectInfo.endStr);
+      axiosManager.axios(`/calendar/`, "POST", {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        id: user.id,
+        title: title,
+        startDate: selectInfo.startStr,
+        endDate: selectInfo.endStr,
+        detail: detail,
+      });
+      calendarApi.addEvent(
+        {
+          title,
+          start: selectInfo.startStr,
+          end: selectInfo.endStr,
+          allDay: selectInfo.allDay,
+        },
+        true
+      );
+    }
+  };
+  //드래그 앤 드롭
+  const handleEventChange = (oldEvent) => {
+    console.log(oldEvent.event.toPlainObject());
+    // TODO: updateToDB(); 해도되고 안해도되고
+  };
+
+  //  일정삭제 컨트롤
+  const handleEventClick = (removeInfo) => {
+    let CalendarApi = removeInfo.view.calendar;
+    let question = window.confirm(
+      `'${removeInfo.event.title}' 일정을 삭제하시겠습니까?`
+    );
+    if (question) {
+      axiosManager.axios(`/calendar/`, "DELETE", {
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+        id: removeInfo.event._def.publicId,
+      });
+      window.location.reload();
+      console.log(removeInfo.event.toPlainObject());
+      setCalendarData(d => d.filter(calendar => calendar.removeInfo !== removeInfo));
+
+      console.log(removeInfo.event._def.publicId);
+    }
+
+    // setCalendarData(updatedList);
+  };
+
   return (
     <div className="demo-app">
       <CalendarBackDiv>
@@ -83,14 +141,14 @@ export function CalendarBody() {
               selectMirror={true}
               dayMaxEvents={true}
               weekends={true}
-              datesSet={handleDates}
+              //datesSet={handleEventAdd}
               select={handleDateSelect}
               events={calendarData}
               eventContent={renderEventContent} // 커스텀 렌더 기능
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}
               eventChange={handleEventChange} //드래그 앤 드롭/크기 조정
-              eventRemove={handleEventRemove}
+              // eventRemove={handleEventRemove}
             />
           </div>
         </OnlyCalendar>
@@ -103,39 +161,9 @@ export function CalendarBody() {
   );
 }
 
-const handleDateSelect = (selectInfo) => {
-  let calendarApi = selectInfo.view.calendar;
-  let title = prompt("일정을 입력하세요.");
-
-  calendarApi.unselect(); //일자 선택 초기화
-
-  if (title) {
-    calendarApi.addEvent(
-      {
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      },
-      true
-    );
-  }
-};
-const handleEventClick = (clickInfo) => {
-  if (window.confirm(`'${clickInfo.event.title}' 일정을 삭제하시겠습니까?`)) {
-    clickInfo.event.remove();
-  }
-  // TODO: deleteCalendarFromDB();
-};
-
-const handleDates = (rangeInfo) => {
-  console.log(rangeInfo);
-};
-
-const handleEventChange = (oldEvent) => {
-  console.log(oldEvent.event.toPlainObject());
-  // TODO: updateToDB(); 해도되고 안해도되고
-};
+// const handleDates = (rangeInfo) => {
+//   console.log(rangeInfo);
+// };
 
 // const handleEventRemove = (removeInfo) => {
 //   (removeInfo.event.id).catch(() => {
@@ -147,7 +175,6 @@ const handleEventChange = (oldEvent) => {
 function renderEventContent(eventInfo) {
   return (
     <>
-      <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
   );

@@ -1,21 +1,27 @@
 import React, { useRef,useEffect } from 'react';
 import { DetailPlanner, OnlyPlanner, PlannerBackDiv } from '../../Presenter/Planner/PlannerBodyPresenter';
 import { Chart, registerables } from 'chart.js';
+import axiosManager from '../../../util/axiosManager';
 
-const labels = [
-    '자료구조',
-    '데이터베이스',
-    '컴퓨터구조',
-    'C언어',
-    'JAVA',
-    '교양',
-];
-var dataNum = [60, 10, 37, 20, 30, 45];
-var dataSum = 0;
+axiosManager.axios(`/record/14`, "GET")
+      .then((res) => {
+        labelsAndDatas(res);
+      });
 
-for (let i = 0; i < dataNum.length; i++){
-    dataSum += dataNum[i];
+const labels = [];
+var dataNum = [];
+
+function labelsAndDatas(responseData) {
+      console.log(responseData.length);
+      for(let i=0; i<responseData.length; i++){
+          labels.push(responseData[i].name)
+          let time = (responseData[i].cumulative_time/60000)
+          console.log(time)
+          dataNum.push(time.toFixed(2))
+          }
 }
+
+var dataSum = 0;
 
 const rendering = () => {
     const result = [];
@@ -69,7 +75,12 @@ var options = {
 }
     //[{ color: '#2bc4bd', percent: 50 }, { color: '#7f58a3', percent: 31 }, { color: '#ebb860', percent: 19 }];
 const PlannerBody = () => {
-    const canvasDom = useRef(null);
+  for (let i = 0; i < dataNum.length; i++){
+    dataSum += Number(dataNum[i]);
+    console.log(dataSum);
+}
+
+const canvasDom = useRef(null);
     useEffect(() => {
       const ctx = canvasDom.current.getContext("2d");
         console.log(ctx);
@@ -90,7 +101,7 @@ const PlannerBody = () => {
                 <DetailPlanner>
                     <ul className='today-study-time'>
                         <li className='today-list'><p id="time-title">오늘의 공부시간</p> </li>  
-                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {dataSum % 60}M</h1></li>
+                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {dataSum.toFixed(2) % 60}M</h1></li>
                     </ul>
                     <ul>
                             {rendering()}

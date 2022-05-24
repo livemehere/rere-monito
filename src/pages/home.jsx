@@ -3,13 +3,19 @@ import { useRecoilState } from "recoil";
 import { userState } from "../atoms/user";
 import Main from "../components/Container/Main/MainComponent";
 import Layout from "../components/layout";
+import { loginState } from "../atoms/loginState";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [user, setUser] = useRecoilState(userState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
 
   useEffect(() => {
-    console.log("로그인정보", user);
-  }, [user]);
+    if (isLoggedIn === true) {
+      console.log("로그인정보", user);
+    }
+  }, [user, isLoggedIn]);
 
   return (
     <Layout>

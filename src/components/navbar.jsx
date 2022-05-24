@@ -8,15 +8,21 @@ import {
 } from "./Presenter/Nav/TopNavPresenter";
 import { useRecoilState } from "recoil";
 import { loginState } from "../atoms/loginState";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function NavBar() {
+
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   const logoutHandler = () => {
-    localStorage.removeItem("4242-token");
+    window.localStorage.removeItem("token");
     setIsLoggedIn(false);
-    // window.location.href = "/";
-    console.log(isLoggedIn);
+    window.location.href = "/";
   };
+
+
+
   return (
     <>
       <NavBody>
@@ -41,15 +47,20 @@ export default function NavBar() {
             </Link>
           </NavListContainer>
           <NavLoginLogOut>
-            {isLoggedIn === true ? (
-              <Link to="/LoginFormContent" className="login-btn">
-                로그인
-              </Link>
+            {isLoggedIn === false ? (
+              <li>
+                <Link to="/LoginFormContent" className="login-btn">
+                  로그인
+                </Link>
+                <Link to="/signUp" className="sign-up-btn">회원가입</Link>
+              </li>
             ) : (
-              <p onClick={logoutHandler}>로그아웃</p>
+              <li>
+                <ToastContainer />
+              <p onClick={logoutHandler} className="login-btn">로그아웃</p>,
+              </li>
             )}
           </NavLoginLogOut>
-
           {/* <div className="user-name">{User.Name}님 환영합니다.</div> { /* 이부분 기능구현은 로그인 기능 갖춰지면 넣을예정 */}
         </NavAllContainer>
       </NavBody>
