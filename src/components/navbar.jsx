@@ -21,8 +21,6 @@ export default function NavBar() {
     window.location.href = "/";
   };
 
-
-
   return (
     <>
       <NavBody>
