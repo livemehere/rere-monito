@@ -91,23 +91,25 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
   const [time, setTime] = React.useState(SubTime);
   const [timerOn, setTimerOn] = React.useState(false);
 
-  axiosManager.axios(`/record/${user.id}`, "GET")
-      .then((res) => {
-        TimesDatas(res);
-      });
+  // 디비구조 바뀐후로 쓸모없음(총 공부시간 합산)
+  // axiosManager.axios(`/record/${user.id}`, "GET")
+  //     .then((res) => {
+  //       TimesDatas(res);
+  //       console.log(res.records.total_time);
+  //     });
 
-  var dataNum = [];
-  var dataSum = 0;
+  // var dataNum = [];
+  // var dataSum = 0;
 
-  function TimesDatas(responseData) {
-      for(let i=0; i<responseData.length; i++){
-          let time = (responseData[i].cumulative_time)
-          dataNum.push(time)
-          }
-      for (let i = 0; i < dataNum.length; i++){
-        dataSum += Number(dataNum[i]);
-      }
-  }
+  // function TimesDatas(responseData) {
+  //     for(let i=0; i<responseData.length; i++){
+  //         let time = (responseData[i].cumulative_time)
+  //         dataNum.push(time)
+  //         }
+  //     for (let i = 0; i < dataNum.length; i++){
+  //       dataSum += Number(dataNum[i]);
+  //     }
+  // }
 
   useEffect(()=>{
     setTime(SubTime);
@@ -129,18 +131,21 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
 
 
   const onUpdate = (currentTime) => {
-    axiosManager.axios(`/record`, "PUT", {
+    axiosManager.axios(`/record`, "POST", {
       headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-      id: id,
-      cumulative_time: currentTime,
-      endDate: nowTime
+      total_time: currentTime,
+      date: nowTime,
+      user_id: user.id,
+      name: text,
+      focus_time: 0,
+      unfocus_time: 0,
     })
-    axiosManager.axios(`/time`, "PUT", {
-      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-      id: user.id,
-      total_time: dataSum,
-      focus_time: 11111,
-    })
+    // axiosManager.axios(`/time`, "PUT", {
+    //   headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+    //   id: user.id,
+    //   total_time: dataSum,
+    //   focus_time: 11111,
+    // })
   }
 
   const setZero = () => {

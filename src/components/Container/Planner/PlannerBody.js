@@ -5,7 +5,7 @@ import axiosManager from '../../../util/axiosManager';
 
 axiosManager.axios(`/record/14`, "GET")
       .then((res) => {
-        labelsAndDatas(res);
+        labelsAndDatas(res.records);
       });
 
 const labels = [];
@@ -15,7 +15,7 @@ function labelsAndDatas(responseData) {
       console.log(responseData.length);
       for(let i=0; i<responseData.length; i++){
           labels.push(responseData[i].name)
-          let time = (responseData[i].cumulative_time/60000)
+          let time = (responseData[i].total_time/60000)
           console.log(time)
           dataNum.push(time.toFixed(2))
           }

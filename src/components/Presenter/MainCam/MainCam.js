@@ -163,10 +163,11 @@ function CamSide() {
   const [timerOn, setTimerOn] = React.useState(false);
 
   useEffect(() => {
-    axiosManager.axios(`/time/${user.id}`, "GET")
+    axiosManager.axios(`/record/${user.id}`, "GET")
     .then((res) => {
-      setTime(res.total_time);
+      setTime(res.time_sum[0].total_study_time);
       setAllTime(res);
+      console.log(res.time_sum[0].total_study_time)
     })
   }, []);
 

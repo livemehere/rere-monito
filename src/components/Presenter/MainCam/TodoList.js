@@ -80,11 +80,11 @@ export function TodoList() {
     axiosManager.axios(`/record/${user.id}`, "GET")
     .then((res) => {
       const initData = [];
-        res.forEach((r) => {
+        res.records.forEach((r) => {
         initData.push({
           id: r.id,
           name: r.name,
-          cumulative_time: r.cumulative_time,
+          total_time: r.total_time,
         });
       });
       setGets(initData);
@@ -108,14 +108,16 @@ export function TodoList() {
 
       axiosManager.axios(`/record/`, "POST", {
         headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-        id: userId,
-        name: values
+        user_id: userId,
+        name: values,
+        focus_time: 0,
+        unfocus_time: 0,
       })
 
       axiosManager.axios(`/record/${user.id}`, "GET")
       .then((res) => {
         const initData = [];
-          res.forEach((r) => {
+          res.records.forEach((r) => {
           initData.push({
             id: r.id,
             name: r.name,
@@ -144,7 +146,7 @@ export function TodoList() {
           text={todo.name}
           textarea={todo.textarea}
           done={todo.done}
-          time={todo.cumulative_time}
+          time={todo.total_time}
           OnRemove={()=> OnRemove(todo.id)}
         />
       ))}
