@@ -7,7 +7,12 @@ class AxiosManager {
       url: `http://15.164.167.169:3000${url}`,
       data: body && body,
     });
-    return data.data;
+
+    if(data.status >= 200 && data.status <= 299){
+      return data.data;
+    }else{
+      return data;
+    }
   }
 }
 

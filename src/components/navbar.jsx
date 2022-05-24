@@ -24,10 +24,9 @@ export default function NavBar() {
 
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   const logoutHandler = () => {
-    localStorage.removeItem("4242-token");
+    window.localStorage.removeItem("token");
     setIsLoggedIn(false);
     window.location.href = "/";
-    console.log(isLoggedIn);
   };
 
   return (
