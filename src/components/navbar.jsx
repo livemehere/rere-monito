@@ -11,16 +11,8 @@ import { loginState } from "../atoms/loginState";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
+
 export default function NavBar() {
-  const info = toast.info("🦄 저번주 대비 학습량이 늘었습니다.", {
-    autoClose:5000,
-    position: toast.POSITION.TOP_RIGHT,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: true,
-    pauseOnFocusLoss: false,
-    draggable: true,
-    });
 
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   const logoutHandler = () => {
