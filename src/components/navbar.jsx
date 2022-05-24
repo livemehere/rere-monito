@@ -13,23 +13,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function NavBar() {
-  const info = toast.info("🦄 저번주 대비 학습량이 늘었습니다.", {
-    autoClose:5000,
-    position: toast.POSITION.TOP_RIGHT,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    pauseOnFocusLoss: false,
-    draggable: true,
-    isLoading: false
-    });
 
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   const logoutHandler = () => {
-    localStorage.removeItem("4242-token");
+    window.localStorage.removeItem("token");
     setIsLoggedIn(false);
     window.location.href = "/";
-    console.log(isLoggedIn);
   };
 
   return (

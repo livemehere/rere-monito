@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { EventDragStopArg } from "@fullcalendar/interaction";
 
 import {
   CalendarBackDiv,
@@ -103,25 +103,42 @@ export function CalendarBody() {
 
   //  일정삭제 컨트롤
   const handleEventClick = (removeInfo) => {
-    let CalendarApi = removeInfo.view.calendar;
+    let datalist = [];
     let question = window.confirm(
       `'${removeInfo.event.title}' 일정을 삭제하시겠습니까?`
     );
+    //calendarApi.unselect(); //일자 선택 초기화
     if (question) {
       axiosManager.axios(`/calendar/`, "DELETE", {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
         id: removeInfo.event._def.publicId,
       });
-      window.location.reload();
-      console.log(removeInfo.event.toPlainObject());
-      setCalendarData(d => d.filter(calendar => calendar.removeInfo !== removeInfo));
-
-      console.log(removeInfo.event._def.publicId);
+      axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
+        const initialData = [];
+        datas.forEach((data) => {
+          initialData.push({
+            id: data.id,
+            title: data.title,
+            start: data.startDate,
+            end: data.endDate,
+          });
+        });
+        setCalendarData(initialData);
+      }, []);
+      // console.log(removeInfo.event.toPlainObject());
+      // setCalendarData((d) =>
+      //   d.filter((calendar) => calendar.removeInfo !== removeInfo)
+      // );
+      //console.log(removeInfo.event._def.publicId);
+      // removeInfo.event.remove();
+      // setCalendarData((d) =>
+      //   d.filter((calendar) => calendar.removeInfo !== removeInfo)
+      // );
+      //console.log(removeInfo.event);
     }
 
     // setCalendarData(updatedList);
   };
-
   return (
     <div className="demo-app">
       <CalendarBackDiv>
@@ -148,7 +165,7 @@ export function CalendarBody() {
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}
               eventChange={handleEventChange} //드래그 앤 드롭/크기 조정
-              // eventRemove={handleEventRemove}
+              //eventRemove={handleEventRemove}
             />
           </div>
         </OnlyCalendar>

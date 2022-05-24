@@ -31,11 +31,20 @@ export default function Login() {
         email,
         password,
       });
-
+      window.localStorage.setItem('token',result);
       const userData = await axiosManager.axios("/signIn/verify", "POST", {
         token: result,
       });
+      // birth: "1998-11-30T00:00:00.000Z"
+      // email: "test@gmail.com"
+      // iat: 1653406032
+      // id: 14
+      // job: "프리렌서"
+      // name: "공태만"
+      // password: "1234"
+      // profile_img: ""
       setUser(userData);
+
       navigate("/");
       setIsLoggedIn(true);
     } catch (e) {
