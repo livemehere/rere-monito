@@ -72,6 +72,7 @@ const UserPageEditBox = () => {
 
     if (userdata.pw === userdata.password) {
       if(userdata.pwnew === null) {
+
         //만약 뉴pw 빈칸이면 원래비번
         axiosManager.axios(`/api/user/`, "PUT", {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -82,12 +83,15 @@ const UserPageEditBox = () => {
         birth: userdata.birth,
         job: userdata.job,
         profile_img: "",
-        });
+        }).catch(console.log);
+        
+
         alert("사용자정보가 업데이트 되었습니다");
         navigate(-1);
       }
       else{
         if (userdata.pwnew === userdata.pwnewcheck){
+
             axiosManager.axios(`/api/user/`, "PUT", {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             id:userdata.id,
@@ -97,7 +101,7 @@ const UserPageEditBox = () => {
             email:userdata.email,
             job: userdata.job,
             profile_img: "",
-            });
+            }).catch(console.log);
             alert("사용자정보가 업데이트 되었습니다");
             navigate(-1);
         }
