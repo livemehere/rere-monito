@@ -3,6 +3,8 @@ import { useRecoilState } from "recoil";
 import { userState } from "../../../atoms/user";
 import { CountingEvent } from "../../Presenter/Calendar/CountingEventPresenter";
 
+import moment from "moment";
+
 function User() {
   const [user, setUser] = useRecoilState(userState);
   return `${user.name}`;
@@ -34,7 +36,7 @@ const CountingEventState = ({ data }) => {
             {data &&
               data.map((d) => (
                 <li key={d.id} className="d-list">
-                  <b>{d.start} </b> {d.title}
+                  <b>{moment(d.start).format("YYYY-MM-DD")} </b> {d.title}
                 </li>
               ))}
             <ul>{/* {this.props.events.map(renderSidebarEvent)} */}</ul>
