@@ -4,6 +4,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { EventDragStopArg } from "@fullcalendar/interaction";
 
+import moment from "moment";
+
 import {
   CalendarBackDiv,
   DetailCalendar,
@@ -41,7 +43,7 @@ export function CalendarBody() {
         });
       });
 
-      setCalendarData(initialData);
+      setCalendarData(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
     });
     console.log("이벤트정보", calendarData);
     console.log("변경");
@@ -123,7 +125,7 @@ export function CalendarBody() {
             end: data.endDate,
           });
         });
-        setCalendarData(initialData);
+        setCalendarData(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
       }, []);
       // console.log(removeInfo.event.toPlainObject());
       // setCalendarData((d) =>

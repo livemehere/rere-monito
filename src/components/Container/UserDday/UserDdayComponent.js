@@ -31,8 +31,6 @@ const UserDday = () => {
         setDday(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
       }
     });
-
-
   }, []);
 
   
