@@ -3,7 +3,7 @@ import styled from "styled-components";
 const EditFrom = styled.form`
     background-color: #EDDDB8;
     background: repeating-linear-gradient(to right, rgb(252, 238, 196), #FCE9CE 13em, #FCFBF9 13em, #FCFBF9 55em);
-    height: 41em;
+    height: 33em;
     width: 55em;
     box-shadow : 0.2em 0.2em 0.7em 0.2em #DBD9D6;
     border-radius: 1.5em;
@@ -55,8 +55,9 @@ flex-direction:row;
 `;
 
 const Lineeee = styled.div`
+padding-top:0.5em;
 width:54.7em;
-height:8.63em;
+height:5.5em;
 border-bottom:0.1em solid #EDEBE9;
 display:flex;
 flex-direction:row;

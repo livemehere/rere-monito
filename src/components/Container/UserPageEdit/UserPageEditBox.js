@@ -41,29 +41,6 @@ const UserPageEditBox = () => {
     });
   };
 
-   // 사진 업로드 & 미리보기
-  const [image, setImage] = useState({
-    profile_img: "",
-    preview_URL: "../../img/default_image.png",
-  });
-
-  const Uploadimg = (e) => {
-    e.preventDefault();
-    const fileReader = new FileReader();
-
-    if(e.target.files[0]){
-      fileReader.readAsDataURL(e.target.files[0])
-    }
-    fileReader.onload = () => {
-      setImage(
-        {
-          profile_img: e.target.files[0],
-          preview_URL: fileReader.result
-        }
-      )
-    }
-  }
-
   const navigate = useNavigate();
 
   const usersave = () => {
@@ -118,22 +95,6 @@ const UserPageEditBox = () => {
     <>
       <EditFrom>
           <Lineeee>
-                <Editname>
-                  커버사진
-                  <Editnames>이미지 사진만 업로드해주세요</Editnames>
-                </Editname>
-                <EditTextt>
-                      <Editimg src={image.preview_URL}/>
-                      <input
-                      type="file"
-                      name="profile_img"
-                      accept="image/*"
-                      value={userdata.profile_img|| ''}
-                      onChange={Uploadimg}/>
-                </EditTextt>
-          </Lineeee>
-
-          <Line>
                 <Editname>이름(닉네임)</Editname>
                 <EditText>
                   <input
@@ -141,7 +102,7 @@ const UserPageEditBox = () => {
                     name="name"
                     onChange={onChange}/>
                 </EditText>
-          </Line>
+          </Lineeee>
 
           <Line>
                 <Editname>이메일</Editname>
