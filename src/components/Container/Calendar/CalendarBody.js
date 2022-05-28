@@ -43,7 +43,11 @@ export function CalendarBody() {
         });
       });
 
-      setCalendarData(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
+      setCalendarData(
+        initialData.sort((a, b) => {
+          return moment(a.start).diff(b.start, "days");
+        })
+      );
     });
     console.log("이벤트정보", calendarData);
     console.log("변경");
@@ -91,7 +95,6 @@ export function CalendarBody() {
           title,
           start: selectInfo.startStr,
           end: selectInfo.endStr,
-          allDay: selectInfo.allDay,
         },
         true
       );
@@ -125,7 +128,11 @@ export function CalendarBody() {
             end: data.endDate,
           });
         });
-        setCalendarData(initialData.sort((a,b)=> {return moment(a.start).diff(b.start, "days")}));
+        setCalendarData(
+          initialData.sort((a, b) => {
+            return moment(a.start).diff(b.start, "days");
+          })
+        );
       }, []);
       // console.log(removeInfo.event.toPlainObject());
       // setCalendarData((d) =>
@@ -149,6 +156,7 @@ export function CalendarBody() {
             <FullCalendar
               className="FullCalendarCSS"
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              timeZone="local"
               headerToolbar={{
                 left: "prev,next today",
                 center: "title",
@@ -157,17 +165,19 @@ export function CalendarBody() {
               initialView="dayGridMonth"
               editable={true}
               selectable={true}
+              expandRows={true} // 화면에 맞게 높이 재설정
+              // slotMinTime="08:00" // Day 캘린더에서 시작 시간
+              // slotMaxTime="20:00" // Day 캘린더에서 종료 시간
               selectMirror={true}
               dayMaxEvents={true}
               weekends={true}
               //datesSet={handleEventAdd}
-              select={handleDateSelect}
               events={calendarData}
-              eventContent={renderEventContent} // 커스텀 렌더 기능
+              select={handleDateSelect} // 일자선택하면 eventADD기능활성화
+              eventContent={renderEventContent} // 아이콘 삭제
               eventClick={handleEventClick}
-              eventAdd={handleEventAdd}
+              //eventAdd={handleEventAdd}
               eventChange={handleEventChange} //드래그 앤 드롭/크기 조정
-              //eventRemove={handleEventRemove}
             />
           </div>
         </OnlyCalendar>
