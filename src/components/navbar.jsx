@@ -55,7 +55,7 @@ export default function NavBar() {
             ) : (
               <li>
                 <ToastContainer />
-              <p onClick={logoutHandler} className="login-btn">로그아웃</p>,
+              <p onClick={logoutHandler} className="login-btn">로그아웃</p>
               </li>
             )}
           </NavLoginLogOut>

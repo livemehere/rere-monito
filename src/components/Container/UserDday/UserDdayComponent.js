@@ -34,7 +34,7 @@ const UserDday = () => {
   }, []);
 
   
-  console.log(dday);
+  // console.log(dday);
   return (
     <>
       <AlignTitlee>디데이</AlignTitlee>
