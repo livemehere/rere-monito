@@ -11,11 +11,12 @@ import moment from "moment";
 
 const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
 
+  console.log("공부시간",yesterdaysetsum/60);
   const yesterday = moment().subtract(1,'days').format('YYYY-MM-DD')
 
   if(Math.floor(yesterdaysetsum / 60)===0){
-    if(yesterdaysetsum.toFixed(0) % 60 % 60===0){
-      if(yesterdaysetsum.toFixed(0)  % 60 % 60% 60===0){
+    if(Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum / 60/60)*60))===0){
+      if(Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))===0){
         return (
           <>
             <BackDiv>
@@ -30,7 +31,7 @@ const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
             <BackDiv>
               <Mtitle>전날 집중도</Mtitle>
               <Mday>{yesterday}</Mday>
-              <Mtime>학습시간 : {yesterdaysetsum.toFixed(2) *60 % 60}S</Mtime>
+              <Mtime>학습시간 : {Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))}S</Mtime>
               <Mmchart>
                 <MChart labels={labels} data={data} />
               </Mmchart>
@@ -46,7 +47,7 @@ const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
           <BackDiv>
             <Mtitle>전날 집중도</Mtitle>
             <Mday>{yesterday}</Mday>
-            <Mtime>학습시간 : {Math.floor(yesterdaysetsum)}M {yesterdaysetsum.toFixed(2) *60 % 60}S</Mtime>
+            <Mtime>학습시간 : {Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum / 60/60)*60))}M {Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))}S</Mtime>
             <Mmchart>
               <MChart labels={labels} data={data} />
             </Mmchart>
@@ -62,7 +63,7 @@ const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
         <BackDiv>
           <Mtitle>전날 집중도</Mtitle>
           <Mday>{yesterday}</Mday>
-          <Mtime>학습시간 : {Math.floor(yesterdaysetsum / 60)}H {Math.floor(yesterdaysetsum)}M {yesterdaysetsum.toFixed(2) *60 % 60}S</Mtime>
+          <Mtime>학습시간 : {Math.floor(yesterdaysetsum / 60/60)}H {Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))}M {Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))}S</Mtime>
           <Mmchart>
             <MChart labels={labels} data={data} />
           </Mmchart>

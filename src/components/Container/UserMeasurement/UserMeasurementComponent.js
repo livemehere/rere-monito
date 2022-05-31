@@ -13,54 +13,56 @@ import moment from "moment";
 const UserMeasurement = () => { 
 
   const [user, setUser] = useRecoilState(userState);
-  const [focus, setFocus] = useState();
-  const [unfocus,setUnFocus] = useState();
+  const [focusss, setFocusss] = useState([]);
+  const [unFocusss, setUnFocusss] = useState([]);
 
-  const yesterday =  moment().subtract(1,'days').format("YYYY-MM-DD"); // 어제 날짜
-
+  const yesterday =  moment().subtract(0,'days').format("YYYY-MM-DD"); // 어제 날짜
 
   useEffect(() => {
-
     axiosManager.axios(`/record/${user.id}`, "GET").then((datas) => {
-      const dataNum = []; // 총 공부시간
-      const dataFocus = []; // 집중시간
-      const dataUnfocus = []; // 집중불량 시간 
 
-      for(let i=0; i<datas.records.length; i++){ 
-        const datee = moment(datas.records[i].date).format('YYYY-MM-DD');
-        if(datee === yesterday){
-          let total_time = (datas.records[i].total_time/60000)
-          let focus_time = (datas.records[i].focus_time/60000)
-          let unfocus_time = (datas.records[i].unfocus_time/60000)
-    
-          dataFocus.push(focus_time.toFixed(2)) // 집중
-          dataUnfocus.push(unfocus_time.toFixed(2)) // 불량
+      const datasFocus = []; // 집중시간
+      const datasUnfocus = []; // 집중불량 시간 
+
+      const focusdataset = [];
+
+      let focuss = 0;
+      let unfocuss = 0;
+ 
+      for(let i=0; i<datas.records.length; i++){ // record 길이 반복문
+        const datee = moment(datas.records[i].date).format('YYYY-MM-DD');  // record 속 데이터 날짜 값 설정 === datee
+        if(datee === yesterday){// 어제날짜와 데이터의 날짜가 같을 시 저장하기 datee === yesterday
+
+          datasFocus.push(datas.records[i].focus_time/1000) // 집중
+          datasUnfocus.push(datas.records[i].unfocus_time/1000) // 불량
 
         }
       }
-      let dataSum = 0;
-      let focuss = 0;
-      let unfocuss = 0;
 
-      for (let i = 0; i < dataFocus.length; i++){ // 과목들 값 더하기
-        focuss += Number(dataFocus[i]);
-        unfocuss += Number(dataUnfocus[i]);
+      for (let i = 0; i < datasFocus.length; i++){ // 과목들 집중도 값 더하기
+        focuss += Number(datasFocus[i]);
+        unfocuss += Number(datasUnfocus[i]);
       }
+      // console.log("더한 값",focuss, unfocuss);
 
-      // console.log("합한 값",focuss,unfocuss);
-      setFocus(focuss);
-      setUnFocus(unfocuss);
+      focusdataset.push({
+        unfocuss:unfocuss,
+        focuss:focuss,
+      });
+
+      setUnFocusss(parseInt(unfocuss))
+      setFocusss(parseInt(focuss));
+      // console.log(`set 설정 = ${focusss} , ${unFocusss}`);
     });
-  }, []);
-   console.log("집중fsdfdfsfdfdfdf",focus,unfocus);
-  
+  }, [focusss, unFocusss]);
+
+
 
   // 하루 집중
-  const yeslabels = ["자세불량(min)","집중(min)"];
-  const yesdataset = [unfocus,focus];
-  const yesdatasets = [25.6,140.4];
-  console.log("data",yesdataset);
-  console.log("datas",yesdatasets);
+  const yeslabels = ["자세불량(min)","집중(min)"]; // 표에 표시될 labels
+  const yesdataset = [unFocusss/60,focusss/60]; // 표에 표시될 datas
+
+  const yesdatasecond = [unFocusss,focusss]; // 표에 표시될 datas
 
   const yesdata = {
     labels: yeslabels,
@@ -76,9 +78,11 @@ const UserMeasurement = () => {
     ],
   };
 
-  const yesterdaysetsum = yesdataset.reduce(function add(sum, currValue){ // 전날 공부시간 구하기
+  const yesterdaysetsum = yesdatasecond.reduce(function add(sum, currValue){ // 전날 공부시간 구하기
     return sum+currValue;
   },0);
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // // 일주일 공부시간
   // const weeklabels = [week7, week6, week5, week4, week3, week2, week1, "평균",]; // 일주일 통계 label
