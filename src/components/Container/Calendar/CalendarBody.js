@@ -3,6 +3,11 @@ import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { EventDragStopArg } from "@fullcalendar/interaction";
+import ReactTooltip from 'react-tooltip';
+// import {
+//   Tooltip,
+// } from 'react-tippy';
+import 'react-tippy/dist/tippy.css'
 
 import moment from "moment";
 
@@ -57,6 +62,7 @@ export function CalendarBody() {
     console.log(addInfo.event.toPlainObject());
     // TODO: addCalendarToDB();
 
+
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
       datas.forEach((data) => {
@@ -79,7 +85,8 @@ export function CalendarBody() {
     let title = prompt("일정을 입력하세요.");
     let detail = "0";
     calendarApi.unselect(); //일자 선택 초기화
-
+    let end_date = moment(selectInfo.endStr).subtract(1, 'days').endOf("day").startOf("day").format('YYYY-MM-DD');
+    selectInfo.endStr = end_date;
     if (title) {
       console.log(user.id, title, selectInfo.startStr, selectInfo.endStr);
       axiosManager.axios(`/calendar/`, "POST", {
@@ -105,19 +112,51 @@ export function CalendarBody() {
     console.log(oldEvent.event.toPlainObject());
     // TODO: updateToDB(); 해도되고 안해도되고
   };
-
+  const renderEventContent=(eventInfo)=>{
+    return (
+      <>
+        <i>{eventInfo.event.title}</i>
+      </>
+    );
+  }  
   //  일정삭제 컨트롤
   const handleEventClick = (removeInfo) => {
     let datalist = [];
     let question = window.confirm(
       `'${removeInfo.event.title}' 일정을 삭제하시겠습니까?`
     );
-    //calendarApi.unselect(); //일자 선택 초기화
+    
     if (question) {
+      let calendarApi = removeInfo.view.calendar;
+      calendarApi.unselect(); //일자 선택 초기화
+      console.log(typeof(calendarApi))
       axiosManager.axios(`/calendar/`, "DELETE", {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
         id: removeInfo.event._def.publicId,
-      });
+      }).then((datas) => {
+        console.log(datas)
+        let eventobj = calendarApi.getEventById(removeInfo.event._def.publicId);
+        eventobj.remove();
+        calendarApi.refetchEvents();
+        // calendarApi.render();
+
+        // const initialData = [];
+        // datas.forEach((data) => {
+        //   initialData.push({
+        //     id: data.id,
+        //     title: data.title,
+        //     start: data.startDate,
+        //     end: data.endDate,
+        //   });
+        // });
+        // setCalendarData(
+        //   initialData.sort((a, b) => {
+        //     return moment(a.start).diff(b.start, "days");
+        //   })
+        // );
+
+
+      }, []);
       axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
         const initialData = [];
         datas.forEach((data) => {
@@ -134,6 +173,7 @@ export function CalendarBody() {
           })
         );
       }, []);
+
       // console.log(removeInfo.event.toPlainObject());
       // setCalendarData((d) =>
       //   d.filter((calendar) => calendar.removeInfo !== removeInfo)
@@ -145,7 +185,6 @@ export function CalendarBody() {
       // );
       //console.log(removeInfo.event);
     }
-
     // setCalendarData(updatedList);
   };
   return (
@@ -156,7 +195,7 @@ export function CalendarBody() {
             <FullCalendar
               className="FullCalendarCSS"
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              timeZone="local"
+              timeZone="UTC"
               headerToolbar={{
                 left: "prev,next today",
                 center: "title",
@@ -176,8 +215,9 @@ export function CalendarBody() {
               select={handleDateSelect} // 일자선택하면 eventADD기능활성화
               eventContent={renderEventContent} // 아이콘 삭제
               eventClick={handleEventClick}
-              //eventAdd={handleEventAdd}
+              eventAdd={handleEventAdd}
               eventChange={handleEventChange} //드래그 앤 드롭/크기 조정
+              // eventRender={eventRender}
             />
           </div>
         </OnlyCalendar>
@@ -201,13 +241,13 @@ export function CalendarBody() {
 //   });
 // };
 
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <i>{eventInfo.event.title}</i>
-    </>
-  );
-}
+// function renderEventContent(eventInfo) {
+//   return (
+//     <>
+//       <i>{eventInfo.event.title}</i>
+//     </>
+//   );
+// }
 
 function renderSidebarEvent(plainEventObject) {
   return (
