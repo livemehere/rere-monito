@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+const Chartmargin =styled.div`
+margin-top:12em;
+`;
+
 const BackDiv = styled.div`
     text-align: center;
     padding: 10px;
@@ -51,4 +55,5 @@ export {BackDiv,
     Mtitle,
     Mday,
     Mtime,
-    Mmchart,};
+    Mmchart,
+    Chartmargin};

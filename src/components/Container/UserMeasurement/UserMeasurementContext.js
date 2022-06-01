@@ -1,5 +1,6 @@
 import {
   BackDiv,
+  BackDivv,
   Mtitle,
   Mtime,
   Mday,
@@ -9,9 +10,12 @@ import MChart from "./MChart";
 
 import moment from "moment";
 
-const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
+const UserMeasurementContext = ({ labels, data, weeklabels, weekdata, yesterdaysetsum }) => {
 
-  const yesterday = moment().subtract(1,'days').format('YYYY-MM-DD')
+  const yesterday = moment().subtract(1,'days').format('YYYY-MM-DD');
+
+  const weekstart =  moment().subtract(7,'days').format("YYYY-MM-DD");
+  const weekend =  moment().subtract(1,'days').format("YYYY-MM-DD");
 
   if(Math.floor(yesterdaysetsum / 60)===0){
     if(Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum / 60/60)*60))===0){
@@ -32,9 +36,14 @@ const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
               <Mday>{yesterday}</Mday>
               <Mtime>학습시간 : {Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))}S</Mtime>
               <Mmchart>
-                <MChart labels={labels} data={data} />
+                <MChart labels={labels} data={data} weeklabels={weeklabels} weekdata={weekdata} />
               </Mmchart>
             </BackDiv>
+
+            <BackDivv>
+            <Mtitle>지난 일주일 공부시간</Mtitle>
+            <Mtime>{weekstart} ~ {weekend}</Mtime>
+            </BackDivv>
           </>
         );
       }
@@ -48,9 +57,14 @@ const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
             <Mday>{yesterday}</Mday>
             <Mtime>학습시간 : {Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum / 60/60)*60))}M {Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))}S</Mtime>
             <Mmchart>
-              <MChart labels={labels} data={data} />
-            </Mmchart>
-          </BackDiv>
+                <MChart labels={labels} data={data} weeklabels={weeklabels} weekdata={weekdata} />
+              </Mmchart>
+            </BackDiv>
+
+            <BackDivv>
+            <Mtitle>지난 일주일 공부시간</Mtitle>
+            <Mtime>{weekstart} ~ {weekend}</Mtime>
+            </BackDivv>
         </>
       );
     }
@@ -64,9 +78,14 @@ const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
           <Mday>{yesterday}</Mday>
           <Mtime>학습시간 : {Math.floor(yesterdaysetsum / 60/60)}H {Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))}M {Math.floor(yesterdaysetsum - (Math.floor(yesterdaysetsum /60/60)*60*60) - (Math.floor((yesterdaysetsum/60)-(Math.floor(yesterdaysetsum /60/60)*60))*60))}S</Mtime>
           <Mmchart>
-            <MChart labels={labels} data={data} />
-          </Mmchart>
-        </BackDiv>
+                <MChart labels={labels} data={data} weeklabels={weeklabels} weekdata={weekdata} />
+            </Mmchart>
+            </BackDiv>
+
+            <BackDivv>
+            <Mtitle>지난 일주일 공부시간</Mtitle>
+            <Mtime>{weekstart} ~ {weekend}</Mtime>
+            </BackDivv>
       </>
     );
   }

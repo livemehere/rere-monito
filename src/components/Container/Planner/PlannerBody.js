@@ -93,6 +93,7 @@ var options = {
 }
     //[{ color: '#2bc4bd', percent: 50 }, { color: '#7f58a3', percent: 31 }, { color: '#ebb860', percent: 19 }];
 const PlannerBody = () => {
+
   const [user, setUser] = useRecoilState(userState);
   useEffect(() => {
     userId = user.id;
@@ -125,6 +126,7 @@ const PlannerBody = () => {
     is_action2 = true;
   }
   
+
 
 const canvasDom = useRef(null);
     useEffect(() => {
