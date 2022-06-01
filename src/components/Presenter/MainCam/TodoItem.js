@@ -88,10 +88,17 @@ const TextArea = styled.div`
 // `;
 
 
-export function TodoItem({ id, done, text, content, time, OnRemove }) {
+export function TodoItem({ id, done, text, content, time, date, OnRemove }) {
+  let filterDate = '';
+  const today = new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
 
+  if(!date) return;
+  else{
+    filterDate = date.split("T")[0];
+  }
+  
     return (
-      
+       today === filterDate ? 
       <TodoItemBlock>
         <ListTimer 
         id={id}
@@ -109,7 +116,6 @@ export function TodoItem({ id, done, text, content, time, OnRemove }) {
           <MdDelete />
         </Remove>
         
-      </TodoItemBlock>
-      
+      </TodoItemBlock> : null
     );
 }

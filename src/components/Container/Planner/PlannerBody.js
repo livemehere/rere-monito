@@ -1,24 +1,42 @@
-import React, { useRef,useEffect } from 'react';
+import React, { useRef,useEffect, useState } from 'react';
 import { DetailPlanner, OnlyPlanner, PlannerBackDiv } from '../../Presenter/Planner/PlannerBodyPresenter';
 import { Chart, registerables } from 'chart.js';
 import axiosManager from '../../../util/axiosManager';
+import { userState } from '../../../atoms/user';
+import { useRecoilState } from 'recoil';
 
-axiosManager.axios(`/record/14`, "GET")
-      .then((res) => {
-        labelsAndDatas(res.records);
-      });
+let is_action = false;
+let is_action2 = false;
+
+let userId = 14;
+
+axiosManager.axios(`/record/${userId}`, "GET")
+.then((res) => {
+  labelsAndDatas(res.records);
+  is_action = true;
+  console.log(res.records)
+});
+
+const today = new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
 
 const labels = [];
 var dataNum = [];
 
+
 function labelsAndDatas(responseData) {
-      console.log(responseData.length);
-      for(let i=0; i<responseData.length; i++){
-          labels.push(responseData[i].name)
-          let time = (responseData[i].total_time/60000)
-          console.log(time)
-          dataNum.push(time.toFixed(2))
-          }
+  if(is_action === true){
+    return 0;
+  }
+  else{
+    for(let i=0; i<responseData.length; i++){
+      if(today == responseData[i].date.split("T")[0]){
+        labels.push(responseData[i].name)
+        let time = (responseData[i].total_time/60000)
+        dataNum.push(time.toFixed(2))
+        console.log(responseData[i].date.split("T")[0]);
+      }
+    }
+  }    
 }
 
 var dataSum = 0;
@@ -75,10 +93,38 @@ var options = {
 }
     //[{ color: '#2bc4bd', percent: 50 }, { color: '#7f58a3', percent: 31 }, { color: '#ebb860', percent: 19 }];
 const PlannerBody = () => {
-  for (let i = 0; i < dataNum.length; i++){
-    dataSum += Number(dataNum[i]);
-    console.log(dataSum);
-}
+  const [user, setUser] = useRecoilState(userState);
+  useEffect(() => {
+    userId = user.id;
+    console.log(userId);
+  }, [userId]);
+  
+  // const [user, setUser] = useRecoilState(userState);
+  // const [getTime, setTimes] = useState([]);
+  // const [getts, setGetts] = useState([]);
+
+  
+
+  //   useEffect(() => {
+  //   axiosManager.axios(`/record/${user.id}`, "GET")
+  //   .then((res) => {
+  //       res.records.forEach((r) => {
+  //       getTime.push({
+  //         date: r.date.split("T")[0],
+  //       })
+        
+  //     });
+  //     labelsAndDatas(res.records);
+  //   })
+  // }, []);
+
+  if(is_action2 === false){
+    for (let i = 0; i < dataNum.length; i++){
+      dataSum += Number(dataNum[i]);
+    }
+    is_action2 = true;
+  }
+  
 
 const canvasDom = useRef(null);
     useEffect(() => {
@@ -100,8 +146,8 @@ const canvasDom = useRef(null);
                 </OnlyPlanner>
                 <DetailPlanner>
                     <ul className='today-study-time'>
-                        <li className='today-list'><p id="time-title">오늘의 공부시간</p> </li>  
-                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {dataSum.toFixed(2) % 60}M</h1></li>
+                        <li className='today-list'><p id="time-title">오늘의 공부시간({today})</p> </li>  
+                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {dataSum.toFixed(0) % 60}M</h1></li>
                     </ul>
                     <ul>
                             {rendering()}

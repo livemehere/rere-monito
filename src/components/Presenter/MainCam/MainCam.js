@@ -231,23 +231,6 @@ function CamSide() {
     }
   }
 
-        // for(let i=0; i < allTime.records.length; i++){
-      //   axiosManager.axios(`/record`, "POST", {
-      //     headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-      //     user_id: user.id,
-      //     // name: text,
-      //     focus_time: 0,
-      //     unfocus_time: 0,
-      //   })
-      // }
-
-  //내일 질문
-
-  // for(let i=0; i<responseData.length; i++){
-  //           let time = (responseData[i].cumulative_time)
-  //           dataNum.push(time)
-  // }
-  // console.log(allTime.length)
 
   return(
     <>

@@ -75,6 +75,8 @@ export function TodoList() {
   const [getts, setGets] = useState([]);
   const [user, setUser] = useRecoilState(userState);
 
+  const [getTime, setTimes] = useState([]);
+
   //record(과목) 가져오기
   useEffect(() => {
     axiosManager.axios(`/record/${user.id}`, "GET")
@@ -86,12 +88,34 @@ export function TodoList() {
           name: r.name,
           total_time: r.total_time,
           content: r.content,
+          date: r.date,
         });
+        getTime.push({
+          id: r.id,
+          name: r.name,
+          total_time: r.total_time,
+          content: r.content,
+          date: r.date,
+        })
       });
       setGets(initData);
     })
   }, []);
-  
+
+
+
+   
+
+    // let res = getTime.map(time => (time.date));
+    
+    // const live = res[0];
+    
+    // const live2 = (live||'').split("T")[0];
+
+    // console.log(today);
+    // console.log(live2);
+
+
   //record(과목) 삭제
   const OnRemove = (id) => 
     { if(window.confirm('할 일을 삭제 하시겠습니까?')){
@@ -101,9 +125,7 @@ export function TodoList() {
       })
       setTodos(prev=>prev.filter(todo=>todo.id !== id));
     }
-    
     }
-
 
     const subjectAdd = (userId, values, textarea) => {
 
@@ -116,19 +138,19 @@ export function TodoList() {
         unfocus_time: 0,
       })
 
-      axiosManager.axios(`/record/${user.id}`, "GET")
-      .then((res) => {
-        const initData = [];
-          res.records.forEach((r) => {
-          initData.push({
-            id: r.id,
-            name: r.name,
-            cumulative_time: r.cumulative_time,
-            content: r.content,
-          });
-        });
-        setGets(initData);
-      })
+      // axiosManager.axios(`/record/${user.id}`, "GET")
+      // .then((res) => {
+      //   const initData = [];
+      //     res.records.forEach((r) => {
+      //     initData.push({
+      //       id: r.id,
+      //       name: r.name,
+      //       cumulative_time: r.cumulative_time,
+      //       content: r.content,
+      //     });
+      //   });
+      //   setGets(initData);
+      // })
       
     };
 
@@ -149,6 +171,7 @@ export function TodoList() {
           content={todo.content}
           done={todo.done}
           time={todo.total_time}
+          date={todo.date}
           OnRemove={()=> OnRemove(todo.id)}
         />
       ))}
