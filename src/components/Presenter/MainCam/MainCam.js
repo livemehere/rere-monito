@@ -160,16 +160,35 @@ const BtnAdd =styled.button`
 function CamSide() {
   const [user, setUser] = useRecoilState(userState);
   const [allTime, setAllTime] = useState([]);
+
   const [timerOn, setTimerOn] = React.useState(false);
 
   useEffect(() => {
     axiosManager.axios(`/record/${user.id}`, "GET")
     .then((res) => {
       setTime(res.time_sum[0].total_study_time);
-      setAllTime(res);
-      console.log(res.time_sum[0].total_study_time)
+      
     })
   }, []);
+
+  useEffect(() => {
+    axiosManager.axios(`/record/${user.id}`, "GET")
+    .then((res) => {
+        res.records.forEach((r) => {
+        allTime.push({
+          id: r.id,
+          name: r.name,
+          total_time: r.total_time,
+          content: r.content,
+        });
+      });
+      setAllTime(allTime);
+      console.log(allTime[0]);
+    })
+    
+  }, []);
+
+  console.log(allTime.length)
 
   const [time, setTime] = useState(0);
 
@@ -198,15 +217,37 @@ function CamSide() {
 
   const setZero = () => {
     if(window.confirm('진행시간을 초기화 하시겠습니까?')){
-      axiosManager.axios(`/time`, "PUT", {
-        headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-        id: user.id,
-        total_time: 0,
-        focus_time: 11111,
-      })
+      for(let i=0; i<allTime.length; i++){
+        axiosManager.axios(`/record`, "POST", {
+          headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+          user_id: user.id,
+          name: allTime[i].name,
+          focus_time: 0,
+          unfocus_time: 0,
+          content: allTime[i].content,
+        })
+      }
       setTime(0);
     }
   }
+
+        // for(let i=0; i < allTime.records.length; i++){
+      //   axiosManager.axios(`/record`, "POST", {
+      //     headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+      //     user_id: user.id,
+      //     // name: text,
+      //     focus_time: 0,
+      //     unfocus_time: 0,
+      //   })
+      // }
+
+  //내일 질문
+
+  // for(let i=0; i<responseData.length; i++){
+  //           let time = (responseData[i].cumulative_time)
+  //           dataNum.push(time)
+  // }
+  // console.log(allTime.length)
 
   return(
     <>

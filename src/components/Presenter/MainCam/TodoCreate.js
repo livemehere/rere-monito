@@ -131,14 +131,15 @@ export function TodoCreate({subjectAdd}) {
 
 
   const onToggle = () => setOpen(!open);
+
   const onChange = e => setValue(e.target.value);
 
   const onChangeContent = e => setContent(e.target.value);
 
 
-  const contentsReplaceNewline = () => {
-    return content.replaceAll("\n", "\r\n"); 
-  }
+  // const contentsReplaceNewline = () => {
+  //   return content.replaceAll("\n", "\r\n"); 
+  // }
 
   const onSubmit = e => {
     e.preventDefault(); // 새로고침 방지
@@ -167,7 +168,7 @@ export function TodoCreate({subjectAdd}) {
             onChange={onChangeContent}
             value={content}
           />
-          <SubmitBtn onClick={() => subjectAdd(user.id, value)}>과목 생성</SubmitBtn>
+          <SubmitBtn onClick={() => subjectAdd(user.id, value, content)}>과목 생성</SubmitBtn>
         </InsertForm>
         
       </InsertFormPositioner>

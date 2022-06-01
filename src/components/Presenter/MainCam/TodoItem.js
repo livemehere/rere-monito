@@ -88,7 +88,7 @@ const TextArea = styled.div`
 // `;
 
 
-export function TodoItem({ id, done, text, textarea, time, OnRemove }) {
+export function TodoItem({ id, done, text, content, time, OnRemove }) {
 
     return (
       
@@ -97,14 +97,14 @@ export function TodoItem({ id, done, text, textarea, time, OnRemove }) {
         id={id}
         done={done}
         text={text}
-        textarea={textarea}
+        content={content}
         SubTime={time}
         ></ListTimer>
         <Text done={done}>
           {text}
         </Text>
         
-        <TextArea>{textarea}</TextArea>
+        <TextArea>{content}</TextArea>
         <Remove onClick={OnRemove}>
           <MdDelete />
         </Remove>

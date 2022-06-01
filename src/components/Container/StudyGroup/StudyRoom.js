@@ -80,7 +80,7 @@ const RoomTitle = styled.div`
   font-weight: bold;
   text-align: center;
   line-height: 150px;
-  color: #206966;
+  color: #ff8e1f;
 `;
 
 // ---
@@ -128,9 +128,9 @@ const StudyRoom = () => {
   return (
     <div>
       <AlignTitle>
-        <h1>스터디룸</h1>
+        <h1>스터디룸 ({rooms})</h1>
       </AlignTitle>
-      <RoomTitle>방 이름 : {rooms}</RoomTitle>
+      {/* <RoomTitle>방 이름 : </RoomTitle> */}
       <VideoWrap>
         <Video videoRef={videoRef}/>
       </VideoWrap>

@@ -85,6 +85,7 @@ export function TodoList() {
           id: r.id,
           name: r.name,
           total_time: r.total_time,
+          content: r.content,
         });
       });
       setGets(initData);
@@ -104,12 +105,13 @@ export function TodoList() {
     }
 
 
-    const subjectAdd = (userId, values) => {
+    const subjectAdd = (userId, values, textarea) => {
 
       axiosManager.axios(`/record/`, "POST", {
         headers : {'Content-Type': 'application/x-www-form-urlencoded', },
         user_id: userId,
         name: values,
+        content: textarea,
         focus_time: 0,
         unfocus_time: 0,
       })
@@ -122,6 +124,7 @@ export function TodoList() {
             id: r.id,
             name: r.name,
             cumulative_time: r.cumulative_time,
+            content: r.content,
           });
         });
         setGets(initData);
@@ -134,7 +137,6 @@ export function TodoList() {
     }, [getts])
 
 
-
   return (
     <>
     {/* 과목 리스트 */}
@@ -144,7 +146,7 @@ export function TodoList() {
           key={todo.id}
           id={todo.id}
           text={todo.name}
-          textarea={todo.textarea}
+          content={todo.content}
           done={todo.done}
           time={todo.total_time}
           OnRemove={()=> OnRemove(todo.id)}

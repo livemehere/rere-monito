@@ -84,7 +84,7 @@ const CheckCircle = styled.div`
     `}
 `;
 
-export function ListTimer({ id, done, text, textarea, SubTime }) {
+export function ListTimer({ id, done, text, content, SubTime }) {
   const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
   const [user, setUser] = useRecoilState(userState);
 
@@ -133,12 +133,11 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
   const onUpdate = (currentTime) => {
     axiosManager.axios(`/record`, "POST", {
       headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-      total_time: currentTime,
-      date: nowTime,
       user_id: user.id,
       name: text,
-      focus_time: 0,
+      focus_time: currentTime,
       unfocus_time: 0,
+      content: content,
     })
     // axiosManager.axios(`/time`, "PUT", {
     //   headers : {'Content-Type': 'application/x-www-form-urlencoded', },
@@ -150,11 +149,13 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
 
   const setZero = () => {
     if(window.confirm('진행시간을 초기화 하시겠습니까?')){
-      axiosManager.axios(`/record`, "PUT", {
+      axiosManager.axios(`/record`, "POST", {
         headers : {'Content-Type': 'application/x-www-form-urlencoded', },
-        id: id,
-        cumulative_time: 0,
-        endDate: nowTime
+        user_id: user.id,
+        name: text,
+        focus_time: 0,
+        unfocus_time: 0,
+        content: content,
       })
       setTime(0);
     }
@@ -162,28 +163,28 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
 
 
     // 디비 키값 추가 필요 
-    const OnToggle = () => {
-      fetch(`http://localhost:3001/subjects/${id}`,{
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      })
-      console.log(time)
-      fetch(`http://localhost:3001/subjects/${id}`,{
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          done: !done,
-          text: text,
-          textarea: textarea,
-          time: time
-        })
-      })
-    }
+    // const OnToggle = () => {
+    //   fetch(`http://localhost:3001/subjects/${id}`,{
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     }
+    //   })
+    //   console.log(time)
+    //   fetch(`http://localhost:3001/subjects/${id}`,{
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       id: id,
+    //       done: !done,
+    //       text: text,
+    //       textarea: textarea,
+    //       time: time
+    //     })
+    //   })
+    // }
 
   return (
     <div>
@@ -207,9 +208,9 @@ export function ListTimer({ id, done, text, textarea, SubTime }) {
         )}
         
       </Timers>
-      <CheckCircle done={done} onClick={OnToggle}>
+      {/* <CheckCircle done={done} onClick={OnToggle}>
             {done && <MdDone />}
-            </CheckCircle>
+            </CheckCircle> */}
     </div>
     
   )
