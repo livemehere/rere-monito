@@ -2,10 +2,10 @@ import React, { useRef, useEffect } from "react";
 import { Chart, registerables } from "chart.js";
 
 const WeekChart = ({ data, labels }) => {
+  
   const canvasDom = useRef(null);
   useEffect(() => {
     const ctx = canvasDom.current.getContext("2d");
-    console.log(ctx);
     Chart.register(...registerables);
     new Chart(ctx, {
       type: "bar",

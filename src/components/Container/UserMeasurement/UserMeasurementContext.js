@@ -11,7 +11,6 @@ import moment from "moment";
 
 const UserMeasurementContext = ({ labels, data, yesterdaysetsum }) => {
 
-  console.log("공부시간",yesterdaysetsum/60);
   const yesterday = moment().subtract(1,'days').format('YYYY-MM-DD')
 
   if(Math.floor(yesterdaysetsum / 60)===0){
