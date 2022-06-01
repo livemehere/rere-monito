@@ -133,46 +133,28 @@ export function CalendarBody() {
       axiosManager.axios(`/calendar/`, "DELETE", {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
         id: removeInfo.event._def.publicId,
-      }).then((datas) => {
-        console.log(datas)
+      }).then((res) => {
         let eventobj = calendarApi.getEventById(removeInfo.event._def.publicId);
         eventobj.remove();
         calendarApi.refetchEvents();
-        // calendarApi.render();
 
-        // const initialData = [];
-        // datas.forEach((data) => {
-        //   initialData.push({
-        //     id: data.id,
-        //     title: data.title,
-        //     start: data.startDate,
-        //     end: data.endDate,
-        //   });
-        // });
-        // setCalendarData(
-        //   initialData.sort((a, b) => {
-        //     return moment(a.start).diff(b.start, "days");
-        //   })
-        // );
-
-
-      }, []);
-      axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
-        const initialData = [];
-        datas.forEach((data) => {
-          initialData.push({
-            id: data.id,
-            title: data.title,
-            start: data.startDate,
-            end: data.endDate,
+        axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
+          const initialData = [];
+          datas.forEach((data) => {
+            initialData.push({
+              id: data.id,
+              title: data.title,
+              start: data.startDate,
+              end: data.endDate,
+            });
           });
-        });
-        setCalendarData(
-          initialData.sort((a, b) => {
-            return moment(a.start).diff(b.start, "days");
-          })
-        );
-      }, []);
+          setCalendarData(
+            initialData.sort((a, b) => {
+              return moment(a.start).diff(b.start, "days");
+            })
+          );
+        }, [])
+      });
 
       // console.log(removeInfo.event.toPlainObject());
       // setCalendarData((d) =>
