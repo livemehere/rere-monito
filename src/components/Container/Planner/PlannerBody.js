@@ -77,7 +77,7 @@ var options = {
 const PlannerBody = () => {
   for (let i = 0; i < dataNum.length; i++){
     dataSum += Number(dataNum[i]);
-    console.log(dataSum);
+    console.log("dta",dataSum);
 }
 
 const canvasDom = useRef(null);

@@ -71,12 +71,10 @@ const UserMeasurement = () => {
       for(let i=0; i<datas.records.length; i++){ // record 길이 반복문
         const datee = moment(datas.records[i].date).format('YYYY-MM-DD');  // record 속 데이터 날짜 값 설정 === datee
         if(datee === yesterday){// 어제날짜와 데이터의 날짜가 같을 시 저장하기 datee === yesterday
-
           datasFocus.push(datas.records[i].focus_time/1000) // 집중
           datasUnfocus.push(datas.records[i].unfocus_time/1000) // 불량
 
           datasweek1.push(datas.records[i].total_time/1000) // 총 공부시간
-
         }
         else if(datee === day2){
           datasweek2.push(datas.records[i].total_time/1000) // 총 공부시간
@@ -155,7 +153,6 @@ const UserMeasurement = () => {
     });
   }, [focusss, unFocusss,
     day1focusss,day2focusss,day3focusss,day5focusss,day6focusss,day7focusss]);
-
 
 
   // 하루 집중
@@ -240,8 +237,7 @@ const UserMeasurement = () => {
   return (
     <>
       <AlignTitlee>측정 결과 분석</AlignTitlee>
-      <UserMeasurementContext labels={yeslabels} data={yesdata} yesterdaysetsum={yesterdaysetsum}/>
-      <WeekUserMeasurement labels={weeklabels} data={weekdata} weekdatasets={weekdatasets}/>
+      <UserMeasurementContext labels={yeslabels} data={yesdata} weeklabels={weeklabels} weekdata={weekdata} yesterdaysetsum={yesterdaysetsum}/>
     </>
   );
 }
