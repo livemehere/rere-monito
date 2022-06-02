@@ -162,6 +162,7 @@ function CamSide() {
   const [allTime, setAllTime] = useState([]);
 
   const [timerOn, setTimerOn] = React.useState(false);
+  const today = new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
 
   useEffect(() => {
     axiosManager.axios(`/record/${user.id}`, "GET")
@@ -180,15 +181,29 @@ function CamSide() {
           name: r.name,
           total_time: r.total_time,
           content: r.content,
+          date: r.date,
         });
       });
       setAllTime(allTime);
-      console.log(allTime[0]);
+      console.log(allTime);
     })
     
   }, []);
 
-  console.log(allTime.length)
+  var dataNum = [];
+  var dataSum = 0;
+
+for(let i=0; i<allTime.length; i++){
+  if(allTime[i].date.split("T")[0] === today){
+    let time = (allTime[i].total_time)
+    dataNum.push(time)
+  }
+}
+for (let i = 0; i < dataNum.length; i++){
+  dataSum += Number(dataNum[i]);
+}
+
+console.log(dataSum);
 
   const [time, setTime] = useState(0);
 
