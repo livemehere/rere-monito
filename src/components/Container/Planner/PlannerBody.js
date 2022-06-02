@@ -149,7 +149,7 @@ const canvasDom = useRef(null);
                 <DetailPlanner>
                     <ul className='today-study-time'>
                         <li className='today-list'><p id="time-title">오늘의 공부시간({today})</p> </li>  
-                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {dataSum.toFixed(0) % 60}M</h1></li>
+                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {Math.floor((dataSum)-(Math.floor(dataSum /60)*60))}M </h1></li>
                     </ul>
                     <ul>
                             {rendering()}

@@ -25,7 +25,7 @@ const UserMeasurement = () => {
   const [day6focusss,setDay6focusss] = useState([]);
   const [day7focusss,setDay7focusss] = useState([]);
 
-  const yesterday =  moment().subtract(1,'days').format("YYYY-MM-DD"); // 어제 날짜
+  const yesterday =  moment().subtract(0,'days').format("YYYY-MM-DD"); // 어제 날짜
   const day2 = moment().subtract(2,'days').format("YYYY-MM-DD");
   const day3 = moment().subtract(3,'days').format("YYYY-MM-DD");
   const day4 = moment().subtract(4,'days').format("YYYY-MM-DD");
