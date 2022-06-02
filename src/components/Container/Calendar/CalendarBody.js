@@ -7,7 +7,6 @@ import ReactTooltip from 'react-tooltip';
 // import {
 //   Tooltip,
 // } from 'react-tippy';
-import 'react-tippy/dist/tippy.css'
 
 import moment from "moment";
 
@@ -61,8 +60,7 @@ export function CalendarBody() {
   const handleEventAdd = (addInfo) => {
     console.log(addInfo.event.toPlainObject());
     // TODO: addCalendarToDB();
-
-
+    
     axiosManager.axios(`/calendar/${user.id}`, "GET").then((datas) => {
       const initialData = [];
       datas.forEach((data) => {
