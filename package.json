@@ -2,7 +2,7 @@
   "name": "rere-monito",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://15.164.167.169:8000",
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@fullcalendar/daygrid": "^5.10.1",
     "@fullcalendar/interaction": "^5.10.1",
