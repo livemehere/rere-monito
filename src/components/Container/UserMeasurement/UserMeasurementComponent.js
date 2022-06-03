@@ -25,7 +25,7 @@ const UserMeasurement = () => {
   const [day6focusss,setDay6focusss] = useState([]);
   const [day7focusss,setDay7focusss] = useState([]);
 
-  const yesterday =  moment().subtract(0,'days').format("YYYY-MM-DD"); // 어제 날짜
+  const yesterday =  moment().subtract(1,'days').format("YYYY-MM-DD"); // 어제 날짜
   const day2 = moment().subtract(2,'days').format("YYYY-MM-DD");
   const day3 = moment().subtract(3,'days').format("YYYY-MM-DD");
   const day4 = moment().subtract(4,'days').format("YYYY-MM-DD");
@@ -180,8 +180,8 @@ const UserMeasurement = () => {
     parseFloat((weekdatasetsum).toFixed(2)),
   ];
 
-  console.log("어제 집중도",yesdataset);
-  console.log("일주일",weekdatasets);
+  // console.log("어제 집중도",yesdataset);
+  // console.log("일주일",weekdatasets);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -237,6 +237,7 @@ const UserMeasurement = () => {
   return (
     <>
       <AlignTitlee>측정 결과 분석</AlignTitlee>
+      <div>*전날 집중도는 <b>전날 공부 데이터</b>가 있어야 나타납니다.*</div>
       <UserMeasurementContext labels={yeslabels} data={yesdata} weeklabels={weeklabels} weekdata={weekdata} yesterdaysetsum={yesterdaysetsum}/>
     </>
   );

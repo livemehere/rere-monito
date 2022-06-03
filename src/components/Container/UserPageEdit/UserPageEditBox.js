@@ -59,7 +59,7 @@ const UserPageEditBox = () => {
         email:userdata.email,
         birth: userdata.birth,
         job: userdata.job,
-        profile_img: "",
+        profile_img: null,
         }).catch(console.log);
         
 
@@ -77,7 +77,7 @@ const UserPageEditBox = () => {
             birth: userdata.birth,
             email:userdata.email,
             job: userdata.job,
-            profile_img: "",
+            profile_img: null,
             }).catch(console.log);
             alert("사용자정보가 업데이트 되었습니다");
             navigate(-1);
