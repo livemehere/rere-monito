@@ -203,10 +203,12 @@ for (let i = 0; i < dataNum.length; i++){
   dataSum += Number(dataNum[i]);
 }
 
-console.log(dataSum);
-
   const [time, setTime] = useState(0);
 
+  useEffect(() => {
+    setTime(dataSum);
+  })
+  
   React.useEffect(() => {
     let interval = null;
 
