@@ -3,8 +3,8 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import * as faceapi from "face-api.js"; //face-api
-import { FaPause } from 'react-icons/fa';
-import { FaPlay } from 'react-icons/fa';
+import { FaPause } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 
 const Container = styled.div`
   margin: 0px;
@@ -78,22 +78,21 @@ const Btn1 = styled.button`
   align-items: center;
   justify-content: center;
   position: relative;
-  
+
   font-size: 40px;
   background-color: white;
   background-size: contain;
   padding-top: 2%;
 
   color: #d1963e;
-  
+
   top: -200px;
 
   &:hover {
-    color: #D1A66F;
-    border: 5px solid #D1A66F;
+    color: #d1a66f;
+    border: 5px solid #d1a66f;
   }
 `;
-
 
 //face-emotion
 const expressionMap = {
@@ -119,9 +118,8 @@ const Video = (props) => {
 };
 
 const videoConstraints = {
-    width: 600,
-    height: 600,
-  
+  width: 600,
+  height: 600,
 };
 
 const Room = (props) => {
@@ -129,7 +127,7 @@ const Room = (props) => {
   const socketRef = useRef();
   const userVideo = useRef();
   const peersRef = useRef([]);
-//   const roomID = props.match.params.roomID;
+  //   const roomID = props.match.params.roomID;
 
   //face-api
   const [faceEmotion, setFaceEmotion] = useState(false);
@@ -141,7 +139,7 @@ const Room = (props) => {
   const [hours, setHours] = useState(0);
 
   useEffect(() => {
-    socketRef.current = io.connect("/");
+    socketRef.current = io.connect("https://monito.ml");
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -188,14 +186,13 @@ const Room = (props) => {
     } else {
       setPlaying(true);
       navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        userVideo.current.srcObject = stream;
-      });
-      };
-      setPlaying(!playing);
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          userVideo.current.srcObject = stream;
+        });
     }
-    
+    setPlaying(!playing);
+  };
 
   // function createPeer(userToSignal, callerID, stream) {
   //   const peer = new Peer({
@@ -302,32 +299,43 @@ const Room = (props) => {
 
   return (
     <>
-    <Container>
-      <Emotions>
-        {faceEmotion}
-      </Emotions>
-     
-      <StyledVideo muted ref={userVideo} autoPlay playsInline />
-      <DetectTimer>
-        실측정 시간 :&nbsp;
-        {hours < 10 ? `0${hours}` : hours}:
-        {minutes < 10 ? `0${minutes}` : minutes}:
-        {seconds < 10 ? `0${seconds}` : seconds}&nbsp;
-        <br></br>
-      </DetectTimer>
-      
-      
-    </Container>
-    <StatesBar>
+      <Container>
+        <Emotions>{faceEmotion}</Emotions>
+
+        <StyledVideo muted ref={userVideo} autoPlay playsInline />
+        <DetectTimer>
+          실측정 시간 :&nbsp;
+          {hours < 10 ? `0${hours}` : hours}:
+          {minutes < 10 ? `0${minutes}` : minutes}:
+          {seconds < 10 ? `0${seconds}` : seconds}&nbsp;
+          <br></br>
+        </DetectTimer>
+      </Container>
+      <StatesBar>
         <State1>자세불량</State1>
         <State2>집중</State2>
       </StatesBar>
       {!timerOn && (
-          <Btn1 onClick={() => {setTimerOn(true); startOrStop(playing);}}><FaPlay></FaPlay></Btn1>
+        <Btn1
+          onClick={() => {
+            setTimerOn(true);
+            startOrStop(playing);
+          }}
+        >
+          <FaPlay></FaPlay>
+        </Btn1>
       )}
-      {timerOn && <Btn1 onClick={() => {setTimerOn(false); startOrStop(!playing);}}><FaPause></FaPause></Btn1>}
+      {timerOn && (
+        <Btn1
+          onClick={() => {
+            setTimerOn(false);
+            startOrStop(!playing);
+          }}
+        >
+          <FaPause></FaPause>
+        </Btn1>
+      )}
     </>
-    
   );
 };
 

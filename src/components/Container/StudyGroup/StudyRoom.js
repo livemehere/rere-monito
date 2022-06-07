@@ -131,7 +131,7 @@ const StudyRoom = () => {
   const [hours, setHours] = useState(0);
 
   useEffect(() => {
-    socketRef.current = io.connect("http://15.164.167.169:8000");
+    socketRef.current = io.connect("https://monito.ml");
     navigator.mediaDevices
       .getUserMedia({ video: StyledVideo2, audio: false })
       .then((stream) => {
