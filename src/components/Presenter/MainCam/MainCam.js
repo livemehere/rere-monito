@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // import {GrPowerReset} from "react-icons/gr"
 // import { TodoCreate } from './TodoCreate';
-import ListTimer from './Timer'
-import { TodoList } from './TodoList';
-import MainCamAi from './MainCamAi';
+import ListTimer from "./Timer";
+import { TodoList } from "./TodoList";
+import MainCamAi from "./MainCamAi";
 import axiosManager from "../../../util/axiosManager";
-import { userState } from '../../../atoms/user';
+import { userState } from "../../../atoms/user";
+import { countState } from "../../../atoms/studytime";
 import { useRecoilState } from "recoil";
+
+import { timerOnOff } from "../../../atoms/studytime";
 
 const Div = styled.div`
   margin: 0px;
@@ -33,7 +36,7 @@ const Block = styled.div`
   border-radius: 20px;
   width: 100%;
   height: 80vh;
-  
+
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
@@ -47,14 +50,14 @@ const Block = styled.div`
 //   align-items: center;
 //   justify-content: center;
 //   position: relative;
-  
+
 //   font-size: 40px;
 //   background-color: white;
 //   background-size: contain;
 //   padding-top: 2%;
 
 //   color: #d1963e;
-  
+
 //   top: -200px;
 
 //   &:hover {
@@ -73,7 +76,7 @@ const BtnReset = styled.button`
   left: 0%;
   border: 0;
   &:hover {
-    background-color: #FBCFB7; 
+    background-color: #fbcfb7;
   }
 `;
 
@@ -85,10 +88,9 @@ const VideoBox = styled.div`
   width: 540px;
   height: 580px;
   position: relative;
-  left : 10%;
-  top : 4%;
+  left: 10%;
+  top: 4%;
   background-color: black;
-  
 `;
 
 const RightBlock = styled.div`
@@ -99,7 +101,6 @@ const RightBlock = styled.div`
   width: 80vh;
   position: relative;
   left: 18%;
-  
 `;
 
 const TimeBlock = styled.div`
@@ -109,7 +110,7 @@ const TimeBlock = styled.div`
   color: white;
   font-size: 4vh;
   font-weight: 600;
-  
+
   margin: 10px;
   margin-left: 6vh;
   width: 70vh;
@@ -118,7 +119,6 @@ const TimeBlock = styled.div`
   top: 15px;
   border-radius: 20px;
   background: linear-gradient(80deg, #f1da94, #e9a681);
-
 `;
 
 const SubjectBlock = styled.div`
@@ -134,11 +134,10 @@ const SubjectBlock = styled.div`
   position: relative;
   top: 20px;
   border-radius: 20px;
-  background: linear-gradient(90deg, #ECBFBF, #FF9696);
-  
+  background: linear-gradient(90deg, #ecbfbf, #ff9696);
 `;
 
-const BtnAdd =styled.button`
+const BtnAdd = styled.button`
   width: 11vh;
   height: 4.5vh;
   border-radius: 5px;
@@ -156,26 +155,30 @@ const BtnAdd =styled.button`
   }
 `;
 
-
 function CamSide() {
   const [user, setUser] = useRecoilState(userState);
   const [allTime, setAllTime] = useState([]);
 
-  const [timerOn, setTimerOn] = React.useState(false);
-  const today = new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
+  const [timerOn, setTimerOn] = useRecoilState(timerOnOff);
+  const [counter, setCounter] = useRecoilState(countState);
+
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [hours, setHours] = useState(0);
+
+  const today = new Date(+new Date() + 3240 * 10000)
+    .toISOString()
+    .split("T")[0];
 
   useEffect(() => {
-    axiosManager.axios(`/record/${user.id}`, "GET")
-    .then((res) => {
+    axiosManager.axios(`/record/${user.id}`, "GET").then((res) => {
       setTime(res.time_sum[0].total_study_time);
-      
-    })
+    });
   }, []);
 
   useEffect(() => {
-    axiosManager.axios(`/record/${user.id}`, "GET")
-    .then((res) => {
-        res.records.forEach((r) => {
+    axiosManager.axios(`/record/${user.id}`, "GET").then((res) => {
+      res.records.forEach((r) => {
         allTime.push({
           id: r.id,
           name: r.name,
@@ -186,29 +189,28 @@ function CamSide() {
       });
       setAllTime(allTime);
       console.log(allTime);
-    })
-    
+    });
   }, []);
 
   var dataNum = [];
   var dataSum = 0;
 
-for(let i=0; i<allTime.length; i++){
-  if(allTime[i].date.split("T")[0] === today){
-    let time = (allTime[i].total_time)
-    dataNum.push(time)
+  for (let i = 0; i < allTime.length; i++) {
+    if (allTime[i].date.split("T")[0] === today) {
+      let time = allTime[i].total_time;
+      dataNum.push(time);
+    }
   }
-}
-for (let i = 0; i < dataNum.length; i++){
-  dataSum += Number(dataNum[i]);
-}
+  for (let i = 0; i < dataNum.length; i++) {
+    dataSum += Number(dataNum[i]);
+  }
 
   const [time, setTime] = useState(0);
 
   useEffect(() => {
     setTime(dataSum);
-  })
-  
+  });
+
   React.useEffect(() => {
     let interval = null;
 
@@ -233,48 +235,72 @@ for (let i = 0; i < dataNum.length; i++){
   // }
 
   const setZero = () => {
-    if(window.confirm('진행시간을 초기화 하시겠습니까?')){
-      for(let i=0; i<allTime.length; i++){
+    if (window.confirm("진행시간을 초기화 하시겠습니까?")) {
+      for (let i = 0; i < allTime.length; i++) {
         axiosManager.axios(`/record`, "POST", {
-          headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
           user_id: user.id,
           name: allTime[i].name,
           focus_time: 0,
           unfocus_time: 0,
           content: allTime[i].content,
-        })
+        });
       }
       setTime(0);
     }
-  }
+  };
 
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (timerOn === true) {
+        if (parseInt(seconds) < 60) {
+          setSeconds(parseInt(seconds) + 1);
+        } else if (parseInt(minutes) < 60) {
+          setSeconds(0);
+          setMinutes(parseInt(minutes) + 1);
+        } else {
+          setMinutes(0);
+          setSeconds(0);
+          setHours(parseInt(hours) + 1);
+        }
+        setCounter(
+          parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds)
+        );
+      }
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, [hours, minutes, seconds, timerOn]);
 
-  return(
+  return (
     <>
       <VideoBox>
         <MainCamAi />
         {/* {!timerOn && time > 0 && (
           <BtnReset onClick={() => {setZero(); setTime(0);}}>초기화</BtnReset>
         )} */}
-        
       </VideoBox>
-      
-      <RightBlock>
-      <TimeBlock>
-      <BtnReset onClick={() => {setZero();}}>reset</BtnReset>
-      <div id="display">공부시간 :&nbsp; 
-        <span>{("0" + Math.floor((time / 3600000) % 60)).slice(-2)}:</span> 
-        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}</span>
-      </div>
 
-      </TimeBlock>
-        <TodoList />          
+      <RightBlock>
+        <TimeBlock>
+          <BtnReset
+            onClick={() => {
+              setZero();
+            }}
+          >
+            reset
+          </BtnReset>
+          <div id="display">
+            공부시간 :&nbsp;
+            <span>{hours < 10 ? `0${hours}` : hours}:</span>
+            <span>{minutes < 10 ? `0${minutes}` : minutes}:</span>
+            <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
+          </div>
+        </TimeBlock>
+        <TodoList />
         {/* <TodoCreate /> */}
       </RightBlock>
     </>
-  )
+  );
 }
-
 
 export { Div, CamStates, Block, CamSide, SubjectBlock, BtnAdd };

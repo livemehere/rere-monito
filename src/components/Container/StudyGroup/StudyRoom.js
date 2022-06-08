@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { userState } from "../../../atoms/user";
 import { useRecoilState } from "recoil";
 import { AlignTitle } from "../../Presenter/Calendar/CalendarTitlePresenter";
+import { countState } from "../../../atoms/studytime";
 
 //생성되는 캠 div 만들기
 const Container = styled.div`
@@ -129,6 +130,8 @@ const StudyRoom = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [hours, setHours] = useState(0);
+
+  const [counter, setCounter] = useRecoilState(countState);
 
   useEffect(() => {
     socketRef.current = io.connect("https://monito.ml");
@@ -266,6 +269,13 @@ const StudyRoom = () => {
   }, [userVideo]);
 
   useEffect(() => {
+    console.log(counter);
+    setHours(parseInt(counter / 3600));
+    setMinutes(parseInt((counter % 3600) / 60));
+    setSeconds(parseInt(counter % 60));
+  }, []);
+
+  useEffect(() => {
     const countdown = setInterval(() => {
       if (detected === true) {
         if (parseInt(seconds) < 60) {
@@ -278,11 +288,13 @@ const StudyRoom = () => {
           setSeconds(0);
           setHours(parseInt(hours) + 1);
         }
+        setCounter(
+          parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds)
+        );
       }
     }, 1000);
     return () => clearInterval(countdown);
   }, [hours, minutes, seconds, detected]);
-
   //face - api;
 
   return (

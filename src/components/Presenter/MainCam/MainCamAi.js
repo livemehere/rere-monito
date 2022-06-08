@@ -6,6 +6,10 @@ import * as faceapi from "face-api.js"; //face-api
 import { FaPause } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
 
+import { useRecoilState } from "recoil";
+import { timerOnOff } from "../../../atoms/studytime";
+import { countState } from "../../../atoms/studytime";
+
 const Container = styled.div`
   margin: 0px;
   height: 580px;
@@ -137,6 +141,8 @@ const Room = (props) => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [hours, setHours] = useState(0);
+
+  const [counter, setCounter] = useRecoilState(countState);
 
   useEffect(() => {
     socketRef.current = io.connect("https://monito.ml");
@@ -275,6 +281,13 @@ const Room = (props) => {
   }, [userVideo]);
 
   useEffect(() => {
+    console.log(counter);
+    setHours(parseInt(counter / 3600));
+    setMinutes(parseInt((counter % 3600) / 60));
+    setSeconds(parseInt(counter % 60));
+  }, []);
+
+  useEffect(() => {
     const countdown = setInterval(() => {
       if (detected === true) {
         if (parseInt(seconds) < 60) {
@@ -287,6 +300,9 @@ const Room = (props) => {
           setSeconds(0);
           setHours(parseInt(hours) + 1);
         }
+        setCounter(
+          parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds)
+        );
       }
     }, 1000);
     return () => clearInterval(countdown);
@@ -295,7 +311,7 @@ const Room = (props) => {
   //face-api
 
   //캠 ON/OFF
-  const [timerOn, setTimerOn] = React.useState(false);
+  const [timerOn, setTimerOn] = useRecoilState(timerOnOff);
 
   return (
     <>
