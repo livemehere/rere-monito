@@ -4,10 +4,12 @@ import styled, { css } from 'styled-components';
 import { FaPause } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
 import { FaStop } from 'react-icons/fa';
-import axios from "axios";
-import useAxios from "../StudyGroup/axiosHook";
 import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch } from './TodoContext';
+import axiosManager from "../../../util/axiosManager";
+import { userState } from "../../../atoms/user";
+import { useRecoilState } from "recoil";
+import moment from "moment";
+
 
 const Timers = styled.div`
     margin: 10px;
@@ -82,24 +84,36 @@ const CheckCircle = styled.div`
     `}
 `;
 
+export function ListTimer({ id, done, text, content, SubTime }) {
+  const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+  const [user, setUser] = useRecoilState(userState);
 
-export function ListTimer({ id, done, text, textarea }) {
-
-  const [initTime, setInitTime] = useState([])
-  useEffect(() => {
-    axios.get(`http://localhost:3001/subjects/${id}`)
-    .then(Response => {
-    setInitTime(Response.data.time)
-    })
-  })
-  
-
-  const [time, setTime] = React.useState(initTime);
+  const [time, setTime] = React.useState(SubTime);
   const [timerOn, setTimerOn] = React.useState(false);
 
+  // 디비구조 바뀐후로 쓸모없음(총 공부시간 합산)
+  // axiosManager.axios(`/record/${user.id}`, "GET")
+  //     .then((res) => {
+  //       TimesDatas(res);
+  //       console.log(res.records.total_time);
+  //     });
+
+  // var dataNum = [];
+  // var dataSum = 0;
+
+  // function TimesDatas(responseData) {
+  //     for(let i=0; i<responseData.length; i++){
+  //         let time = (responseData[i].cumulative_time)
+  //         dataNum.push(time)
+  //         }
+  //     for (let i = 0; i < dataNum.length; i++){
+  //       dataSum += Number(dataNum[i]);
+  //     }
+  // }
+
   useEffect(()=>{
-    setTime(initTime);
-  },[initTime])
+    setTime(SubTime);
+  },[])
   
 
   React.useEffect(() => {
@@ -107,8 +121,8 @@ export function ListTimer({ id, done, text, textarea }) {
 
     if (timerOn) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 100);
-      }, 100);
+        setTime((prevTime) => prevTime + 1000);
+      }, 1000);
     } else if (!timerOn) {
       clearInterval(interval);
     }
@@ -116,48 +130,61 @@ export function ListTimer({ id, done, text, textarea }) {
   }, [timerOn]);
 
 
-  const onUpdate = () => {
-    fetch(`http://localhost:3001/subjects/${id}`,{
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          done: done,
-          text: text,
-          textarea: textarea,
-          time: time
-        })
-      })
+  const onUpdate = (currentTime) => {
+    axiosManager.axios(`/record`, "POST", {
+      headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+      user_id: user.id,
+      name: text,
+      focus_time: currentTime,
+      unfocus_time: 0,
+      content: content,
+    })
+    // axiosManager.axios(`/time`, "PUT", {
+    //   headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+    //   id: user.id,
+    //   total_time: dataSum,
+    //   focus_time: 11111,
+    // })
   }
 
-  const dispatch = useTodoDispatch();
-    const OnToggle = () => {
-      fetch(`http://localhost:3001/subjects/${id}`,{
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
+  const setZero = () => {
+    if(window.confirm('진행시간을 초기화 하시겠습니까?')){
+      axiosManager.axios(`/record`, "POST", {
+        headers : {'Content-Type': 'application/x-www-form-urlencoded', },
+        user_id: user.id,
+        name: text,
+        focus_time: 0,
+        unfocus_time: 0,
+        content: content,
       })
-      console.log(time)
-      dispatch({ type: 'TOGGLE', id },
-      fetch(`http://localhost:3001/subjects/${id}`,{
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          done: !done,
-          text: text,
-          textarea: textarea,
-          time: time
-        })
-      })
-      
-      );
+      setTime(0);
     }
+  }
+
+
+    // 디비 키값 추가 필요 
+    // const OnToggle = () => {
+    //   fetch(`http://localhost:3001/subjects/${id}`,{
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     }
+    //   })
+    //   console.log(time)
+    //   fetch(`http://localhost:3001/subjects/${id}`,{
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       id: id,
+    //       done: !done,
+    //       text: text,
+    //       textarea: textarea,
+    //       time: time
+    //     })
+    //   })
+    // }
 
   return (
     <div>
@@ -171,22 +198,20 @@ export function ListTimer({ id, done, text, textarea }) {
         {!timerOn && time === 0 && (
           <BtnPlay onClick={() => setTimerOn(true)}><FaPlay></FaPlay></BtnPlay>
         )}
-        {timerOn && <BtnPause onClick={() => {setTimerOn(false); onUpdate();}
+        {timerOn && <BtnPause onClick={() => {onUpdate(time); setTimerOn(false); }
         }><FaPause></FaPause></BtnPause>}
         {!timerOn && time > 0 && (
           <BtnPlay onClick={() => {setTimerOn(true)}}><FaPlay></FaPlay></BtnPlay>
         )}
         {time >= 0 && (
-          <BtnReset onClick={() => setTime(0)}><FaStop /></BtnReset>
+          <BtnReset onClick={() => setZero()}><FaStop /></BtnReset>
         )}
         
       </Timers>
-      <CheckCircle done={done} onClick={OnToggle}>
+      {/* <CheckCircle done={done} onClick={OnToggle}>
             {done && <MdDone />}
-            </CheckCircle>
+            </CheckCircle> */}
     </div>
     
   )
 };
-
-// export default React.memo(ListTimer);

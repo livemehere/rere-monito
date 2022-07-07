@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
-import { useTodoDispatch, useTodoNextId } from './TodoContext';
+import axiosManager from '../../../util/axiosManager';
+import { userState } from '../../../atoms/user';
+import { useRecoilState } from 'recoil';
 
 
 const CircleButton = styled.button`
@@ -84,7 +86,7 @@ const TextAreaInput = styled.textarea`
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #dee2e6;
-  width: 96%;
+  width: 100%;
   outline: none;
   resize: none;
   height: 100px;
@@ -92,62 +94,62 @@ const TextAreaInput = styled.textarea`
   white-space: pre-wrap;
 `;
 
-export function TodoCreate() {
+const SubmitBtn = styled.button`
+  width:120px;
+  height: 40px;
+  color: white;
+  text-align: center;
+  top: 20px;
+  font-weight: bold;
+  
+  background: #E9A681;
+  font-size: 16px;
+  border:none;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,79,255,0.3);
+  transition:0.3s;
+  position: relative;
+
+  left: 8%;
+  transform: translate(-50%,-50%);
+  text-decoration-line: none;
+
+  &:hover {
+  background: #DB9A33;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,79,255,0.6);
+  }
+`;
+
+export function TodoCreate({subjectAdd}) {
+  
+  const [user, setUser] = useRecoilState(userState);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(''); 
   const [content, setContent] = useState('');
 
-  const dispatch = useTodoDispatch();
-  const nextId = useTodoNextId();
 
   const onToggle = () => setOpen(!open);
+
   const onChange = e => setValue(e.target.value);
-  console.log(onChange);
 
   const onChangeContent = e => setContent(e.target.value);
-  console.log(onChangeContent);
 
-  
 
-  const contentsReplaceNewline = () => {
-    return content.replaceAll("\n", "\r\n"); 
-  }
+  // const contentsReplaceNewline = () => {
+  //   return content.replaceAll("\n", "\r\n"); 
+  // }
 
   const onSubmit = e => {
     e.preventDefault(); // 새로고침 방지
-    
-    
-    dispatch({
-      type: 'CREATE',
-      todo: {
-        id: nextId.current,
-        text: value,
-        textarea: contentsReplaceNewline(),
-        done: false,
-        time: 0
-      }
-      
-    },
-    fetch(`http://localhost:3001/subjects/`, {
-            method : "POST",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: nextId.current,
-              text: value,
-              textarea: contentsReplaceNewline(),
-              done: false,
-              time: 0
-            })
-    }));
  
     setValue('');
     setContent('');
     setOpen(false);
-    nextId.current += 1;
-    console.log(nextId.current);
-  };
+
+    console.log("posted");
+   };
 
   return (
     <>
@@ -166,7 +168,7 @@ export function TodoCreate() {
             onChange={onChangeContent}
             value={content}
           />
-          
+          <SubmitBtn onClick={() => subjectAdd(user.id, value, content)}>과목 생성</SubmitBtn>
         </InsertForm>
         
       </InsertFormPositioner>
@@ -178,5 +180,3 @@ export function TodoCreate() {
     </>
   );
 }
-
-// export default React.memo(TodoCreate);

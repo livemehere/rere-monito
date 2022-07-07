@@ -1,16 +1,13 @@
-import { Uploadimg } from '../../Presenter/UserPageEdit/ImageUpload';
+import { Uploadimg } from "../../Presenter/UserPageEdit/ImageUpload";
 
-
-const Uploader = () => {
-
-
+const Uploader = () => { // 안씀
   return (
-      <>
-        <Uploadimg>
-            
-        </Uploadimg>
-      </>
+    <>
+      <Uploadimg>
+        <input type="file" name="profile_img" accept="image/*" />
+      </Uploadimg>
+    </>
   );
-}
+};
 
 export default Uploader;

@@ -1,5 +1,6 @@
 import React from "react";
 import NavBar from "./navbar";
+import Copyright from "./copyright"
 import { AllBody } from "./Presenter/Nav/TopNavPresenter";
 
 export default function Layout({ children }) {

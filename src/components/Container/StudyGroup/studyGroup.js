@@ -2,15 +2,12 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { Card, Catbtn, SearchBar } from "../../Presenter/StudyGroup/GroupFilter/Card";
-import axiosHook from "../../Presenter/StudyGroup/axiosHook";
-// import items from "./post.json";
+
 
 import "../../Presenter/StudyGroup/GroupFilter/StudyMain.css";
 import "../../Presenter/StudyGroup/GroupFilter/card.css";
 
 import LogoSrc from "../../Presenter/StudyGroup/GroupFilter/book.jpg";
-import useAxios from "../../Presenter/StudyGroup/axiosHook";
-import axios from "axios";
 import { useRecoilState } from "recoil";
 import axiosManager from "../../../util/axiosManager";
 
@@ -37,11 +34,6 @@ export default function Display() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [search, setSearch] = useState("");
 
-  const handleDeleteRoome = (id) => {
-    //TODO: ui상으로 삭제 & DB상 삭제
-    console.log(id);
-  };
-
   useEffect(() => {
     axiosManager.axios("/room", "GET").then((result) => {
       const initData = [];
@@ -52,6 +44,7 @@ export default function Display() {
           recruit: r.is_recruit === 1 ? "모집중" : "모집완료",
           member: r.now_member,
           score: r.focus_point,
+          roomCode: r.room_code,
         });
       });
       setData(initData);
@@ -59,6 +52,8 @@ export default function Display() {
       setIsLoaded(true);
     });
   }, []);
+
+  
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -74,6 +69,23 @@ export default function Display() {
     if (!isLoaded) return;
     setFilterdData([...data].filter((d) => d.roomname.includes(search)));
   }, [search]);
+
+  const handleDeleteRoome = (id) => {
+    //TODO: ui상으로 삭제 & DB상 삭제
+    if(window.confirm('할 일을 삭제 하시겠습니까?')){
+      axiosManager.axios(`/room/`, "DELETE", {
+        headers: { 'Content-type': 'application/x-www-form-urlencoded', },
+        id: id
+      })
+      
+      setData(prev=>prev.filter(room=>room.id !== id));
+    }
+    console.log(id);
+  };
+
+  useEffect(() => {
+    setFilterdData(data);
+  }, [data])
 
   return (
     <main>
@@ -94,7 +106,7 @@ export default function Display() {
           {filterdData &&
             filterdData.map((r, i) => (
               <div className="card_container" key={i}>
-                <Card card={r} handleDeleteRoome={handleDeleteRoome}></Card>
+                <Card card={r} handleDeleteRoome={() => handleDeleteRoome(r.id)}></Card>
               </div>
             ))}
           {/* {renderList.length > 0 ? (

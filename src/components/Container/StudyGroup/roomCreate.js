@@ -4,6 +4,8 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoSrc from '../../Presenter/StudyGroup/GroupFilter/book.jpg'
 import { v1 as uuid } from "uuid";
+import axiosManager from "../../../util/axiosManager";
+
 
 const Logo = styled.img`
   width: 100%;
@@ -52,7 +54,7 @@ const SubmitBtn = styled.button`
   box-shadow: 0 4px 16px rgba(0,79,255,0.3);
   transition:0.3s;
   position: relative;
-  left: 100%;
+  left: 60%;
   
   transform: translate(-50%,-50%);
   .button-design{
@@ -81,27 +83,20 @@ const RoomTitle = styled.div`
 export default function CreateWord() {
     const id = uuid();
 
-    const days = useAxios("http://localhost:3001/rooms")
     const navigate = useNavigate();
 
     function onSubmit(e) {
         e.preventDefault();
 
-        fetch(`http://localhost:3001/rooms/`, {
-            method : "POST",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                roomname : roomName.current.value,
-                recruit : '모집중',
-                member : 0,
-                score : 0,
-                roomId: id
-            })
+        axiosManager.axios(`/room/`, "POST", {
+          headers: { 'Content-type': 'application/x-www-form-urlencoded', },
+          roomName : roomName.current.value,
+          max_member : 10,
+          roomCode: id
         })
         .then(res =>{
-            if (res.ok) {
+            if(res) {
+              console.log(".then executed")
                 alert("생성이 완료 되었습니다.");
                 navigate(`/group`);
             }

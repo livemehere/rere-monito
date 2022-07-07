@@ -1,21 +1,45 @@
-import React, { useRef,useEffect } from 'react';
+import React, { useRef,useEffect, useState } from 'react';
 import { DetailPlanner, OnlyPlanner, PlannerBackDiv } from '../../Presenter/Planner/PlannerBodyPresenter';
 import { Chart, registerables } from 'chart.js';
+import axiosManager from '../../../util/axiosManager';
+import { userState } from '../../../atoms/user';
+import { useRecoilState } from 'recoil';
 
-const labels = [
-    '자료구조',
-    '데이터베이스',
-    '컴퓨터구조',
-    'C언어',
-    'JAVA',
-    '교양',
-];
-var dataNum = [60, 10, 37, 20, 30, 45];
-var dataSum = 0;
+let is_action = false;
+let is_action2 = false;
 
-for (let i = 0; i < dataNum.length; i++){
-    dataSum += dataNum[i];
+let userId = 14;
+
+axiosManager.axios(`/record/${userId}`, "GET")
+.then((res) => {
+  labelsAndDatas(res.records);
+  is_action = true;
+  console.log(res.records)
+});
+
+const today = new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
+
+const labels = [];
+var dataNum = [];
+
+
+function labelsAndDatas(responseData) {
+  if(is_action === true){
+    return 0;
+  }
+  else{
+    for(let i=0; i<responseData.length; i++){
+      if(today == responseData[i].date.split("T")[0]){
+        labels.push(responseData[i].name)
+        let time = (responseData[i].total_time/60000)
+        dataNum.push(time.toFixed(2))
+        console.log(responseData[i].date.split("T")[0]);
+      }
+    }
+  }    
 }
+
+var dataSum = 0;
 
 const rendering = () => {
     const result = [];
@@ -69,7 +93,42 @@ var options = {
 }
     //[{ color: '#2bc4bd', percent: 50 }, { color: '#7f58a3', percent: 31 }, { color: '#ebb860', percent: 19 }];
 const PlannerBody = () => {
-    const canvasDom = useRef(null);
+
+  const [user, setUser] = useRecoilState(userState);
+  useEffect(() => {
+    userId = user.id;
+    console.log(userId);
+  }, [userId]);
+  
+  // const [user, setUser] = useRecoilState(userState);
+  // const [getTime, setTimes] = useState([]);
+  // const [getts, setGetts] = useState([]);
+
+  
+
+  //   useEffect(() => {
+  //   axiosManager.axios(`/record/${user.id}`, "GET")
+  //   .then((res) => {
+  //       res.records.forEach((r) => {
+  //       getTime.push({
+  //         date: r.date.split("T")[0],
+  //       })
+        
+  //     });
+  //     labelsAndDatas(res.records);
+  //   })
+  // }, []);
+
+  if(is_action2 === false){
+    for (let i = 0; i < dataNum.length; i++){
+      dataSum += Number(dataNum[i]);
+    }
+    is_action2 = true;
+  }
+  
+
+
+const canvasDom = useRef(null);
     useEffect(() => {
       const ctx = canvasDom.current.getContext("2d");
         console.log(ctx);
@@ -89,8 +148,8 @@ const PlannerBody = () => {
                 </OnlyPlanner>
                 <DetailPlanner>
                     <ul className='today-study-time'>
-                        <li className='today-list'><p id="time-title">오늘의 공부시간</p> </li>  
-                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {dataSum % 60}M</h1></li>
+                        <li className='today-list'><p id="time-title">오늘의 공부시간({today})</p> </li>  
+                        <li className='today-list'><h1 id='total-time'>{Math.floor(dataSum / 60)}H {Math.floor((dataSum)-(Math.floor(dataSum /60)*60))}M </h1></li>
                     </ul>
                     <ul>
                             {rendering()}

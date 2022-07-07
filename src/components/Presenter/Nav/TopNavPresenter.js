@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const AllBody = styled.div`
-  margin-top:7%;
-`
+  margin-top: 7%;
+`;
 
 const NavBody = styled.div`
   font-size: large;
@@ -25,6 +25,7 @@ const NavAllContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: space-between;
+
   .top-nav-title {
     text-decoration: none;
     justify-content: space-between;
@@ -103,6 +104,31 @@ const NavLoginLogOut = styled.div`
     background: rgb(196, 155, 67);
     border-radius: 30px;
   }
+  a.sign-up-btn {
+    color: white;
+    margin-left: 10px;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 5px 15px 5px 15px;
+    background: linear-gradient(
+      45deg,
+      rgb(239, 217, 20),
+      rgba(105, 139, 5, 0.375)
+    );
+    border-radius: 30px;
+  }
+  a.sign-up-btn:hover {
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 5px 15px 5px 15px;
+    background: linear-gradient(
+      45deg,
+      rgb(209, 190, 15),
+      rgba(86, 113, 4, 0.375)
+    );
+    border-radius: 30px;
+  }
 `;
 export {
   NavBody,
@@ -110,5 +136,5 @@ export {
   NavListContainer,
   BottomBody,
   NavLoginLogOut,
-  AllBody
+  AllBody,
 };

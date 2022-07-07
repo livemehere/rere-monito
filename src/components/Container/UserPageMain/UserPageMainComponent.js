@@ -20,16 +20,12 @@ const UserPageMain = () => {
                         <UserBtn><Link to ="/mypage/edit" className="UserPageBtn">수정</Link></UserBtn>
                 </MypageBox>
                 <MypageBox>
-                    <UserPageTitle>디데이 설정</UserPageTitle>
-                    <UserBtn><Link to="/mypage/d-day" className="UserPageBtn">설정</Link></UserBtn>
+                    <UserPageTitle>디데이</UserPageTitle>
+                    <UserBtn><Link to="/mypage/d-day" className="UserPageBtn">확인하기</Link></UserBtn>
                 </MypageBox>
                 <MypageBox>
                     <UserPageTitle>측정 결과 분석</UserPageTitle>
                     <UserBtn><Link to ="/mypage/analyze" className="UserPageBtn">확인하기</Link></UserBtn>
-                </MypageBox>  
-                <MypageBox>
-                    <UserPageTitle>자세</UserPageTitle>
-                    <UserBtn><Link to="/mypage/pose" className="UserPageBtn">설정</Link></UserBtn>
                 </MypageBox>  
             </BackDiv>
         </>

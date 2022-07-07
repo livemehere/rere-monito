@@ -1,9 +1,9 @@
 import DdayContents from "./DdayContents"
 
-const DdayList = ({ddays}) => {
+const DdayList = ({dday}) => { // 안씀
     return (
         <>
-        {ddays.map(dday => (
+        {dday.map(dday => (
             <DdayContents dday={dday} key={dday.id}/>
         ))}
         </>

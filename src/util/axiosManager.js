@@ -4,10 +4,15 @@ class AxiosManager {
   async axios(url, method, body) {
     const data = await axios({
       method,
-      url: `http://www.monito.ml:3000${url}`,
+      url: `https://monito.ml${url}`,
       data: body && body,
     });
-    return data.data;
+
+    if (data.status >= 200 && data.status <= 299) {
+      return data.data;
+    } else {
+      return data;
+    }
   }
 }
 
